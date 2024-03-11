@@ -1,0 +1,42 @@
+.slot-container {
+  width: 280px; /* Width should match image width */
+  height: 618px; /* Height should be 3 times the single image height (to show 3 images) */
+  overflow: hidden;
+}
+
+@keyframes spinAnimation {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1078px); /* Single image height */
+  }
+}
+
+.spinning1 {
+  animation: spinAnimation 2s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+  animation-direction: reverse;
+}
+.spinning2 {
+  animation: spinAnimation 2.5s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+  animation-direction: reverse;
+}
+.spinning3 {
+  animation: spinAnimation 3s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+  animation-direction: reverse;
+}
+.spinning4 {
+  animation: spinAnimation 3.5s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+  animation-direction: reverse;
+}
+.spinning5 {
+  animation: spinAnimation 4s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+  animation-direction: reverse;
+}
+
+.animate-flow {
+  animation-name: flow-animation;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+}
