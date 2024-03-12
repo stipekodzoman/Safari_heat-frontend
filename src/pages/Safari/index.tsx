@@ -13,8 +13,8 @@ import MenuAudioOffImage from '../../assets/menu_audio_off.png';
 import MenuShakeImage from '../../assets/menu_shake.png';
 import MenuLogoutImage from '../../assets/menu_logout.png';
 
-import HoverPlusImage from '../../assets/hover_plus.png';
-import HoverMinusImage from '../../assets/hover_plus.png';
+// import HoverPlusImage from '../../assets/hover_plus.png';
+// import HoverMinusImage from '../../assets/hover_plus.png';
 import './index.css';
 
 const Safari = () => {
