@@ -28,6 +28,15 @@ export default {
         layout: '#040a0f',
         drawer: '#011018',
       },
+      keyframes: {
+        slide: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(var(--mt))' }, // Using CSS variables
+        }
+      },
+      animation: {
+        slide: 'slide 10s ease-in-out forwards', // Define the total animation time here
+      }
     },
   },
   plugins: [],

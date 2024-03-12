@@ -47,7 +47,7 @@ const Safari = () => {
   const handleSpinEnd = () => {
     setTimeout(() => {
       setIsSpinning(false);
-    }, 2000);
+    }, 1400);
     // setIsSpinning(true);
   };
   const [isOpen, setIsOpen] = useState(false);
@@ -127,34 +127,33 @@ const Safari = () => {
           </div>
           <div className="flex px-[68px] pt-[102px] gap-[18.6px]">
             <Slot
-              count={13}
+              count={9}
               isSpinning={isSpinning}
               onSpinEnd={handleSpinEnd}
-              speed="spinning1"
+            />
+            <Slot
+              count={12}
+              isSpinning={isSpinning}
+              onSpinEnd={handleSpinEnd}
+
+            />
+            <Slot
+              count={15}
+              isSpinning={isSpinning}
+              onSpinEnd={handleSpinEnd}
+
             />
             <Slot
               count={18}
               isSpinning={isSpinning}
               onSpinEnd={handleSpinEnd}
-              speed="spinning2"
+
             />
             <Slot
-              count={23}
+              count={21}
               isSpinning={isSpinning}
               onSpinEnd={handleSpinEnd}
-              speed="spinning3"
-            />
-            <Slot
-              count={28}
-              isSpinning={isSpinning}
-              onSpinEnd={handleSpinEnd}
-              speed="spinning4"
-            />
-            <Slot
-              count={33}
-              isSpinning={isSpinning}
-              onSpinEnd={handleSpinEnd}
-              speed="spinning5"
+
             />
           </div>
           <div className="flex mt-[2px]">
