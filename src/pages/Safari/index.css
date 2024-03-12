@@ -1,5 +1,5 @@
 .gradient-text {
-  background: linear-gradient(to top, #F9620D, #fad087);
+  background: linear-gradient(to top, #f9620d, #fad087);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent; /* Make the text color transparent so the gradient shows through */
