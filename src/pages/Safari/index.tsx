@@ -4,7 +4,8 @@ import Background from '../../assets/background.png';
 import MinusImage from '../../assets/minus.png';
 import PlusImage from '../../assets/plus.png';
 import AutoStartImage from '../../assets/auto_start.png';
-import SponImage from '../../assets/spin.png';
+import SpinImage from '../../assets/spin.png';
+import StopSpinImage from '../../assets/stop.png';
 import MenuBtnImage from '../../assets/menu_btn.png';
 import MenuImage from '../../assets/menu.png';
 import MenuBackImage from '../../assets/menu_back.png';
@@ -21,6 +22,7 @@ const Safari = () => {
   const [line, setLine] = useState(1);
   const [betValue, setBetValue] = useState(0.01);
   const [isSpinning, setIsSpinning] = useState(false);
+  // const [isSpinClicked, setIsSpinClicked] = useState(false);
 
   const handleIncrementLine = () => {
     setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
@@ -166,16 +168,22 @@ const Safari = () => {
               <p className="gradient-text  text-[36px] font-bold pl-[76px] mt-[-4px]">
                 {line}
               </p>
-              <div className="flex">
+              <div className="flex mt-[2px]">
                 <button
+                  type="submit"
                   onClick={handleDecrementLine}
                   className="h-[81px] w-[173px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MinusImage})` }}
+                  style={{
+                    backgroundImage: isSpinning ? '' : `url(${MinusImage})`,
+                  }}
                 ></button>
                 <button
+                  type="submit"
                   onClick={handleIncrementLine}
                   className="h-[81px] w-[172px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
-                  style={{ backgroundImage: `url(${PlusImage})` }}
+                  style={{
+                    backgroundImage: isSpinning ? '' : `url(${PlusImage})`,
+                  }}
                 ></button>
               </div>
             </div>
@@ -183,17 +191,23 @@ const Safari = () => {
               <p className="gradient-text text-[36px] font-bold pl-[40px] mt-[-4px]">
                 {(betValue * line).toFixed(2)}
               </p>
-              <div className="flex ml-[6px]">
+              <div className="flex mt-[2px] ml-[7px]">
                 <button
+                  type="submit"
                   onClick={handleDecrementBet}
-                  className="h-[81px] w-[173px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MinusImage})` }}
+                  className="h-[81px] w-[172px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: isSpinning ? '' : `url(${MinusImage})`,
+                  }}
                 ></button>
                 <button
+                  type="submit"
                   // onMouseEnter={handleIncrementBet}
                   onClick={handleIncrementBet}
                   className="h-[81px] w-[172px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
-                  style={{ backgroundImage: `url(${PlusImage})` }}
+                  style={{
+                    backgroundImage: isSpinning ? '' : `url(${PlusImage})`,
+                  }}
                 ></button>
               </div>
             </div>
@@ -201,17 +215,24 @@ const Safari = () => {
               <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
                 {(betValue * line).toFixed(2)}
               </p>
-              <div className="flex gap-[6px] ml-[7px]">
+              <div className="flex gap-[6px] mt-[2px] ml-[7px]">
                 <button
+                  type="submit"
                   // onClick={handleDecrementLine}
                   className="h-[81px] w-[243px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${AutoStartImage})` }}
+                  style={{
+                    backgroundImage: isSpinning ? '' : `url(${AutoStartImage})`,
+                  }}
                 ></button>
                 <button
                   type="submit"
                   onClick={handleSpinClick}
-                  className="focus:outline-none hover:brightness-125 border-none w-[234px] h-[80px] bg-opacity-0"
-                  style={{ backgroundImage: `url(${SponImage})` }}
+                  className="focus:outline-none hover:brightness-125 border-none w-[234px] h-[79px] bg-opacity-0"
+                  style={{
+                    backgroundImage: isSpinning
+                      ? `url(${StopSpinImage})`
+                      : `url(${SpinImage})`,
+                  }}
                 ></button>
               </div>
             </div>
