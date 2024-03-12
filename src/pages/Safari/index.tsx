@@ -47,7 +47,7 @@ const Safari = () => {
   const handleSpinEnd = () => {
     setTimeout(() => {
       setIsSpinning(false);
-    }, 1000);
+    }, 1400);
     // setIsSpinning(true);
   };
   const [isOpen, setIsOpen] = useState(false);

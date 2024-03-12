@@ -4,39 +4,70 @@
   overflow: hidden;
 }
 
-@keyframes spinAnimation {
+@keyframes spinAnimation9 {
   from {
     transform: translateY(0);
   }
   to {
-    transform: translateY(-1078px); /* Single image height */
+    transform: translateY(-1854px); /* Single image height */
   }
 }
-
-.spinning1 {
-  animation: spinAnimation 2s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+@keyframes spinAnimation12 {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2472px); /* Single image height */
+  }
+}
+@keyframes spinAnimation15 {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-3090px); /* Single image height */
+  }
+}
+@keyframes spinAnimation18 {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-3708px); /* Single image height */
+  }
+}
+@keyframes spinAnimation21 {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4326px); /* Single image height */
+  }
+}
+.spinning9 {
+  animation: spinAnimation9 0.6s linear;
   animation-direction: reverse;
 }
-.spinning2 {
-  animation: spinAnimation 2.5s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+.spinning12 {
+  animation: spinAnimation12 0.8s linear;
   animation-direction: reverse;
 }
-.spinning3 {
-  animation: spinAnimation 3s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+.spinning15{
+  animation: spinAnimation15 1s linear;
   animation-direction: reverse;
 }
-.spinning4 {
-  animation: spinAnimation 3.5s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+.spinning18 {
+  animation: spinAnimation18 1.2s linear;
   animation-direction: reverse;
 }
-.spinning5 {
-  animation: spinAnimation 4s cubic-bezier(0.63, 0.001, 0.08, 1) forwards;
+.spinning21 {
+  animation: spinAnimation21 1.4s linear;
   animation-direction: reverse;
 }
-
+/* 
 .animate-flow {
   animation-name: flow-animation;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-play-state: running;
-}
+} */
