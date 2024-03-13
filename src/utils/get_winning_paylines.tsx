@@ -1,14 +1,20 @@
 import { PAYLINES } from "../constants/paylines"
 let winning=0.0
 const get_winning_paylines=(result1:String[],result2:String[],result3:String[],result4:String[],result5:String[],line:number,betValue:number)=>{
+    
     const scatter_winning=get_scatter_winning(result1,result2,result3,result4,result5,betValue)
     const general_winning=get_general_winning(result1,result2,result3,result4,result5,line,betValue)
-    return {scatter_winning,general_winning}
+    return {scatter_winning,general_winning,winning}
 }
 
 const get_scatter_winning=(result1:String[],result2:String[],result3:String[],result4:String[],result5:String[],betValue:number)=>{
     let count=0
-    let locations=new Array(5)
+    let locations: number[][]=[]
+    locations[0]=[]
+    locations[1]=[]
+    locations[2]=[]
+    locations[3]=[]
+    locations[4]=[]
     count+=result1.filter((value) => value === "tree").length;
     count+=result2.filter((value) => value === "tree").length;
     count+=result3.filter((value) => value === "tree").length;
@@ -51,6 +57,7 @@ const get_scatter_winning=(result1:String[],result2:String[],result3:String[],re
     if (count==5){
         winning+=betValue*500
     }
+    console.log(winning)
     return locations
 }
 
