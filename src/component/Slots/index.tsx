@@ -4,11 +4,12 @@ import {get_initial_items, get_slot_items} from '../../utils/get_slot_items.js'
 export interface Props {
   count: number;
   isSpinning: boolean; // New prop to control spinning
+  setResult:(result: string[]) => void;
   onSpinEnd: () => void;
 }
 
 let items=new Array()
-const Slot: FC<Props> = ({ count, isSpinning, onSpinEnd}) => {
+const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd}) => {
     const [currentImages, setCurrentImages] = useState<string[]>(() => []);
     const [initial_items, setInitialItems] = useState<string[]>(() => []);
     useEffect(() =>{
@@ -19,7 +20,7 @@ const Slot: FC<Props> = ({ count, isSpinning, onSpinEnd}) => {
       items=get_slot_items(count)
       items.push(...initial_items);
       setCurrentImages(items)
-      console.log(currentImages)
+      setResult([currentImages[0],currentImages[1],currentImages[2]])
       items=[]
     },[isSpinning])
     const spinEnd=()=>{
