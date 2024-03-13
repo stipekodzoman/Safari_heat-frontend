@@ -131,7 +131,15 @@ const Safari = () => {
   const handleSpinEnd = () => {
     setTimeout(() => {
       setIsSpinning(false);
-      get_winning_paylines(result1,result2,result3,result4,result5,line,betValue)
+      get_winning_paylines(
+        result1,
+        result2,
+        result3,
+        result4,
+        result5,
+        line,
+        betValue
+      );
     }, 1400);
     // setIsSpinning(true);
   };
@@ -206,7 +214,7 @@ const Safari = () => {
                 className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
                 style={{ backgroundImage: `url(${MenuLogoutImage})` }}
               ></button>
-{/*  */}
+              {/*  */}
             </div>
           </div>
         </div>
