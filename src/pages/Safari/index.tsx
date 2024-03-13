@@ -22,6 +22,7 @@ const Safari = () => {
   const [line, setLine] = useState(1);
   const [betValue, setBetValue] = useState(0.01);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [winning, setWinning]=useState(0.00)
   // const [isSpinClicked, setIsSpinClicked] = useState(false);
   const [result1,setResult1]=useState<String[]>(()=>[])
   const [result2,setResult2]=useState<String[]>(()=>[])
@@ -223,7 +224,7 @@ const Safari = () => {
             </div>
             <div className="w-auto">
               <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
-                {(betValue * line).toFixed(2)}
+                {winning.toFixed(2)}
               </p>
               <div className="flex gap-[6px] mt-[2px] ml-[7px]">
                 <button
