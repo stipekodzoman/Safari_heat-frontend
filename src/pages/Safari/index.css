@@ -5,3 +5,15 @@
   color: transparent; /* Make the text color transparent so the gradient shows through */
   display: inline-block; /* Required for gradients on text */
 }
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.background-slide-down {
+  animation: slideDown 1s ease forwards; /* Adjust duration and easing as needed */
+}
