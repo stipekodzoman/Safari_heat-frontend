@@ -35,7 +35,6 @@ import SideRight8 from '../../assets/sider/right-8.png';
 import SideRight9 from '../../assets/sider/right-9.png';
 import SideRight14 from '../../assets/sider/right-14.png';
 import SideRight15 from '../../assets/sider/right-15.png';
-
 import './index.css';
 
 const Safari = () => {
@@ -107,7 +106,6 @@ const Safari = () => {
         break;
     }
   }, [line]);
-
   const handleIncrementLine = () => {
     setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
@@ -133,6 +131,7 @@ const Safari = () => {
   const handleSpinEnd = () => {
     setTimeout(() => {
       setIsSpinning(false);
+      get_winning_paylines(result1,result2,result3,result4,result5,line,betValue)
     }, 1400);
     // setIsSpinning(true);
   };
@@ -207,6 +206,7 @@ const Safari = () => {
                 className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
                 style={{ backgroundImage: `url(${MenuLogoutImage})` }}
               ></button>
+{/*  */}
             </div>
           </div>
         </div>
