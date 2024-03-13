@@ -10,7 +10,6 @@ import Pagination3 from '../../assets/help/pagination3.png';
 
 const SafariHelp = () => {
   const [helpBackground, setHelpBackground] = useState(HelpBackground);
-
   const navigate = useNavigate();
   return (
     <div>

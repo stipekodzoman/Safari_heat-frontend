@@ -6,25 +6,31 @@ export interface Props {
   isSpinning: boolean; // New prop to control spinning
   setResult:(result: string[]) => void;
   onSpinEnd: () => void;
+  spinID:number
 }
 
 let items=new Array()
-const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd}) => {
-    const [currentImages, setCurrentImages] = useState<string[]>(() => []);
-    const [initial_items, setInitialItems] = useState<string[]>(() => []);
+const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd,spinID}) => {
+    const [currentImages, setCurrentImages] = useState<string[]>(()=> []);
+    const [initial_items, setInitialItems] = useState<string[]>(()=> []);
     useEffect(() =>{
       setInitialItems(get_initial_items())
     },[])
 
     useEffect(()=> {
-      items=get_slot_items(count)
-      items.push(...initial_items);
-      setCurrentImages(items)
-      setResult([currentImages[0],currentImages[1],currentImages[2]])
-      items=[]
+      if(isSpinning){
+        items=get_slot_items(count)
+        items.push(...initial_items);
+        setResult([currentImages[0],currentImages[1],currentImages[2]])
+        setCurrentImages(()=>items)
+        
+        items=[]
+      }
+      
     },[isSpinning])
     const spinEnd=()=>{
       setInitialItems([currentImages[0],currentImages[1],currentImages[2]])
+      
     }
     return (
       <div className="slot-machine">
@@ -38,8 +44,13 @@ const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd}) => {
                 className={`w-[280px] h-[206px] spinning${count}`}
                 alt={`Slot ${index}`}
                 onAnimationEnd={() =>{
-                  onSpinEnd()
-                  spinEnd()
+                  if(spinID==5){
+                    onSpinEnd()
+                    spinEnd()
+                  }
+                  else{
+                    spinEnd()
+                  }
                 }
                 }
                 // onAnimationEnd={onSpinEnd}
@@ -52,11 +63,11 @@ const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd}) => {
                 src={`src/assets/${imageSrc}.png`}
                 className={`w-[280px] h-[206px]`}
                 alt={`Slot ${index}`}
-                onAnimationEnd={() =>{
-                    onSpinEnd()
-                    spinEnd()
-                  }
-                }
+                // onAnimationEnd={() =>{
+                //     onSpinEnd()
+                //     spinEnd()
+                //   }
+                // }
               />
             )
           }
