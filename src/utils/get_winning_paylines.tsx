@@ -4,7 +4,9 @@ const get_winning_paylines=(result1:String[],result2:String[],result3:String[],r
     
     const scatter_winning=get_scatter_winning(result1,result2,result3,result4,result5,betValue)
     const general_winning=get_general_winning(result1,result2,result3,result4,result5,line,betValue)
-    return {scatter_winning,general_winning,winning}
+    let result:number=winning
+    winning=0.0
+    return {scatter_winning,general_winning,result}
 }
 
 const get_scatter_winning=(result1:String[],result2:String[],result3:String[],result4:String[],result5:String[],betValue:number)=>{
@@ -57,7 +59,7 @@ const get_scatter_winning=(result1:String[],result2:String[],result3:String[],re
     if (count==5){
         winning+=betValue*500
     }
-    console.log(winning)
+    // console.log(winning)
     return locations
 }
 
@@ -872,7 +874,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                 }
             }
         }
-        if (general_winning_count!=0 && wild_winning_count!=0){
+        if (general_winning_count!=0 || wild_winning_count!=0){
             if (general_winning>=wild_winning){
                 winning+=general_winning
                 winned_paylines.push({count:general_winning_count,payline:index})

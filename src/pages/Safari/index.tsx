@@ -38,9 +38,10 @@ import SideRight15 from '../../assets/sider/right-15.png';
 import './index.css';
 
 const Safari = () => {
-  const navigate = useNavigate();
+  
   const [line, setLine] = useState(1);
   const [betValue, setBetValue] = useState(0.01);
+  const [balance, setBalance]=useState(10000.00)
   const [winning, setWinning]=useState(0.00)
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
@@ -51,6 +52,7 @@ const Safari = () => {
   const [result3, setResult3] = useState<String[]>(() => []);
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
+  const navigate = useNavigate();
   useEffect(() => {
     switch (line) {
       case 1:
@@ -107,6 +109,18 @@ const Safari = () => {
         break;
     }
   }, [line]);
+  useEffect(()=>{
+    const {scatter_winning, general_winning,result}=get_winning_paylines(
+      result1,
+      result2,
+      result3,
+      result4,
+      result5,
+      line,
+      betValue*line
+    );
+    setWinning(result)
+  },[result5])
   const handleIncrementLine = () => {
     setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
@@ -133,16 +147,7 @@ const Safari = () => {
   const handleSpinEnd = () => {
     setIsSpinning(false);
 
-    const {scatter_winning, general_winning,winning}=get_winning_paylines(
-      result1,
-      result2,
-      result3,
-      result4,
-      result5,
-      line,
-      betValue
-    );
-    setWinning(winning)
+    
   };
   const [isOpen, setIsOpen] = useState(false);
 
@@ -278,7 +283,7 @@ const Safari = () => {
       <div className="flex mt-[2px]">
         <div className="w-[374px]">
           <p className="gradient-text pt-[55px] bg-[#300E0C] text-[36px] font-bold">
-            182354324
+            {balance}
           </p>
         </div>
         <div className="w-[373px]">

@@ -14,15 +14,15 @@ const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd,spinID}) => {
     const [currentImages, setCurrentImages] = useState<string[]>(()=> []);
     const [initial_items, setInitialItems] = useState<string[]>(()=> []);
     useEffect(() =>{
-      setInitialItems(get_initial_items())
+      let items=get_initial_items()
+      setInitialItems(()=>items)
     },[])
 
     useEffect(()=> {
       if(isSpinning){
         items=get_slot_items(count)
         items.push(...initial_items);
-        setResult([currentImages[0],currentImages[1],currentImages[2]])
-        setCurrentImages(()=>items)
+        setCurrentImages(items)
         
         items=[]
       }
@@ -30,7 +30,7 @@ const Slot: FC<Props> = ({ count, isSpinning, setResult,onSpinEnd,spinID}) => {
     },[isSpinning])
     const spinEnd=()=>{
       setInitialItems([currentImages[0],currentImages[1],currentImages[2]])
-      
+      setResult([currentImages[0],currentImages[1],currentImages[2]])
     }
     return (
       <div className="slot-machine">
