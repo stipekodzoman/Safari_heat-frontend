@@ -13,7 +13,7 @@ import MenuHelpImage from '../../assets/menu_help.png';
 import MenuAudioOffImage from '../../assets/menu_audio_off.png';
 import MenuShakeImage from '../../assets/menu_shake.png';
 import MenuLogoutImage from '../../assets/menu_logout.png';
-
+import get_winning_paylines from '../../utils/get_winning_paylines';
 // import HoverPlusImage from '../../assets/hover_plus.png';
 // import HoverMinusImage from '../../assets/hover_plus.png';
 import './index.css';
@@ -23,7 +23,11 @@ const Safari = () => {
   const [betValue, setBetValue] = useState(0.01);
   const [isSpinning, setIsSpinning] = useState(false);
   // const [isSpinClicked, setIsSpinClicked] = useState(false);
-
+  const [result1,setResult1]=useState<String[]>(()=>[])
+  const [result2,setResult2]=useState<String[]>(()=>[])
+  const [result3,setResult3]=useState<String[]>(()=>[])
+  const [result4,setResult4]=useState<String[]>(()=>[])
+  const [result5,setResult5]=useState<String[]>(()=>[])
   const handleIncrementLine = () => {
     setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
@@ -49,6 +53,7 @@ const Safari = () => {
   const handleSpinEnd = () => {
     setTimeout(() => {
       setIsSpinning(false);
+      get_winning_paylines(result1,result2,result3,result4,result5,line,betValue)
     }, 1400);
     // setIsSpinning(true);
   };
@@ -131,29 +136,34 @@ const Safari = () => {
             <Slot
               count={9}
               isSpinning={isSpinning}
+              setResult={setResult1}
               onSpinEnd={handleSpinEnd}
             />
             <Slot
               count={12}
               isSpinning={isSpinning}
+              setResult={setResult2}
               onSpinEnd={handleSpinEnd}
 
             />
             <Slot
               count={15}
               isSpinning={isSpinning}
+              setResult={setResult3}
               onSpinEnd={handleSpinEnd}
 
             />
             <Slot
               count={18}
               isSpinning={isSpinning}
+              setResult={setResult4}
               onSpinEnd={handleSpinEnd}
 
             />
             <Slot
               count={21}
               isSpinning={isSpinning}
+              setResult={setResult5}
               onSpinEnd={handleSpinEnd}
 
             />
