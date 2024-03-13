@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
 
@@ -41,6 +41,7 @@ const Safari = () => {
   const navigate = useNavigate();
   const [line, setLine] = useState(1);
   const [betValue, setBetValue] = useState(0.01);
+  const [winning, setWinning]=useState(0.00)
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
   const [sideRight, setSideRight] = useState(SideRight1);
@@ -126,22 +127,22 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     setIsSpinning(true);
+    setWinning(0.00)
   };
 
   const handleSpinEnd = () => {
-    setTimeout(() => {
-      setIsSpinning(false);
-      get_winning_paylines(
-        result1,
-        result2,
-        result3,
-        result4,
-        result5,
-        line,
-        betValue
-      );
-    }, 1400);
-    // setIsSpinning(true);
+    setIsSpinning(false);
+
+    const {scatter_winning, general_winning,winning}=get_winning_paylines(
+      result1,
+      result2,
+      result3,
+      result4,
+      result5,
+      line,
+      betValue
+    );
+    setWinning(winning)
   };
   const [isOpen, setIsOpen] = useState(false);
 
@@ -233,6 +234,7 @@ const Safari = () => {
             isSpinning={isSpinning}
             setResult={setResult1}
             onSpinEnd={handleSpinEnd}
+            spinID={1}
           />
         </div>
         <Slot
@@ -240,18 +242,21 @@ const Safari = () => {
           isSpinning={isSpinning}
           setResult={setResult2}
           onSpinEnd={handleSpinEnd}
+          spinID={2}
         />
         <Slot
           count={15}
           isSpinning={isSpinning}
           setResult={setResult3}
           onSpinEnd={handleSpinEnd}
+          spinID={3}
         />
         <Slot
           count={18}
           isSpinning={isSpinning}
           setResult={setResult4}
           onSpinEnd={handleSpinEnd}
+          spinID={4}
         />
         <div className="flex gap-[4px]">
           <Slot
@@ -259,6 +264,7 @@ const Safari = () => {
             isSpinning={isSpinning}
             setResult={setResult5}
             onSpinEnd={handleSpinEnd}
+            spinID={5}
           />
           <div
             className="w-[64px] h-[628px] mt-[-12px]"
@@ -324,7 +330,7 @@ const Safari = () => {
         </div>
         <div className="w-auto">
           <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
-            {(betValue * line).toFixed(2)}
+            {winning.toFixed(2)}
           </p>
           <div className="flex gap-[6px] mt-[2px] ml-[7px]">
             <button
