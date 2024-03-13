@@ -150,9 +150,7 @@ const Safari = () => {
         backgroundSize: 'cover',
       }}
     >
-      {/* <div
-        className=" "
-      > */}
+      {/* header */}
       <div className="flex justify-between h-[50px]">
         <div className="flex mt-[4px]">
           <p className="text-white text-center font-extrabold text-[24px] w-[493px] pl-[275px]">
@@ -213,6 +211,7 @@ const Safari = () => {
           </div>
         </div>
       </div>
+      {/* content */}
       <div className="flex pt-[102px] gap-[19.2px]">
         <div className="flex gap-[3px]">
           <div
@@ -261,6 +260,7 @@ const Safari = () => {
           ></div>
         </div>
       </div>
+      {/* bottom */}
       <div className="flex mt-[2px]">
         <div className="w-[374px]">
           <p className="gradient-text pt-[55px] bg-[#300E0C] text-[36px] font-bold">
@@ -344,7 +344,6 @@ const Safari = () => {
         </div>
       </div>
     </div>
-    // </div>
   );
 };
 
