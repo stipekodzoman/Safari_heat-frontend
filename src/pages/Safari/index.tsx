@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
+import { PAYLINES } from '../../constants/paylines';
 
 import Background from '../../assets/background.png';
 import MinusImage from '../../assets/minus.png';
@@ -56,11 +57,10 @@ const betValueArray = [
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
 ];
 const Safari = () => {
-  
   const [line, setLine] = useState(1);
   const [betValue, setBetValue] = useState(1);
-  const [balance, setBalance]=useState(10000.00)
-  const [winning, setWinning]=useState(0.00)
+  const [balance, setBalance] = useState(10000.0);
+  const [winning, setWinning] = useState(0.0);
 
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
@@ -75,6 +75,20 @@ const Safari = () => {
   const [result3, setResult3] = useState<String[]>(() => []);
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
+
+  const [suceessID1, setSuccessID1] = useState<Array<number>>([0, 1, 0]);
+  const [suceessID2, setSuccessID2] = useState<Array<number>>([1, 0, 0]);
+  const [suceessID3, setSuccessID3] = useState<Array<number>>([0, 1, 0]);
+  const [suceessID4, setSuccessID4] = useState<Array<number>>([0, 0, 1]);
+  const [suceessID5, setSuccessID5] = useState<Array<number>>([0, 1, 0]);
+
+  const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
+    suceessID1,
+    suceessID2,
+    suceessID3,
+    suceessID4,
+    suceessID5,
+  ]);
   const navigate = useNavigate();
   useEffect(() => {
     switch (line) {
@@ -132,20 +146,46 @@ const Safari = () => {
         break;
     }
   }, [line]);
-  useEffect(()=>{
-    console.log(betValueArray[betValue-1])
-    const {scatter_winning, general_winning,result}=get_winning_paylines(
+  useEffect(() => {
+    // console.log(betValueArray[betValue - 1]);
+    const { scatter_winning, general_winning, result } = get_winning_paylines(
       result1,
       result2,
       result3,
       result4,
       result5,
       line,
-      betValueArray[betValue-1]*line
+      betValueArray[betValue - 1] * line
     );
-    setWinning(result)
-    console.log(general_winning)
-  },[result5])
+    setWinning(result);
+    console.log(general_winning);
+    console.log(result1, result2, result3, result4, result5);
+    if (general_winning.length !== 0) {
+      const finalResult: any[][] = [
+        result1,
+        result2,
+        result3,
+        result4,
+        result5,
+      ];
+      general_winning.map((value) => {
+        console.log(value.count, value.payline);
+        console.log(PAYLINES[value.payline]);
+        for (let i = 0; i < value.count; i++) {
+          // console.log(finalResult[i][PAYLINES[value.payline][i]]);
+
+          setAllSuccessIDs((prevAllSuccessIDs) => {
+            const newAllSuccessIDs = [...prevAllSuccessIDs];
+            newAllSuccessIDs[i] = [0, 0, 0];
+            return newAllSuccessIDs;
+          });
+        }
+        console.log(finalResult);
+      });
+      console.log('---------------------------->general win!!!!!!!');
+      // setSuccessID1([0, 0, 0]);
+    }
+  }, [result5]);
   const handleIncrementLine = () => {
     setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
@@ -154,15 +194,11 @@ const Safari = () => {
     setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
   };
   const handleIncrementBet = () => {
-    setBetValue((prevBetValue) =>
-      prevBetValue < 19 ? prevBetValue + 1 : 1
-    );
+    setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
   };
 
   const handleDecrementBet = () => {
-    setBetValue((prevBetValue) =>
-      prevBetValue > 1 ? prevBetValue - 1 : 19
-    );
+    setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
     setIsSpinning(true);
@@ -269,6 +305,7 @@ const Safari = () => {
               setResult={setResult1}
               onSpinEnd={handleSpinEnd}
               spinID={1}
+              suceessID={allSuccessIDs[0]}
             />
           </div>
           <Slot
@@ -277,6 +314,7 @@ const Safari = () => {
             setResult={setResult2}
             onSpinEnd={handleSpinEnd}
             spinID={2}
+            suceessID={allSuccessIDs[1]}
           />
           <Slot
             count={15}
@@ -284,6 +322,7 @@ const Safari = () => {
             setResult={setResult3}
             onSpinEnd={handleSpinEnd}
             spinID={3}
+            suceessID={allSuccessIDs[2]}
           />
           <Slot
             count={18}
@@ -291,6 +330,7 @@ const Safari = () => {
             setResult={setResult4}
             onSpinEnd={handleSpinEnd}
             spinID={4}
+            suceessID={allSuccessIDs[3]}
           />
           <div className="flex gap-[4px]">
             <Slot
@@ -299,6 +339,7 @@ const Safari = () => {
               setResult={setResult5}
               onSpinEnd={handleSpinEnd}
               spinID={5}
+              suceessID={allSuccessIDs[4]}
             />
             <div
               className="w-[64px] h-[628px] mt-[-12px]"
@@ -480,7 +521,7 @@ const Safari = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Safari
+export default Safari;
