@@ -106,7 +106,7 @@ const Safari = () => {
     });
     newSocket.on('jackpot', (message) => {
       const { jackpot } = JSON.parse(message);
-      setJackpot(jackpot);
+      setJackpot(jackpot.toFixed(4));
     });
     newSocket.on('update', (message) => {
       const { balance } = JSON.parse(message);
@@ -249,7 +249,7 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     setSpinType(1);
-    if (socket) {
+    if (socket&&isSpinning === false) {
       socket.emit(
         'bet',
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
@@ -260,7 +260,7 @@ const Safari = () => {
   };
   const handleAutoSpinClick = () => {
     setSpinType(0);
-    if (socket) {
+    if (socket&&isSpinning === false){
       socket.emit(
         'bet',
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })

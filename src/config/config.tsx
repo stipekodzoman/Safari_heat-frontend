@@ -1,1 +1,1 @@
-export const SOCKET_SERVER_URL = 'http://localhost:5000';
+export const SOCKET_SERVER_URL = 'http://192.168.144.119:5000';
