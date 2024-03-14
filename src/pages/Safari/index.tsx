@@ -209,7 +209,7 @@ const Safari = () => {
               ></div>
             )}
             <div
-              className={`fixed top-0 z-40 w-[326px] h-[906px] shadow-lg transform ease-in-out duration-300 ${
+              className={`fixed top-[6px] z-40 w-[326px] h-[906px] shadow-lg transform ease-in-out duration-300 ${
                 isOpen
                   ? 'translate-x-0 right-[153px]'
                   : 'translate-x-full right-[180px] hidden'
@@ -249,7 +249,7 @@ const Safari = () => {
           </div>
         </div>
         {/* content */}
-        <div className="flex pt-[102px] gap-[19.2px]">
+        <div className="flex mt-[102px] gap-[19.2px]">
           <div className="flex gap-[3px]">
             <div
               className="w-[64px] h-[628px] mt-[-11px]"
@@ -333,7 +333,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-[373px]">
-            <p className="gradient-text text-[36px] font-bold pl-[40px] mt-[-4px]">
+            <p className="gradient-text font-serif text-[36px] font-bold pl-[40px] mt-[-4px]">
               {(line * betValueArray[betValue - 1]).toFixed(2)}
             </p>
             <div className="flex mt-[2px] ml-[7px]">
@@ -357,7 +357,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-auto">
-            <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
+            <p className="gradient-text font-mono text-[36px] font-bold pl-[70px] mt-[-4px]">
               {winning.toFixed(2)}
             </p>
             <div className="flex gap-[6px] mt-[2px] ml-[7px]">
