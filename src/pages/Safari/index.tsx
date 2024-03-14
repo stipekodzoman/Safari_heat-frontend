@@ -173,6 +173,33 @@ const Safari = () => {
     }
   }, [line]);
 
+  const showWinningCombinations = (winningCombos: any) => {
+    let count = 0;
+    const intervalId = setInterval(() => {
+      if (count < winningCombos.length) {
+        const value = winningCombos[count];
+        console.log(value.count, value.payline);
+        console.log(PAYLINES[value.payline]);
+        for (let i = 0; i < value.count; i++) {
+          setAllSuccessIDs((prevAllSuccessIDs) =>
+            prevAllSuccessIDs.map((successID, index) =>
+              index === i
+                ? [
+                    PAYLINES[value.payline][i] === 0 ? 1 : 0,
+                    PAYLINES[value.payline][i] === 1 ? 1 : 0,
+                    PAYLINES[value.payline][i] === 2 ? 1 : 0,
+                  ]
+                : successID
+            )
+          );
+        }
+        count++;
+      } else {
+        clearInterval(intervalId); // Clear interval when all winning lines have been shown
+      }
+    }, 1000); // Set for 2 seconds
+    console.log("----------------->general win!")
+  };
   useEffect(() => {
     // console.log(betValueArray[betValue - 1]);
     const { scatter_winning, general_winning, result } = get_winning_paylines(
@@ -204,46 +231,42 @@ const Safari = () => {
     // );
     // console.log(general_winning)
 
-    if (general_winning.length !== 0) {
-      general_winning.forEach(async (value) => {
-        // console.log(value.count, value.payline);
-        console.log(PAYLINES[value.payline], value.count);
-        let allSuccessId: number[][] = Array.from({ length: 5 }, () =>
-          new Array(3).fill(0)
-        );
-        for (let i = 0; i < value.count; i++) {
-          for (let j = 0; j < 3; j++) {
-            if (PAYLINES[value.payline][i] === j) {
-              allSuccessId[i][j] = 1;
-            }
-          }
-          // setAllSuccessIDs((prevAllSuccessIDs) => {
-          //   const newAllSuccessIDs = prevAllSuccessIDs.map((successID, index) =>
-          //     index === i
-          //       ? [
-          //           PAYLINES[value.payline][i] === 0 ? 1 : 0,
-          //           PAYLINES[value.payline][i] === 1 ? 1 : 0,
-          //           PAYLINES[value.payline][i] === 2 ? 1 : 0,
-          //         ]
-          //       : successID
-          //   );
+    // if (general_winning.length !== 0) {
+    //   general_winning.forEach((value) => {
+    //     // console.log(value.count, value.payline);
+    //     console.log(PAYLINES[value.payline], value.count);
+    //     for (let i = 0; i < value.count; i++) {
+    //       setAllSuccessIDs((prevAllSuccessIDs) => {
+    //         const newAllSuccessIDs = prevAllSuccessIDs.map((successID, index) =>
+    //           index === i
+    //             ? [
+    //                 PAYLINES[value.payline][i] === 0 ? 1 : 0,
+    //                 PAYLINES[value.payline][i] === 1 ? 1 : 0,
+    //                 PAYLINES[value.payline][i] === 2 ? 1 : 0,
+    //               ]
+    //             : successID
+    //         );
+    //         return newAllSuccessIDs;
+    //       });
+    //     }
+    //     // console.log(finalResult);
+    //   });
+    //   console.log('---------------------------->general win!!!!!!!');
+    // }
 
-          //   return newAllSuccessIDs;
+    setAllSuccessIDs([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
 
-          // });
-        }
-        // for (let i=value.count;i<5;i++){
-        //   for(let j=0;j<3;j++){
-        //     allSuccessId[i].push(0)
-        //   }
-        // }
-        
-        
-        setTimeout(() => {setAllSuccessIDs(allSuccessId); }, 1000)
-        // console.log(finalResult);
-      });
-      console.log('---------------------------->general win!!!!!!!');
-    }
+    // Wait till the Slot components have reset before showing the new wins
+    setTimeout(() => {
+      showWinningCombinations(general_winning);
+    }, 2000); // Wait for 2 seconds
+
   }, [result5]);
 
   const handleIncrementLine = () => {
