@@ -79,11 +79,11 @@ const Safari = () => {
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
 
-  const [suceessID1, setSuccessID1] = useState<Array<number>>([0, 1, 0]);
-  const [suceessID2, setSuccessID2] = useState<Array<number>>([1, 0, 0]);
-  const [suceessID3, setSuccessID3] = useState<Array<number>>([0, 1, 0]);
-  const [suceessID4, setSuccessID4] = useState<Array<number>>([0, 0, 1]);
-  const [suceessID5, setSuccessID5] = useState<Array<number>>([0, 1, 0]);
+  const [suceessID1, setSuccessID1] = useState<Array<number>>([0, 0, 0]);
+  const [suceessID2, setSuccessID2] = useState<Array<number>>([0, 0, 0]);
+  const [suceessID3, setSuccessID3] = useState<Array<number>>([0, 0, 0]);
+  const [suceessID4, setSuccessID4] = useState<Array<number>>([0, 0, 0]);
+  const [suceessID5, setSuccessID5] = useState<Array<number>>([0, 0, 0]);
 
   const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
     suceessID1,
@@ -116,6 +116,7 @@ const Safari = () => {
       newSocket.disconnect();
     };
   }, []);
+
   useEffect(() => {
     switch (line) {
       case 1:
@@ -172,6 +173,7 @@ const Safari = () => {
         break;
     }
   }, [line]);
+
   useEffect(() => {
     // console.log(betValueArray[betValue - 1]);
     const { scatter_winning, general_winning, result } = get_winning_paylines(
@@ -184,7 +186,7 @@ const Safari = () => {
       betValueArray[betValue - 1] * line
     );
     setWinning(result);
-    console.log(general_winning);
+    // console.log(general_winning);
 
     let paylines = new Array();
     general_winning.forEach((winning) => {
@@ -201,31 +203,47 @@ const Safari = () => {
         winning: result,
       })
     );
-    // console.log(general_winning)
-    if (general_winning.length !== 0) {
-      const finalResult: any[][] = [
-        result1,
-        result2,
-        result3,
-        result4,
-        result5,
-      ];
-      general_winning.map((value) => {
-        console.log(value.count, value.payline);
-        console.log(PAYLINES[value.payline]);
-        for (let i = 0; i < value.count; i++) {
-          // console.log(finalResult[i][PAYLINES[value.payline][i]]);
+    console.log(general_winning)
 
-          setAllSuccessIDs((prevAllSuccessIDs) => {
-            const newAllSuccessIDs = [...prevAllSuccessIDs];
-            newAllSuccessIDs[i] = [0, 0, 0];
-            return newAllSuccessIDs;
-          });
+    if (general_winning.length !== 0) {
+      general_winning.forEach(async (value) => {
+        // console.log(value.count, value.payline);
+        console.log(PAYLINES[value.payline], value.count);
+        let allSuccessId: number[][] = Array.from({ length: 5 }, () =>
+          new Array(3).fill(0)
+        );
+        for (let i = 0; i < value.count; i++) {
+          for (let j = 0; j < 3; j++) {
+            if (PAYLINES[value.payline][i] === j) {
+              allSuccessId[i][j] = 1;
+            }
+          }
+          // setAllSuccessIDs((prevAllSuccessIDs) => {
+          //   const newAllSuccessIDs = prevAllSuccessIDs.map((successID, index) =>
+          //     index === i
+          //       ? [
+          //           PAYLINES[value.payline][i] === 0 ? 1 : 0,
+          //           PAYLINES[value.payline][i] === 1 ? 1 : 0,
+          //           PAYLINES[value.payline][i] === 2 ? 1 : 0,
+          //         ]
+          //       : successID
+          //   );
+
+          //   return newAllSuccessIDs;
+
+          // });
         }
-        console.log(finalResult);
+        // for (let i=value.count;i<5;i++){
+        //   for(let j=0;j<3;j++){
+        //     allSuccessId[i].push(0)
+        //   }
+        // }
+        
+        
+        setTimeout(() => {setAllSuccessIDs(allSuccessId); }, 1000)
+        // console.log(finalResult);
       });
       console.log('---------------------------->general win!!!!!!!');
-      // setSuccessID1([0, 0, 0]);
     }
   }, [result5]);
 
@@ -249,6 +267,7 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     setSpinType(1);
+
     if (socket&&isSpinning === false) {
       socket.emit(
         'bet',
@@ -268,6 +287,40 @@ const Safari = () => {
       setIsSpinning(true);
       setWinning(0.0);
     }
+    if (socket) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
+    setIsSpinning(true);
+    setWinning(0.0);
+    // }
+    setAllSuccessIDs([
+      [0, 0, 0], // Initial state for successID1
+      [0, 0, 0], // Initial state for successID2
+      [0, 0, 0], // Initial state for successID3
+      [0, 0, 0], // Initial state for successID4
+      [0, 0, 0], // Initial state for successID5
+    ]);
+  };
+  const handleAutoSpinClick = () => {
+    setSpinType(0);
+    // if (socket) {
+    //   socket.emit(
+    //     'bet',
+    //     JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+    //   );
+    setIsSpinning(true);
+    setWinning(0.0);
+    // }
+    setAllSuccessIDs([
+      [0, 0, 0], // Initial state for successID1
+      [0, 0, 0], // Initial state for successID2
+      [0, 0, 0], // Initial state for successID3
+      [0, 0, 0], // Initial state for successID4
+      [0, 0, 0], // Initial state for successID5
+    ]);
+
   };
   const handleSpinEnd = () => {
     setIsSpinning(false);
@@ -587,5 +640,5 @@ const Safari = () => {
     </>
   );
 };
-
-export default Safari;
+}
+export default Safari
