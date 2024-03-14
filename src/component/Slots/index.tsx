@@ -10,10 +10,30 @@ export interface Props {
   setResult: (result: string[]) => void;
   onSpinEnd: () => void;
   spinID: number;
-  suceessID:Array<number>;
+  suceessID: Array<number>;
+  // paylineID?: number;
 }
 
 let items = new Array();
+const paylineColor = [
+  '#ffff4d',
+  '#ff0066',
+  '#0066ff',
+  '#ff0066',
+  '#0099ff',
+  '#ffff00',
+  '#33cc33',
+  '#00b33c',
+  '#ff3300',
+  '#e6e600',
+  '#b3ff1a',
+  '#ff9900',
+  '#66ffcc',
+  '#1affb2',
+  '#6600cc',
+  '#66ffcc',
+  '#008000',
+];
 const Slot: FC<Props> = ({
   count,
   isSpinning,
@@ -21,6 +41,7 @@ const Slot: FC<Props> = ({
   onSpinEnd,
   spinID,
   suceessID,
+  // paylineID,
 }) => {
   const [currentImages, setCurrentImages] = useState<string[]>(() => []);
   const [initial_items, setInitialItems] = useState<string[]>(() => []);
@@ -71,7 +92,14 @@ const Slot: FC<Props> = ({
                     ? `src/assets/${imageSrc}.png`
                     : `src/assets/gif/${imageSrc}.gif`
                 }
-                className={`w-[280px] h-[206px]`}
+                className={`w-[280px] h-[206px] `}
+                // ${
+                //   suceessID[index] === 0
+                //     ? ''
+                //     : `border-8 border-${paylineColor[paylineID]}
+                //     `
+                // }
+                // `}
                 alt={`Slot ${suceessID[index]}`}
                 // onAnimationEnd={() =>{
                 //     onSpinEnd()
