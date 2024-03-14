@@ -1,9 +1,10 @@
 import { useState, useEffect, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Socket, io } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
-import {SOCKET_SERVER_URL} from "../../config/config.tsx"
+import { PAYLINES } from '../../constants/paylines';
+import { SOCKET_SERVER_URL } from '../../config/config.tsx';
 
 import Background from '../../assets/background.png';
 import MinusImage from '../../assets/minus.png';
@@ -52,21 +53,20 @@ import HelpImageClick2 from '../../assets/help/help2_click.png';
 import HelpImage3 from '../../assets/help/help3.png';
 import HelpImageClick3 from '../../assets/help/help3_click.png';
 import './index.css';
-import { DefaultEventsMap } from '@socket.io/component-emitter';
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
 ];
 const Safari = () => {
-  
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
-  const [balance, setBalance]=useState(10000.00)
-  const [winning, setWinning]=useState<number>(0.00)
-  const [spin_type, setSpinType]=useState<number>(1)
-  const [minor,setMinor]=useState(0.00)
-  const [major,setMajor]=useState(0.00)
-  const [jackpot,setJackpot]=useState(0.00)
+  const [balance, setBalance] = useState(10000.0);
+  const [winning, setWinning] = useState<number>(0.0);
+  const [spin_type, setSpinType] = useState<number>(1);
+  const [minor, setMinor] = useState(0.0);
+  const [major, setMajor] = useState(0.0);
+  const [jackpot, setJackpot] = useState(0.0);
+
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
   const [sideRight, setSideRight] = useState(SideRight1);
@@ -78,29 +78,44 @@ const Safari = () => {
   const [result3, setResult3] = useState<String[]>(() => []);
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
+
+  const [suceessID1, setSuccessID1] = useState<Array<number>>([0, 1, 0]);
+  const [suceessID2, setSuccessID2] = useState<Array<number>>([1, 0, 0]);
+  const [suceessID3, setSuccessID3] = useState<Array<number>>([0, 1, 0]);
+  const [suceessID4, setSuccessID4] = useState<Array<number>>([0, 0, 1]);
+  const [suceessID5, setSuccessID5] = useState<Array<number>>([0, 1, 0]);
+
+  const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
+    suceessID1,
+    suceessID2,
+    suceessID3,
+    suceessID4,
+    suceessID5,
+  ]);
   const [socket, setSocket] = useState<Socket | null>(null);
+
   const navigate = useNavigate();
-  useEffect(()=>{
+  useEffect(() => {
     const newSocket = io(SOCKET_SERVER_URL);
-    setSocket(newSocket)
-    newSocket.emit('username', "test1");
-    newSocket.on("major_minor",(message)=>{
-      const {major,minor}=JSON.parse(message)
-      setMajor(major)
-      setMinor(minor)
-    })
-    newSocket.on("jackpot",(message)=>{
-      const {jackpot}=JSON.parse(message)
-      setJackpot(jackpot)
-    })
-    newSocket.on("update",(message)=>{
-      const {balance} = JSON.parse(message)
-      setBalance(balance.toFixed(2))
-    })
-    return ()=>{
-      newSocket.disconnect()
-    }
-  },[])
+    setSocket(newSocket);
+    newSocket.emit('username', 'test1');
+    newSocket.on('major_minor', (message) => {
+      const { major, minor } = JSON.parse(message);
+      setMajor(major);
+      setMinor(minor);
+    });
+    newSocket.on('jackpot', (message) => {
+      const { jackpot } = JSON.parse(message);
+      setJackpot(jackpot);
+    });
+    newSocket.on('update', (message) => {
+      const { balance } = JSON.parse(message);
+      setBalance(balance.toFixed(2));
+    });
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
   useEffect(() => {
     switch (line) {
       case 1:
@@ -157,66 +172,105 @@ const Safari = () => {
         break;
     }
   }, [line]);
-  useEffect(()=>{
-    console.log(betValueArray[betValue-1])
-    const {scatter_winning, general_winning,result}=get_winning_paylines(
+  useEffect(() => {
+    // console.log(betValueArray[betValue - 1]);
+    const { scatter_winning, general_winning, result } = get_winning_paylines(
       result1,
       result2,
       result3,
       result4,
       result5,
       line,
-      betValueArray[betValue-1]*line
+      betValueArray[betValue - 1] * line
     );
-    let paylines=new Array()
-    general_winning.forEach((winning)=>{
-      paylines.push(winning.payline)
-    })
-    setWinning(result)
-    socket?.emit("spinresult",JSON.stringify({lines:line,bet:betValueArray[betValue-1]*line,spin_type:spin_type,paylines:paylines,winning:result}));
+    setWinning(result);
+    console.log(general_winning);
+
+    let paylines = new Array();
+    general_winning.forEach((winning) => {
+      paylines.push(winning.payline);
+    });
+    setWinning(result);
+    socket?.emit(
+      'spinresult',
+      JSON.stringify({
+        lines: line,
+        bet: betValueArray[betValue - 1] * line,
+        spin_type: spin_type,
+        paylines: paylines,
+        winning: result,
+      })
+    );
     // console.log(general_winning)
-  },[result5])
+    if (general_winning.length !== 0) {
+      const finalResult: any[][] = [
+        result1,
+        result2,
+        result3,
+        result4,
+        result5,
+      ];
+      general_winning.map((value) => {
+        console.log(value.count, value.payline);
+        console.log(PAYLINES[value.payline]);
+        for (let i = 0; i < value.count; i++) {
+          // console.log(finalResult[i][PAYLINES[value.payline][i]]);
+
+          setAllSuccessIDs((prevAllSuccessIDs) => {
+            const newAllSuccessIDs = [...prevAllSuccessIDs];
+            newAllSuccessIDs[i] = [0, 0, 0];
+            return newAllSuccessIDs;
+          });
+        }
+        console.log(finalResult);
+      });
+      console.log('---------------------------->general win!!!!!!!');
+      // setSuccessID1([0, 0, 0]);
+    }
+  }, [result5]);
+
   const handleIncrementLine = () => {
-    if (isSpinning===false)
+    if (isSpinning === false)
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
 
   const handleDecrementLine = () => {
-    if (isSpinning===false)
+    if (isSpinning === false)
       setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
   };
   const handleIncrementBet = () => {
-    if (isSpinning===false)
-      setBetValue((prevBetValue) =>
-        prevBetValue < 19 ? prevBetValue + 1 : 1
-      );
+    if (isSpinning === false)
+      setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
   };
 
   const handleDecrementBet = () => {
-    if (isSpinning===false)
-      setBetValue((prevBetValue) =>
-        prevBetValue > 1 ? prevBetValue - 1 : 19
-      );
+    if (isSpinning === false)
+      setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
-    setSpinType(1)
-    if (socket){
-      socket.emit("bet",JSON.stringify({bet:(line * betValueArray[betValue - 1]).toFixed(2)}))
+    setSpinType(1);
+    if (socket) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
       setIsSpinning(true);
       setWinning(0.0);
     }
   };
   const handleAutoSpinClick = () => {
-    setSpinType(0)
-    if (socket){
-      socket.emit("bet",JSON.stringify({bet:(line * betValueArray[betValue - 1]).toFixed(2)}))
+    setSpinType(0);
+    if (socket) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
       setIsSpinning(true);
       setWinning(0.0);
     }
   };
   const handleSpinEnd = () => {
     setIsSpinning(false);
-
   };
   const [isOpen, setIsOpen] = useState(false);
 
@@ -261,7 +315,7 @@ const Safari = () => {
               ></div>
             )}
             <div
-              className={`fixed top-0 z-40 w-[326px] h-[906px] shadow-lg transform ease-in-out duration-300 ${
+              className={`fixed top-[6px] z-40 w-[326px] h-[906px] shadow-lg transform ease-in-out duration-300 ${
                 isOpen
                   ? 'translate-x-0 right-[153px]'
                   : 'translate-x-full right-[180px] hidden'
@@ -301,7 +355,7 @@ const Safari = () => {
           </div>
         </div>
         {/* content */}
-        <div className="flex pt-[102px] gap-[19.2px]">
+        <div className="flex mt-[102px] gap-[19.2px]">
           <div className="flex gap-[3px]">
             <div
               className="w-[64px] h-[628px] mt-[-11px]"
@@ -315,6 +369,7 @@ const Safari = () => {
               setResult={setResult1}
               onSpinEnd={handleSpinEnd}
               spinID={1}
+              suceessID={allSuccessIDs[0]}
             />
           </div>
           <Slot
@@ -323,6 +378,7 @@ const Safari = () => {
             setResult={setResult2}
             onSpinEnd={handleSpinEnd}
             spinID={2}
+            suceessID={allSuccessIDs[1]}
           />
           <Slot
             count={15}
@@ -330,6 +386,7 @@ const Safari = () => {
             setResult={setResult3}
             onSpinEnd={handleSpinEnd}
             spinID={3}
+            suceessID={allSuccessIDs[2]}
           />
           <Slot
             count={18}
@@ -337,6 +394,7 @@ const Safari = () => {
             setResult={setResult4}
             onSpinEnd={handleSpinEnd}
             spinID={4}
+            suceessID={allSuccessIDs[3]}
           />
           <div className="flex gap-[4px]">
             <Slot
@@ -345,6 +403,7 @@ const Safari = () => {
               setResult={setResult5}
               onSpinEnd={handleSpinEnd}
               spinID={5}
+              suceessID={allSuccessIDs[4]}
             />
             <div
               className="w-[64px] h-[628px] mt-[-12px]"
@@ -385,7 +444,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-[373px]">
-            <p className="gradient-text text-[36px] font-bold pl-[40px] mt-[-4px]">
+            <p className="gradient-text font-serif text-[36px] font-bold pl-[40px] mt-[-4px]">
               {(line * betValueArray[betValue - 1]).toFixed(2)}
             </p>
             <div className="flex mt-[2px] ml-[7px]">
@@ -409,7 +468,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-auto">
-            <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
+            <p className="gradient-text font-mono text-[36px] font-bold pl-[70px] mt-[-4px]">
               {winning.toFixed(2)}
             </p>
             <div className="flex gap-[6px] mt-[2px] ml-[7px]">
@@ -526,7 +585,7 @@ const Safari = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Safari
+export default Safari;
