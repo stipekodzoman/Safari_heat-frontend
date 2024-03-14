@@ -85,8 +85,9 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-        }else if (result1[PAYLINES[index][0]]==="lion"){
-            if(result2[PAYLINES[index][1]]==="elephant"){
+        }
+        if (result1[PAYLINES[index][0]]==="lion"){
+            if(result2[PAYLINES[index][1]]==="elephant"||result2[PAYLINES[index][1]]==="lion"){
                 general_winning_count=2
                 general_winning=betValue/line*2*2
                 if(result3[PAYLINES[index][2]]==="elephant"||result3[PAYLINES[index][2]]==="lion"){
@@ -102,7 +103,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="rhino"){
+            if(result2[PAYLINES[index][1]]==="rhino"||result2[PAYLINES[index][1]]==="lion"){
                 general_winning_count=2
                 general_winning=betValue/line*2*2
                 if(result3[PAYLINES[index][2]]==="rhino"||result3[PAYLINES[index][2]]==="lion"){
@@ -118,7 +119,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="zebra"){
+            if(result2[PAYLINES[index][1]]==="zebra"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="zebra"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*15*2
@@ -132,7 +133,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="bison"){
+            if(result2[PAYLINES[index][1]]==="bison"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="bison"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*15*2
@@ -146,7 +147,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="flamingo"){
+            if(result2[PAYLINES[index][1]]==="flamingo"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="flamingo"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*20*2
@@ -160,7 +161,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="king"){
+            if(result2[PAYLINES[index][1]]==="king"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="king"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*10*2
@@ -174,7 +175,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="ace"){
+            if(result2[PAYLINES[index][1]]==="ace"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="ace"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*10*2
@@ -188,7 +189,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="queen"){
+            if(result2[PAYLINES[index][1]]==="queen"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="queen"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*5*2
@@ -202,7 +203,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="jack"){
+            if(result2[PAYLINES[index][1]]==="jack"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="jack"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*5*2
@@ -216,7 +217,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="ten"){
+            if(result2[PAYLINES[index][1]]==="ten"||result2[PAYLINES[index][1]]==="lion"){
                 if(result3[PAYLINES[index][2]]==="ten"||result3[PAYLINES[index][2]]==="lion"){
                     general_winning_count=3
                     general_winning=betValue/line*5*2
@@ -230,7 +231,7 @@ const get_general_winning=(result1:String[],result2:String[],result3:String[],re
                     }
                 }
             }
-            if(result2[PAYLINES[index][1]]==="nine"){
+            if(result2[PAYLINES[index][1]]==="nine"||result2[PAYLINES[index][1]]==="lion"){
                 general_winning_count=2
                 general_winning=betValue/line*2*2
                 if(result3[PAYLINES[index][2]]==="nine"||result3[PAYLINES[index][2]]==="lion"){

@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
 import { PAYLINES } from '../../constants/paylines';
+import { SOCKET_SERVER_URL } from '../../config/config.tsx';
 
 import Background from '../../assets/background.png';
 import MinusImage from '../../assets/minus.png';
@@ -50,26 +52,27 @@ import HelpImage2 from '../../assets/help/help2.png';
 import HelpImageClick2 from '../../assets/help/help2_click.png';
 import HelpImage3 from '../../assets/help/help3.png';
 import HelpImageClick3 from '../../assets/help/help3_click.png';
-
 import './index.css';
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
 ];
 const Safari = () => {
-  const [line, setLine] = useState(1);
+  const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
-  const [winning, setWinning] = useState(0.0);
+  const [winning, setWinning] = useState<number>(0.0);
+  const [spin_type, setSpinType] = useState<number>(1);
+  const [minor, setMinor] = useState(0.0);
+  const [major, setMajor] = useState(0.0);
+  const [jackpot, setJackpot] = useState(0.0);
 
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
   const [sideRight, setSideRight] = useState(SideRight1);
   const [isBackground, setIsBackground] = useState(true);
-
   const [helpBackground, setHelpBackground] = useState(HelpBackground1);
   const [pageNumber, setPageNumber] = useState(1);
-  // const [isSpinClicked, setIsSpinClicked] = useState(false);
   const [result1, setResult1] = useState<String[]>(() => []);
   const [result2, setResult2] = useState<String[]>(() => []);
   const [result3, setResult3] = useState<String[]>(() => []);
@@ -89,7 +92,30 @@ const Safari = () => {
     suceessID4,
     suceessID5,
   ]);
+  const [socket, setSocket] = useState<Socket | null>(null);
+
   const navigate = useNavigate();
+  useEffect(() => {
+    const newSocket = io(SOCKET_SERVER_URL);
+    setSocket(newSocket);
+    newSocket.emit('username', 'test1');
+    newSocket.on('major_minor', (message) => {
+      const { major, minor } = JSON.parse(message);
+      setMajor(major);
+      setMinor(minor);
+    });
+    newSocket.on('jackpot', (message) => {
+      const { jackpot } = JSON.parse(message);
+      setJackpot(jackpot);
+    });
+    newSocket.on('update', (message) => {
+      const { balance } = JSON.parse(message);
+      setBalance(balance.toFixed(2));
+    });
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
   useEffect(() => {
     switch (line) {
       case 1:
@@ -159,7 +185,23 @@ const Safari = () => {
     );
     setWinning(result);
     console.log(general_winning);
-    console.log(result1, result2, result3, result4, result5);
+
+    let paylines = new Array();
+    general_winning.forEach((winning) => {
+      paylines.push(winning.payline);
+    });
+    setWinning(result);
+    socket?.emit(
+      'spinresult',
+      JSON.stringify({
+        lines: line,
+        bet: betValueArray[betValue - 1] * line,
+        spin_type: spin_type,
+        paylines: paylines,
+        winning: result,
+      })
+    );
+    // console.log(general_winning)
     if (general_winning.length !== 0) {
       const finalResult: any[][] = [
         result1,
@@ -186,25 +228,47 @@ const Safari = () => {
       // setSuccessID1([0, 0, 0]);
     }
   }, [result5]);
+
   const handleIncrementLine = () => {
-    setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
+    if (isSpinning === false)
+      setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
 
   const handleDecrementLine = () => {
-    setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
+    if (isSpinning === false)
+      setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
   };
   const handleIncrementBet = () => {
-    setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
+    if (isSpinning === false)
+      setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
   };
 
   const handleDecrementBet = () => {
-    setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
+    if (isSpinning === false)
+      setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
-    setIsSpinning(true);
-    setWinning(0.0);
+    setSpinType(1);
+    if (socket) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
+      setIsSpinning(true);
+      setWinning(0.0);
+    }
   };
-
+  const handleAutoSpinClick = () => {
+    setSpinType(0);
+    if (socket) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
+      setIsSpinning(true);
+      setWinning(0.0);
+    }
+  };
   const handleSpinEnd = () => {
     setIsSpinning(false);
   };
@@ -229,13 +293,13 @@ const Safari = () => {
         <div className="flex justify-between h-[50px]">
           <div className="flex mt-[4px]">
             <p className="text-white text-center font-extrabold text-[24px] w-[493px] pl-[275px]">
-              864.30
+              {major}
             </p>
             <p className="text-white font-extrabold text-center text-[24px] pl-[157px]  w-[450px]">
-              5864.30
+              {jackpot}
             </p>
             <p className="text-white font-extrabold text-[24px] text-center pl-[150px] w-[365px]">
-              864.30
+              {minor}
             </p>
           </div>
           <div>
@@ -411,7 +475,7 @@ const Safari = () => {
               <button
                 type="submit"
                 // onClick={handleDecrementLine}
-                onClick={handleSpinClick}
+                onClick={handleAutoSpinClick}
                 className="h-[81px] w-[243px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
                   backgroundImage: isSpinning
