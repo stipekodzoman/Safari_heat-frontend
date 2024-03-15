@@ -578,7 +578,7 @@ const Safari = () => {
         </div>
         <img
           src={GambleImage}
-          onClick={()=>setBackgroundName("Gamble")}
+          onClick={() => setBackgroundName('Gamble')}
           className="fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125"
         />
       </div>
@@ -673,7 +673,7 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
-        } flex flex-col justify-end w-[1602px] h-[906px]
+        } flex flex-col justify-end w-[1602px] h-[906px] pt-[400px]
         `}
         style={{
           backgroundImage: `url(${GambleBackgroundImage})`,
@@ -681,6 +681,10 @@ const Safari = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
+        <div>
+          <img src={RedButtonImage} />
+          <img src={BlackButtonImage} />
+        </div>
         <div className="flex justify-between px-[8px]"></div>
       </div>
     </>
