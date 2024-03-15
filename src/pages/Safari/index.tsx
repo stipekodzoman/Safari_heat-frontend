@@ -102,6 +102,16 @@ const Safari = () => {
     suceessID4,
     suceessID5,
   ]);
+
+  const [cardName, setCardName] = useState('card');
+  const [randomValue, setRandomValue] = useState<boolean | null>(null);
+  const [winingString, setWinningString] = useState(false);
+  let cardRandomValue = false;
+  const generateCardRandomValue = () => {
+    const newValue = Math.floor(Math.random() * 2) % 2 === 0;
+    setRandomValue(newValue);
+    cardRandomValue = newValue;
+  };
   // const [socket, setSocket] = useState<Socket | null>(null);
 
   const navigate = useNavigate();
@@ -361,6 +371,7 @@ const Safari = () => {
 
   return (
     <>
+      {/* Main */}
       <div
         className={`${
           backgroundName != 'Main' ? 'hidden' : ''
@@ -583,6 +594,7 @@ const Safari = () => {
           className="fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125"
         />
       </div>
+      {/* Help */}
       <div
         className={`${
           backgroundName != 'Help' ? 'hidden' : ''
@@ -671,10 +683,11 @@ const Safari = () => {
           </div>
         </div>
       </div>
+      {/* Gamble */}
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
-        } flex flex-col  w-[1602px] h-[906px] pt-[278px]
+        } flex flex-col  w-[1602px] h-[906px] pt-[278px] gap-[20px] 
         `}
         style={{
           backgroundImage: `url(${GambleBackgroundImage})`,
@@ -684,22 +697,88 @@ const Safari = () => {
       >
         <div className="flex pl-[270px] pr-[275px] justify-between">
           <img
+            onClick={() => {
+              setCardName('red');
+              generateCardRandomValue();
+              {
+                cardRandomValue == false
+                  ? setCardName('red')
+                  : setCardName('black');
+              }
+              {
+                cardRandomValue == false
+                  ? setWinningString(true)
+                  : setTimeout(() => {
+                      setBackgroundName('Main');
+                    }, 2000);
+              }
+              console.log(cardRandomValue);
+            }}
             src={RedButtonImage}
             className="w-[339px] cursor-pointer hover:brightness-125"
           />
           <img
-            src={Card}
-            className="gamble-image w-[268px] hover:brightness-125 ml-[12px]"
+            src={`${
+              cardName == 'card'
+                ? Card
+                : cardName == 'black'
+                ? BlackCard
+                : Redcard
+            }`}
+            className={`${
+              cardName == 'card' ? 'gamble-image' : ' '
+            } w-[269px] ml-[12px]`}
           />
           <img
+            onClick={() => {
+              setCardName('black');
+              generateCardRandomValue();
+              {
+                cardRandomValue == false
+                  ? setCardName('red')
+                  : setCardName('black');
+              }
+
+              {
+                cardRandomValue == true
+                  ? setWinningString(true)
+                  : setTimeout(() => {
+                      setBackgroundName('Main');
+                    }, 2000);
+              }
+            }}
             src={BlackButtonImage}
             className="w-[339px] cursor-pointer hover:brightness-125"
           />
         </div>
-        <div>
-          <p className="text-white text-center font-extrabold">2550</p>
+        <div className="h-[48px]">
+          <p
+            className={`${
+              winingString ? '' : 'hidden'
+            } text-white text-center font-bold text-[32px]`}
+          >
+            YOU WIN {(winning * 2).toFixed(2)}
+          </p>
         </div>
-        <div className="flex justify-between px-[8px]"></div>
+
+        <div className="grid grid-cols-2 px-[442px] gap mt-[28px]">
+          <p className="text-white text-center font-bold text-[32px]">
+            {winning.toFixed(2)}
+          </p>
+          <p className="text-white text-center font-bold text-[32px]">
+            {(winning * 2).toFixed(2)}
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <img
+            onClick={() => {
+              setBackgroundName('Main');
+              setCardName('card');
+            }}
+            src={CollectButtonImage}
+            className="mt-[26px] ml-[12px] w-[290px] cursor-pointer hover:brightness-105"
+          />
+        </div>
       </div>
     </>
   );
