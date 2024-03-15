@@ -52,6 +52,15 @@ import HelpImage2 from '../../assets/help/help2.png';
 import HelpImageClick2 from '../../assets/help/help2_click.png';
 import HelpImage3 from '../../assets/help/help3.png';
 import HelpImageClick3 from '../../assets/help/help3_click.png';
+
+import GambleBackgroundImage from '../../assets/gamble/background.png';
+import GambleImage from '../../assets/gamble/gamble.png';
+import CollectButtonImage from '../../assets/gamble/collect.png';
+import BlackButtonImage from '../../assets/gamble/black_button.png';
+import RedButtonImage from '../../assets/gamble/red_button.png';
+import BlackCard from '../../assets/gamble/black_card.png';
+import Redcard from '../../assets/gamble/red_card.png';
+
 import './index.css';
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
@@ -70,7 +79,7 @@ const Safari = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
   const [sideRight, setSideRight] = useState(SideRight1);
-  const [isBackground, setIsBackground] = useState(true);
+  const [backgroundName, setBackgroundName] = useState('Main');
   const [helpBackground, setHelpBackground] = useState(HelpBackground1);
   const [pageNumber, setPageNumber] = useState(1);
   const [result1, setResult1] = useState<String[]>(() => []);
@@ -172,35 +181,44 @@ const Safari = () => {
         break;
     }
   }, [line]);
-
-  const showWinningCombinations = (winningCombos: any) => {
-    let count = 0;
-    const intervalId = setInterval(() => {
-      if (count < winningCombos.length) {
-        const value = winningCombos[count];
-        console.log(value.count, value.payline);
-        console.log(PAYLINES[value.payline]);
-        for (let i = 0; i < value.count; i++) {
-          setAllSuccessIDs((prevAllSuccessIDs) =>
-            prevAllSuccessIDs.map((successID, index) =>
-              index === i
-                ? [
-                    PAYLINES[value.payline][i] === 0 ? 1 : 0,
-                    PAYLINES[value.payline][i] === 1 ? 1 : 0,
-                    PAYLINES[value.payline][i] === 2 ? 1 : 0,
-                  ]
-                : successID
-            )
-          );
-        }
-        count++;
-      } else {
-        clearInterval(intervalId); // Clear interval when all winning lines have been shown
-      }
-    }, 1000); // Set for 2 seconds
-    console.log("----------------->general win!")
-  };
   useEffect(() => {
+    const showWinningCombinations = async (winningCombos: any) => {
+      let count = 0;
+
+      // Helper function to delay execution.
+      const delay = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
+
+      // while (true) {
+      //   if (count < winningCombos.length) {
+      //     const value = winningCombos[count];
+      //     console.log(value.count, value.payline);
+      //     console.log(PAYLINES[value.payline]);
+
+      //     for (let i = 0; i < value.count; i++) {
+      //       setAllSuccessIDs((prevAllSuccessIDs) =>
+      //         prevAllSuccessIDs.map((successID, index) =>
+      //           index === i
+      //             ? [
+      //                 PAYLINES[value.payline][i] === 0 ? 1 : 0,
+      //                 PAYLINES[value.payline][i] === 1 ? 1 : 0,
+      //                 PAYLINES[value.payline][i] === 2 ? 1 : 0,
+      //               ]
+      //             : successID
+      //         )
+      //       );
+      //     }
+
+      //     count++;
+      //   } else {
+      //     count = 0; // Reset count when all winning lines have been shown
+      //   }
+
+      //   // Delay for 1000 ms (1 second) before next iteration
+      //   await delay(2000);
+      //   console.log('----------------->general win!');
+      // }
+    };
     // console.log(betValueArray[betValue - 1]);
     const { scatter_winning, general_winning, result } = get_winning_paylines(
       result1,
@@ -218,7 +236,6 @@ const Safari = () => {
     general_winning.forEach((winning) => {
       paylines.push(winning.payline);
     });
-    setWinning(result);
     // socket?.emit(
     //   'spinresult',
     //   JSON.stringify({
@@ -254,21 +271,30 @@ const Safari = () => {
     //   console.log('---------------------------->general win!!!!!!!');
     // }
 
-    setAllSuccessIDs([
+    // setAllSuccessIDs(()=>[
+    //   [0, 0, 0],
+    //   [0, 0, 0],
+    //   [0, 0, 0],
+    //   [0, 0, 0],
+    //   [0, 0, 0],
+    // ]);
+
+    // Wait till the Slot components have reset before showing the new wins
+    setTimeout(() => {
+      showWinningCombinations(general_winning);
+    }, 0); // Wait for 2 seconds
+  }, [result5]);
+  useEffect(() => {
+    if (isSpinning) {
+    }
+    setAllSuccessIDs(() => [
       [0, 0, 0],
       [0, 0, 0],
       [0, 0, 0],
       [0, 0, 0],
       [0, 0, 0],
     ]);
-
-    // Wait till the Slot components have reset before showing the new wins
-    setTimeout(() => {
-      showWinningCombinations(general_winning);
-    }, 2000); // Wait for 2 seconds
-
-  }, [result5]);
-
+  }, [isSpinning]);
   const handleIncrementLine = () => {
     if (isSpinning === false)
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
@@ -297,13 +323,13 @@ const Safari = () => {
     setIsSpinning(true);
     setWinning(0.0);
     // }
-    setAllSuccessIDs([
-      [0, 0, 0], // Initial state for successID1
-      [0, 0, 0], // Initial state for successID2
-      [0, 0, 0], // Initial state for successID3
-      [0, 0, 0], // Initial state for successID4
-      [0, 0, 0], // Initial state for successID5
-    ]);
+    // setAllSuccessIDs(()=>[
+    //   [0, 0, 0], // Initial state for successID1
+    //   [0, 0, 0], // Initial state for successID2
+    //   [0, 0, 0], // Initial state for successID3
+    //   [0, 0, 0], // Initial state for successID4
+    //   [0, 0, 0], // Initial state for successID5
+    // ]);
   };
   const handleAutoSpinClick = () => {
     setSpinType(0);
@@ -315,13 +341,13 @@ const Safari = () => {
     setIsSpinning(true);
     setWinning(0.0);
     // }
-    setAllSuccessIDs([
-      [0, 0, 0], // Initial state for successID1
-      [0, 0, 0], // Initial state for successID2
-      [0, 0, 0], // Initial state for successID3
-      [0, 0, 0], // Initial state for successID4
-      [0, 0, 0], // Initial state for successID5
-    ]);
+    // setAllSuccessIDs(()=>[
+    //   [0, 0, 0], // Initial state for successID1
+    //   [0, 0, 0], // Initial state for successID2
+    //   [0, 0, 0], // Initial state for successID3
+    //   [0, 0, 0], // Initial state for successID4
+    //   [0, 0, 0], // Initial state for successID5
+    // ]);
   };
   const handleSpinEnd = () => {
     setIsSpinning(false);
@@ -336,7 +362,7 @@ const Safari = () => {
     <>
       <div
         className={`${
-          isBackground ? '' : 'hidden'
+          backgroundName != 'Main' ? 'hidden' : ''
         } flex flex-col 2xl:w-[1612px] h-[100vh] xl:w-[1200px] lg:w-[960px] md:w-[700px] sm:w-[540px] bg-no-repeat inset-0 2xl:h-[906px] xl:h-[576px] lg:h-[462px] md:h-[335px] sm:h-[257px] bg-cover rotate`}
         style={{
           backgroundImage: `url(${Background})`,
@@ -385,7 +411,7 @@ const Safari = () => {
                 ></button>
                 <button
                   onClick={() => {
-                    setIsBackground(false);
+                    setBackgroundName('Help');
                     setIsOpen(false);
                   }}
                   className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
@@ -498,7 +524,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-[373px]">
-            <p className="gradient-text font-serif text-[36px] font-bold pl-[40px] mt-[-4px]">
+            <p className="gradient-text text-[36px] font-bold pl-[40px] mt-[-4px]">
               {(line * betValueArray[betValue - 1]).toFixed(2)}
             </p>
             <div className="flex mt-[2px] ml-[7px]">
@@ -522,7 +548,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-auto">
-            <p className="gradient-text font-mono text-[36px] font-bold pl-[70px] mt-[-4px]">
+            <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
               {winning.toFixed(2)}
             </p>
             <div className="flex gap-[6px] mt-[2px] ml-[7px]">
@@ -550,10 +576,15 @@ const Safari = () => {
             </div>
           </div>
         </div>
+        <img
+          src={GambleImage}
+          onClick={()=>setBackgroundName("Gamble")}
+          className="fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125"
+        />
       </div>
       <div
         className={`${
-          isBackground ? 'hidden' : ''
+          backgroundName != 'Help' ? 'hidden' : ''
         } flex flex-col justify-end w-[1602px] h-[906px]
         `}
         style={{
@@ -564,11 +595,12 @@ const Safari = () => {
       >
         <div className="flex justify-between px-[8px]">
           <div className="pl-[59px]">
-            <button
-              onClick={() => setIsBackground(true)}
-              className="h-[81px] w-[265px] focus:outline-none hover:brightness-105 bg-no-repeat bg-center border-none"
-              style={{ backgroundImage: `url(${Back})` }}
-            ></button>
+            <img
+              onClick={() => setBackgroundName('Main')}
+              src={Back}
+              className="cursor-pointer mb-0.5 hover:brightness-110"
+            />
+            {/* </button> */}
           </div>
           <div className={`${pageNumber != 4 ? 'mr-[152px]' : 'mr-[470px]'} `}>
             <button
@@ -637,6 +669,19 @@ const Safari = () => {
             ></button>
           </div>
         </div>
+      </div>
+      <div
+        className={`${
+          backgroundName != 'Gamble' ? 'hidden' : ''
+        } flex flex-col justify-end w-[1602px] h-[906px]
+        `}
+        style={{
+          backgroundImage: `url(${GambleBackgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="flex justify-between px-[8px]"></div>
       </div>
     </>
   );

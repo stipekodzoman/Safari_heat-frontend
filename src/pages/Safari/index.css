@@ -17,3 +17,19 @@
 .background-slide-down {
   animation: slideDown 1s ease forwards; /* Adjust duration and easing as needed */
 }
+
+@keyframes darken-brighten {
+  0% {
+    filter: brightness(90%);
+  }
+  50% {
+    filter: brightness(130%);
+  }
+  100% {
+    filter: brightness(90%);
+  }
+}
+
+.gamble-image {
+  animation: darken-brighten 2s infinite;
+}
