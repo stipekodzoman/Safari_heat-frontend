@@ -92,31 +92,30 @@ const Safari = () => {
     suceessID4,
     suceessID5,
   ]);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  // const [socket, setSocket] = useState<Socket | null>(null);
 
   const navigate = useNavigate();
-  useEffect(() => {
-    const newSocket = io(SOCKET_SERVER_URL);
-    setSocket(newSocket);
-    newSocket.emit('username', 'test1');
-    newSocket.on('major_minor', (message) => {
-      const { major, minor } = JSON.parse(message);
-      setMajor(major);
-      setMinor(minor);
-    });
-    newSocket.on('jackpot', (message) => {
-      const { jackpot } = JSON.parse(message);
-      setJackpot(jackpot.toFixed(4));
-    });
-    newSocket.on('update', (message) => {
-      const { balance } = JSON.parse(message);
-      setBalance(balance.toFixed(2));
-    });
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
+  // useEffect(() => {
+  //   const newSocket = io(SOCKET_SERVER_URL);
+  //   setSocket(newSocket);
+  //   newSocket.emit('username', 'test1');
+  //   newSocket.on('major_minor', (message) => {
+  //     const { major, minor } = JSON.parse(message);
+  //     setMajor(major);
+  //     setMinor(minor);
+  //   });
+  //   newSocket.on('jackpot', (message) => {
+  //     const { jackpot } = JSON.parse(message);
+  //     setJackpot(jackpot);
+  //   });
+  //   newSocket.on('update', (message) => {
+  //     const { balance } = JSON.parse(message);
+  //     setBalance(balance.toFixed(2));
+  //   });
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // }, []);
   useEffect(() => {
     switch (line) {
       case 1:
@@ -220,17 +219,17 @@ const Safari = () => {
       paylines.push(winning.payline);
     });
     setWinning(result);
-    socket?.emit(
-      'spinresult',
-      JSON.stringify({
-        lines: line,
-        bet: betValueArray[betValue - 1] * line,
-        spin_type: spin_type,
-        paylines: paylines,
-        winning: result,
-      })
-    );
-    console.log(general_winning)
+    // socket?.emit(
+    //   'spinresult',
+    //   JSON.stringify({
+    //     lines: line,
+    //     bet: betValueArray[betValue - 1] * line,
+    //     spin_type: spin_type,
+    //     paylines: paylines,
+    //     winning: result,
+    //   })
+    // );
+    // console.log(general_winning)
 
     // if (general_winning.length !== 0) {
     //   general_winning.forEach((value) => {
@@ -290,31 +289,11 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     setSpinType(1);
-
-    if (socket&&isSpinning === false) {
-      socket.emit(
-        'bet',
-        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-      );
-      setIsSpinning(true);
-      setWinning(0.0);
-    }
-  };
-  const handleAutoSpinClick = () => {
-    setSpinType(0);
-    if (socket&&isSpinning === false){
-      socket.emit(
-        'bet',
-        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-      );
-      setIsSpinning(true);
-      setWinning(0.0);
-    }
-    if (socket) {
-      socket.emit(
-        'bet',
-        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-      );
+    // if (socket) {
+    //   socket.emit(
+    //     'bet',
+    //     JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+    //   );
     setIsSpinning(true);
     setWinning(0.0);
     // }
@@ -343,7 +322,6 @@ const Safari = () => {
       [0, 0, 0], // Initial state for successID4
       [0, 0, 0], // Initial state for successID5
     ]);
-
   };
   const handleSpinEnd = () => {
     setIsSpinning(false);
@@ -663,5 +641,5 @@ const Safari = () => {
     </>
   );
 };
-}
-export default Safari
+
+export default Safari;
