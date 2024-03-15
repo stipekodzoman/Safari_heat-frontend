@@ -52,6 +52,16 @@ import HelpImage2 from '../../assets/help/help2.png';
 import HelpImageClick2 from '../../assets/help/help2_click.png';
 import HelpImage3 from '../../assets/help/help3.png';
 import HelpImageClick3 from '../../assets/help/help3_click.png';
+
+import GambleBackgroundImage from '../../assets/gamble/background.png';
+import GambleImage from '../../assets/gamble/gamble.png';
+import CollectButtonImage from '../../assets/gamble/collect.png';
+import BlackButtonImage from '../../assets/gamble/black_button.png';
+import RedButtonImage from '../../assets/gamble/red_button.png';
+import BlackCard from '../../assets/gamble/black_card.png';
+import Redcard from '../../assets/gamble/red_card.png';
+import Card from '../../assets/gamble/card.png';
+
 import './index.css';
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
@@ -70,7 +80,7 @@ const Safari = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft1);
   const [sideRight, setSideRight] = useState(SideRight1);
-  const [isBackground, setIsBackground] = useState(true);
+  const [backgroundName, setBackgroundName] = useState('Main');
   const [helpBackground, setHelpBackground] = useState(HelpBackground1);
   const [pageNumber, setPageNumber] = useState(1);
   const [result1, setResult1] = useState<String[]>(() => []);
@@ -92,6 +102,17 @@ const Safari = () => {
     suceessID4,
     suceessID5,
   ]);
+
+  const [cardName, setCardName] = useState('card');
+  const [randomValue, setRandomValue] = useState<boolean | null>(null);
+  const [winingString, setWinningString] = useState(false);
+  let cardRandomValue = false;
+  const generateCardRandomValue = () => {
+    const newValue = Math.floor(Math.random() * 2) % 2 === 0;
+    setRandomValue(newValue);
+    cardRandomValue = newValue;
+  };
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
 
   const navigate = useNavigate();
@@ -264,7 +285,6 @@ const Safari = () => {
       setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
-    // clearInterval(timer)
     setSpinType(1);
     if (socket&&isSpinning === false) {
       socket.emit(
@@ -283,7 +303,7 @@ const Safari = () => {
     ]);
   };
   const handleAutoSpinClick = () => {
-    // clearInterval(timer)
+
     setSpinType(0);
     if (socket&&isSpinning===false) {
       socket.emit(
@@ -312,9 +332,10 @@ const Safari = () => {
 
   return (
     <>
+      {/* Main */}
       <div
         className={`${
-          isBackground ? '' : 'hidden'
+          backgroundName != 'Main' ? 'hidden' : ''
         } flex flex-col 2xl:w-[1612px] h-[100vh] xl:w-[1200px] lg:w-[960px] md:w-[700px] sm:w-[540px] bg-no-repeat inset-0 2xl:h-[906px] xl:h-[576px] lg:h-[462px] md:h-[335px] sm:h-[257px] bg-cover rotate`}
         style={{
           backgroundImage: `url(${Background})`,
@@ -363,7 +384,7 @@ const Safari = () => {
                 ></button>
                 <button
                   onClick={() => {
-                    setIsBackground(false);
+                    setBackgroundName('Help');
                     setIsOpen(false);
                   }}
                   className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
@@ -476,7 +497,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-[373px]">
-            <p className="gradient-text font-serif text-[36px] font-bold pl-[40px] mt-[-4px]">
+            <p className="gradient-text text-[36px] font-bold pl-[40px] mt-[-4px]">
               {(line * betValueArray[betValue - 1]).toFixed(2)}
             </p>
             <div className="flex mt-[2px] ml-[7px]">
@@ -500,7 +521,7 @@ const Safari = () => {
             </div>
           </div>
           <div className="w-auto">
-            <p className="gradient-text font-mono text-[36px] font-bold pl-[70px] mt-[-4px]">
+            <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
               {winning.toFixed(2)}
             </p>
             <div className="flex gap-[6px] mt-[2px] ml-[7px]">
@@ -528,10 +549,16 @@ const Safari = () => {
             </div>
           </div>
         </div>
+        <img
+          src={GambleImage}
+          onClick={() => setBackgroundName('Gamble')}
+          className="fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125"
+        />
       </div>
+      {/* Help */}
       <div
         className={`${
-          isBackground ? 'hidden' : ''
+          backgroundName != 'Help' ? 'hidden' : ''
         } flex flex-col justify-end w-[1602px] h-[906px]
         `}
         style={{
@@ -542,11 +569,12 @@ const Safari = () => {
       >
         <div className="flex justify-between px-[8px]">
           <div className="pl-[59px]">
-            <button
-              onClick={() => setIsBackground(true)}
-              className="h-[81px] w-[265px] focus:outline-none hover:brightness-105 bg-no-repeat bg-center border-none"
-              style={{ backgroundImage: `url(${Back})` }}
-            ></button>
+            <img
+              onClick={() => setBackgroundName('Main')}
+              src={Back}
+              className="cursor-pointer mb-0.5 hover:brightness-110"
+            />
+            {/* </button> */}
           </div>
           <div className={`${pageNumber != 4 ? 'mr-[152px]' : 'mr-[470px]'} `}>
             <button
@@ -614,6 +642,103 @@ const Safari = () => {
               }}
             ></button>
           </div>
+        </div>
+      </div>
+      {/* Gamble */}
+      <div
+        className={`${
+          backgroundName != 'Gamble' ? 'hidden' : ''
+        } flex flex-col  w-[1602px] h-[906px] pt-[278px] gap-[20px] 
+        `}
+        style={{
+          backgroundImage: `url(${GambleBackgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="flex pl-[270px] pr-[275px] justify-between">
+          <img
+            onClick={() => {
+              setCardName('red');
+              generateCardRandomValue();
+              {
+                cardRandomValue == false
+                  ? setCardName('red')
+                  : setCardName('black');
+              }
+              {
+                cardRandomValue == false
+                  ? setWinningString(true)
+                  : setTimeout(() => {
+                      setBackgroundName('Main');
+                    }, 2000);
+              }
+              console.log(cardRandomValue);
+            }}
+            src={RedButtonImage}
+            className="w-[339px] cursor-pointer hover:brightness-125"
+          />
+          <img
+            src={`${
+              cardName == 'card'
+                ? Card
+                : cardName == 'black'
+                ? BlackCard
+                : Redcard
+            }`}
+            className={`${
+              cardName == 'card' ? 'gamble-image' : ' '
+            } w-[269px] ml-[12px]`}
+          />
+          <img
+            onClick={() => {
+              setCardName('black');
+              generateCardRandomValue();
+              {
+                cardRandomValue == false
+                  ? setCardName('red')
+                  : setCardName('black');
+              }
+
+              {
+                cardRandomValue == true
+                  ? setWinningString(true)
+                  : setTimeout(() => {
+                      setBackgroundName('Main');
+                    }, 2000);
+              }
+            }}
+            src={BlackButtonImage}
+            className="w-[339px] cursor-pointer hover:brightness-125"
+          />
+        </div>
+        <div className="h-[48px]">
+          <p
+            className={`${
+              winingString ? '' : 'hidden'
+            } text-white text-center font-bold text-[32px]`}
+          >
+            YOU WIN {(winning * 2).toFixed(2)}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 px-[442px] gap mt-[28px]">
+          <p className="text-white text-center font-bold text-[32px]">
+            {winning.toFixed(2)}
+          </p>
+          <p className="text-white text-center font-bold text-[32px]">
+            {(winning * 2).toFixed(2)}
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <img
+            onClick={() => {
+              setBackgroundName('Main');
+              setCardName('card');
+            }}
+            src={CollectButtonImage}
+            className="mt-[26px] ml-[12px] w-[290px] cursor-pointer hover:brightness-105"
+          />
         </div>
       </div>
     </>
