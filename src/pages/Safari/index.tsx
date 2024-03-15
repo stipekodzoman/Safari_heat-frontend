@@ -60,6 +60,7 @@ import BlackButtonImage from '../../assets/gamble/black_button.png';
 import RedButtonImage from '../../assets/gamble/red_button.png';
 import BlackCard from '../../assets/gamble/black_card.png';
 import Redcard from '../../assets/gamble/red_card.png';
+import Card from '../../assets/gamble/card.png';
 
 import './index.css';
 const betValueArray = [
@@ -673,7 +674,7 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
-        } flex flex-col justify-end w-[1602px] h-[906px] pt-[400px]
+        } flex flex-col  w-[1602px] h-[906px] pt-[278px]
         `}
         style={{
           backgroundImage: `url(${GambleBackgroundImage})`,
@@ -681,9 +682,22 @@ const Safari = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
+        <div className="flex pl-[270px] pr-[275px] justify-between">
+          <img
+            src={RedButtonImage}
+            className="w-[339px] cursor-pointer hover:brightness-125"
+          />
+          <img
+            src={Card}
+            className="gamble-image w-[268px] hover:brightness-125 ml-[12px]"
+          />
+          <img
+            src={BlackButtonImage}
+            className="w-[339px] cursor-pointer hover:brightness-125"
+          />
+        </div>
         <div>
-          <img src={RedButtonImage} />
-          <img src={BlackButtonImage} />
+          <p className="text-white text-center font-extrabold">2550</p>
         </div>
         <div className="flex justify-between px-[8px]"></div>
       </div>
