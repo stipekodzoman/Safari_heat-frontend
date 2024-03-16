@@ -11,28 +11,28 @@ export interface Props {
   onSpinEnd: () => void;
   spinID: number;
   suceessID: Array<number>;
+  payline:number
   // paylineID?: number;
 }
 
 let items = new Array();
 const paylineColor = [
-  '#ffff4d',
-  '#ff0066',
-  '#0066ff',
-  '#ff0066',
-  '#0099ff',
-  '#ffff00',
-  '#33cc33',
-  '#00b33c',
-  '#ff3300',
-  '#e6e600',
-  '#b3ff1a',
-  '#ff9900',
-  '#66ffcc',
-  '#1affb2',
-  '#6600cc',
-  '#66ffcc',
-  '#008000',
+  `w-[280px] h-[206px] border-[10px] border-[#FFF516]`,
+  `w-[280px] h-[206px] border-[10px] border-[#DF398E]`,
+  `w-[280px] h-[206px] border-[10px] border-[#2586C5]`,
+  `w-[280px] h-[206px] border-[10px] border-[#AD03DD]`,
+  `w-[280px] h-[206px] border-[10px] border-[#1B4CA4]`,
+  `w-[280px] h-[206px] border-[10px] border-[#D5C023]`,
+  `w-[280px] h-[206px] border-[10px] border-[#7EA60C]`,
+  `w-[280px] h-[206px] border-[10px] border-[#0ABA48]`,
+  `w-[280px] h-[206px] border-[10px] border-[#E63009]`,
+  `w-[280px] h-[206px] border-[10px] border-[#C2E21A]`,
+  `w-[280px] h-[206px] border-[10px] border-[#FBBD00]`,
+  `w-[280px] h-[206px] border-[10px] border-[#FBBD00]`,
+  `w-[280px] h-[206px] border-[10px] border-[#03D78E]`,
+  `w-[280px] h-[206px] border-[10px] border-[#810792]`,
+  `w-[280px] h-[206px] border-[10px] border-[#1E0FA6]`,
+  `w-[280px] h-[206px] border-[10px] border-[#04BC45]`,
 ];
 const Slot: FC<Props> = ({
   count,
@@ -41,7 +41,7 @@ const Slot: FC<Props> = ({
   onSpinEnd,
   spinID,
   suceessID,
-  // paylineID,
+  payline
 }) => {
   const [currentImages, setCurrentImages] = useState<string[]>(() => []);
   const [initial_items, setInitialItems] = useState<string[]>(() => []);
@@ -81,7 +81,6 @@ const Slot: FC<Props> = ({
                     spinEnd();
                   }
                 }}
-                // onAnimationEnd={onSpinEnd}
               />
             ))
           : initial_items.map((imageSrc, index) => (
@@ -92,20 +91,8 @@ const Slot: FC<Props> = ({
                     ? `src/assets/${imageSrc}.png`
                     : `src/assets/gif/${imageSrc}.gif`
                 }
-                className={`w-[280px] h-[206px] `}
-                // ${
-                //   suceessID[index] === 0
-                //     ? ''
-                //     : `border-8 border-${paylineColor[paylineID]}
-                //     `
-                // }
-                // `}
+                className={suceessID[index] === 0?`w-[280px] h-[206px] `:paylineColor[payline]}
                 alt={`Slot ${suceessID[index]}`}
-                // onAnimationEnd={() =>{
-                //     onSpinEnd()
-                //     spinEnd()
-                //   }
-                // }
               />
             ))}
       </div>
