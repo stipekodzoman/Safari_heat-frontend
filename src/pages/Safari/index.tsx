@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
@@ -10,7 +10,7 @@ import Background from '../../assets/background.png';
 import MinusImage from '../../assets/minus.png';
 import PlusImage from '../../assets/plus.png';
 import AutoStartImage from '../../assets/auto_start.png';
-import AutoStopImage from '../../assets/autostop.png';
+// import AutoStopImage from '../../assets/autostop.png';
 import SpinImage from '../../assets/spin.png';
 import StopSpinImage from '../../assets/stop.png';
 import MenuBtnImage from '../../assets/menubar/menu_btn.png';
@@ -78,8 +78,8 @@ const Safari = () => {
   const [jackpot, setJackpot] = useState(0.0);
 
   const [isSpinning, setIsSpinning] = useState(false);
-  const [sideLeft, setSideLeft] = useState(SideLeft1);
-  const [sideRight, setSideRight] = useState(SideRight1);
+  const [sideLeft, setSideLeft] = useState(SideLeft13);
+  const [sideRight, setSideRight] = useState(SideRight15);
   const [backgroundName, setBackgroundName] = useState('Main');
   const [helpBackground, setHelpBackground] = useState(HelpBackground1);
   const [pageNumber, setPageNumber] = useState(1);
@@ -89,12 +89,13 @@ const Safari = () => {
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
 
-  const [suceessID1, setSuccessID1] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID2, setSuccessID2] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID3, setSuccessID3] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID4, setSuccessID4] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID5, setSuccessID5] = useState<Array<number>>([0, 0, 0]);
+  const suceessID1 = [0, 0, 0];
+  const suceessID2 = [0, 0, 0];
+  const suceessID3 = [0, 0, 0];
+  const suceessID4 = [0, 0, 0];
+  const suceessID5 = [0, 0, 0];
 
+  const intervalID = useRef<number | null>();
   const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
     suceessID1,
     suceessID2,
@@ -102,40 +103,40 @@ const Safari = () => {
     suceessID4,
     suceessID5,
   ]);
-
   const [cardName, setCardName] = useState('card');
-  const [randomValue, setRandomValue] = useState<boolean | null>(null);
+  const [, setRandomValue] = useState<boolean | null>(null);
   const [winingString, setWinningString] = useState(false);
+  const [isGamble, setIsGamble] = useState(false);
   let cardRandomValue = false;
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
     setRandomValue(newValue);
     cardRandomValue = newValue;
   };
-  // const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const newSocket = io(SOCKET_SERVER_URL);
-  //   setSocket(newSocket);
-  //   newSocket.emit('username', 'test1');
-  //   newSocket.on('major_minor', (message) => {
-  //     const { major, minor } = JSON.parse(message);
-  //     setMajor(major);
-  //     setMinor(minor);
-  //   });
-  //   newSocket.on('jackpot', (message) => {
-  //     const { jackpot } = JSON.parse(message);
-  //     setJackpot(jackpot);
-  //   });
-  //   newSocket.on('update', (message) => {
-  //     const { balance } = JSON.parse(message);
-  //     setBalance(balance.toFixed(2));
-  //   });
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // }, []);
+  useEffect(() => {
+    const newSocket = io(SOCKET_SERVER_URL);
+    setSocket(newSocket);
+    newSocket.emit('username', 'test1');
+    newSocket.on('major_minor', (message) => {
+      const { major, minor } = JSON.parse(message);
+      setMajor(major);
+      setMinor(minor);
+    });
+    newSocket.on('jackpot', (message) => {
+      const { jackpot } = JSON.parse(message);
+      setJackpot(jackpot.toFixed(2));
+    });
+    newSocket.on('update', (message) => {
+      const { balance } = JSON.parse(message);
+      setBalance(balance.toFixed(2));
+    });
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
   useEffect(() => {
     switch (line) {
       case 1:
@@ -193,44 +194,43 @@ const Safari = () => {
     }
   }, [line]);
   useEffect(() => {
-    const showWinningCombinations = async (winningCombos: any) => {
-      let count = 0;
-
-      // Helper function to delay execution.
-      const delay = (ms: number) =>
-        new Promise((resolve) => setTimeout(resolve, ms));
-
-      // while (true) {
-      //   if (count < winningCombos.length) {
-      //     const value = winningCombos[count];
-      //     console.log(value.count, value.payline);
-      //     console.log(PAYLINES[value.payline]);
-
-      //     for (let i = 0; i < value.count; i++) {
-      //       setAllSuccessIDs((prevAllSuccessIDs) =>
-      //         prevAllSuccessIDs.map((successID, index) =>
-      //           index === i
-      //             ? [
-      //                 PAYLINES[value.payline][i] === 0 ? 1 : 0,
-      //                 PAYLINES[value.payline][i] === 1 ? 1 : 0,
-      //                 PAYLINES[value.payline][i] === 2 ? 1 : 0,
-      //               ]
-      //             : successID
-      //         )
-      //       );
-      //     }
-
-      //     count++;
-      //   } else {
-      //     count = 0; // Reset count when all winning lines have been shown
-      //   }
-
-      //   // Delay for 1000 ms (1 second) before next iteration
-      //   await delay(2000);
-      //   console.log('----------------->general win!');
-      // }
-    };
-    // console.log(betValueArray[betValue - 1]);
+    if (intervalID.current && isSpinning === true)
+      clearInterval(intervalID.current);
+  }, [isSpinning]);
+  const showWinningCombinations = (
+    scatter_winning: any,
+    winningCombos: any
+  ) => {
+    let count = 0;
+    if (scatter_winning.count >= 2) {
+      setAllSuccessIDs(scatter_winning.locations);
+      setTimeout(() => console.log(scatter_winning), 1000);
+    }
+    intervalID.current = setInterval(() => {
+      if (count < winningCombos.length) {
+        const value = winningCombos[count];
+        for (let i = 0; i < value.count; i++) {
+          setAllSuccessIDs((prevAllSuccessIDs) =>
+            prevAllSuccessIDs.map((successID, index) =>
+              index === i
+                ? [
+                    PAYLINES[value.payline][i] === 0 ? 1 : 0,
+                    PAYLINES[value.payline][i] === 1 ? 1 : 0,
+                    PAYLINES[value.payline][i] === 2 ? 1 : 0,
+                  ]
+                : index < value.count
+                ? successID
+                : [0, 0, 0]
+            )
+          );
+        }
+        count++;
+      } else {
+        count = 0;
+      }
+    }, 2000); // Set for 2 seconds
+  };
+  useEffect(() => {
     const { scatter_winning, general_winning, result } = get_winning_paylines(
       result1,
       result2,
@@ -241,71 +241,32 @@ const Safari = () => {
       betValueArray[betValue - 1] * line
     );
     setWinning(result);
-    // console.log(general_winning);
-
+    if (general_winning.length > 0 || scatter_winning.count > 1) {
+      setIsGamble(true);
+    }
+    console.log('---------->scatter', scatter_winning);
     let paylines = new Array();
     general_winning.forEach((winning) => {
       paylines.push(winning.payline);
     });
-    // socket?.emit(
-    //   'spinresult',
-    //   JSON.stringify({
-    //     lines: line,
-    //     bet: betValueArray[betValue - 1] * line,
-    //     spin_type: spin_type,
-    //     paylines: paylines,
-    //     winning: result,
-    //   })
-    // );
-    // console.log(general_winning)
 
-    // if (general_winning.length !== 0) {
-    //   general_winning.forEach((value) => {
-    //     // console.log(value.count, value.payline);
-    //     console.log(PAYLINES[value.payline], value.count);
-    //     for (let i = 0; i < value.count; i++) {
-    //       setAllSuccessIDs((prevAllSuccessIDs) => {
-    //         const newAllSuccessIDs = prevAllSuccessIDs.map((successID, index) =>
-    //           index === i
-    //             ? [
-    //                 PAYLINES[value.payline][i] === 0 ? 1 : 0,
-    //                 PAYLINES[value.payline][i] === 1 ? 1 : 0,
-    //                 PAYLINES[value.payline][i] === 2 ? 1 : 0,
-    //               ]
-    //             : successID
-    //         );
-    //         return newAllSuccessIDs;
-    //       });
-    //     }
-    //     // console.log(finalResult);
-    //   });
-    //   console.log('---------------------------->general win!!!!!!!');
-    // }
-
-    // setAllSuccessIDs(()=>[
-    //   [0, 0, 0],
-    //   [0, 0, 0],
-    //   [0, 0, 0],
-    //   [0, 0, 0],
-    //   [0, 0, 0],
-    // ]);
-
-    // Wait till the Slot components have reset before showing the new wins
+    if (socket) {
+      socket.emit(
+        'spinresult',
+        JSON.stringify({
+          lines: line,
+          bet: betValueArray[betValue - 1] * line,
+          spin_type: spin_type,
+          paylines: paylines,
+          winning: result,
+        })
+      );
+    }
     setTimeout(() => {
-      showWinningCombinations(general_winning);
+      showWinningCombinations(scatter_winning, general_winning);
     }, 0); // Wait for 2 seconds
   }, [result5]);
-  useEffect(() => {
-    if (isSpinning) {
-    }
-    setAllSuccessIDs(() => [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ]);
-  }, [isSpinning]);
+
   const handleIncrementLine = () => {
     if (isSpinning === false)
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
@@ -326,39 +287,41 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     setSpinType(1);
-    // if (socket) {
-    //   socket.emit(
-    //     'bet',
-    //     JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-    //   );
+    if (socket && isSpinning === false) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
+    }
     setIsSpinning(true);
     setWinning(0.0);
-    // }
-    // setAllSuccessIDs(()=>[
-    //   [0, 0, 0], // Initial state for successID1
-    //   [0, 0, 0], // Initial state for successID2
-    //   [0, 0, 0], // Initial state for successID3
-    //   [0, 0, 0], // Initial state for successID4
-    //   [0, 0, 0], // Initial state for successID5
-    // ]);
+    setAllSuccessIDs(() => [
+      [0, 0, 0], // Initial state for successID1
+      [0, 0, 0], // Initial state for successID2
+      [0, 0, 0], // Initial state for successID3
+      [0, 0, 0], // Initial state for successID4
+      [0, 0, 0], // Initial state for successID5
+    ]);
+    setIsGamble(false);
   };
   const handleAutoSpinClick = () => {
     setSpinType(0);
-    // if (socket) {
-    //   socket.emit(
-    //     'bet',
-    //     JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-    //   );
+    if (socket && isSpinning === false) {
+      socket.emit(
+        'bet',
+        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+      );
+    }
     setIsSpinning(true);
     setWinning(0.0);
-    // }
-    // setAllSuccessIDs(()=>[
-    //   [0, 0, 0], // Initial state for successID1
-    //   [0, 0, 0], // Initial state for successID2
-    //   [0, 0, 0], // Initial state for successID3
-    //   [0, 0, 0], // Initial state for successID4
-    //   [0, 0, 0], // Initial state for successID5
-    // ]);
+    setAllSuccessIDs(() => [
+      [0, 0, 0], // Initial state for successID1
+      [0, 0, 0], // Initial state for successID2
+      [0, 0, 0], // Initial state for successID3
+      [0, 0, 0], // Initial state for successID4
+      [0, 0, 0], // Initial state for successID5
+    ]);
+    setIsGamble(false);
   };
   const handleSpinEnd = () => {
     setIsSpinning(false);
@@ -394,6 +357,8 @@ const Safari = () => {
               {minor}
             </p>
           </div>
+          {/* <img src="https://i.postimg.cc/FswCXSFY/animal-1.png" /> */}
+          {/* <img src="https://i.ibb.co/wJ28Pfs/lion.png" alt="lion" /> */}
           <div>
             <button
               onClick={toggleDrawer}
@@ -570,9 +535,7 @@ const Safari = () => {
                 onClick={handleAutoSpinClick}
                 className="h-[81px] w-[243px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
-                  backgroundImage: isSpinning
-                    ? `url(${AutoStopImage})`
-                    : `url(${AutoStartImage})`,
+                  backgroundImage: isSpinning ? `` : `url(${AutoStartImage})`,
                 }}
               ></button>
               <button
@@ -590,8 +553,14 @@ const Safari = () => {
         </div>
         <img
           src={GambleImage}
-          onClick={() => setBackgroundName('Gamble')}
-          className="fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125"
+          onClick={() => {
+            setBackgroundName('Gamble');
+            setCardName('card');
+            setIsGamble(false);
+          }}
+          className={`${
+            isGamble ? '' : 'hidden'
+          } fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125`}
         />
       </div>
       {/* Help */}
@@ -698,7 +667,7 @@ const Safari = () => {
         <div className="flex pl-[270px] pr-[275px] justify-between">
           <img
             onClick={() => {
-              setCardName('red');
+              // setCardName('red');
               generateCardRandomValue();
               {
                 cardRandomValue == false
@@ -710,8 +679,12 @@ const Safari = () => {
                   ? setWinningString(true)
                   : setTimeout(() => {
                       setBackgroundName('Main');
-                    }, 2000);
+                    }, 1500);
               }
+              setTimeout(() => {
+                setCardName('card');
+                setWinningString(false);
+              }, 1500);
               console.log(cardRandomValue);
             }}
             src={RedButtonImage}
@@ -731,7 +704,7 @@ const Safari = () => {
           />
           <img
             onClick={() => {
-              setCardName('black');
+              // setCardName('black');
               generateCardRandomValue();
               {
                 cardRandomValue == false
@@ -744,8 +717,12 @@ const Safari = () => {
                   ? setWinningString(true)
                   : setTimeout(() => {
                       setBackgroundName('Main');
-                    }, 2000);
+                    }, 1500);
               }
+              setTimeout(() => {
+                setCardName('card');
+                setWinningString(false);
+              }, 1500);
             }}
             src={BlackButtonImage}
             className="w-[339px] cursor-pointer hover:brightness-125"
@@ -774,6 +751,7 @@ const Safari = () => {
             onClick={() => {
               setBackgroundName('Main');
               setCardName('card');
+              setIsGamble(false);
             }}
             src={CollectButtonImage}
             className="mt-[26px] ml-[12px] w-[290px] cursor-pointer hover:brightness-105"

@@ -3,7 +3,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full">
       <button
         type="button"
         onClick={() => navigate('/safari')}
