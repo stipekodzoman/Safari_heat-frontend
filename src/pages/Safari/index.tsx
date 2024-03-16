@@ -71,12 +71,12 @@ const Safari = () => {
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
-  const [winning, setWinning] = useState<number>(0.0);
+  const [winning, setWinning] = useState<number>(0.00);
   const [spin_type, setSpinType] = useState<number>(1);
   const [minor, setMinor] = useState(0.0);
   const [major, setMajor] = useState(0.0);
   const [jackpot, setJackpot] = useState(0.0);
-
+  const [payline, setPayline]=useState<number>(0)
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft13);
   const [sideRight, setSideRight] = useState(SideRight15);
@@ -104,9 +104,12 @@ const Safari = () => {
     suceessID5,
   ]);
   const [cardName, setCardName] = useState('card');
-  const [, setRandomValue] = useState<boolean | null>(null);
+  const [randomValue, setRandomValue] = useState<boolean | null>(null);
   const [winingString, setWinningString] = useState(false);
   const [isGamble, setIsGamble] = useState(false);
+  const [gamble,setGamble]=useState<number>(0.00)
+  // const [isWinningGamble, setIsWinningGamble] = useState(true);
+  let isWinningGamble: boolean
   let cardRandomValue = false;
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
@@ -115,8 +118,6 @@ const Safari = () => {
   };
 
   const [socket, setSocket] = useState<Socket | null>(null);
-
-
   const navigate = useNavigate();
   useEffect(() => {
     const newSocket = io(SOCKET_SERVER_URL);
@@ -129,7 +130,7 @@ const Safari = () => {
     });
     newSocket.on('jackpot', (message) => {
       const { jackpot } = JSON.parse(message);
-      setJackpot(jackpot.toFixed(4));
+      setJackpot(jackpot.toFixed(2));
     });
     newSocket.on('update', (message) => {
       const { balance } = JSON.parse(message);
@@ -199,41 +200,38 @@ const Safari = () => {
     if(intervalID.current&&isSpinning===true)
       clearInterval(intervalID.current)
   },[isSpinning])
-  const showWinningCombinations = (winningCombos: any) => {
-    let count = 0;
+  const showWinningCombinations = (scatter_winning:any,winningCombos: any) => {
+      let count = 0;
+      if (scatter_winning.count>=2){
+        setAllSuccessIDs(scatter_winning.locations)
+        setTimeout(()=>console.log(scatter_winning),1000)
+        setPayline(15)
+      }
       intervalID.current = setInterval(() => {
         
         if (count < winningCombos.length) {
           const value = winningCombos[count];
-          // console.log(value.count, value.payline);
-          // console.log(PAYLINES[value.payline]);
           for (let i = 0; i < value.count; i++) {
             setAllSuccessIDs((prevAllSuccessIDs) =>
               prevAllSuccessIDs.map((successID, index) =>
+              
                 index === i
                   ? [
                       PAYLINES[value.payline][i] === 0 ? 1 : 0,
                       PAYLINES[value.payline][i] === 1 ? 1 : 0,
                       PAYLINES[value.payline][i] === 2 ? 1 : 0,
                     ]
-                  : successID
+                  : index<value.count?successID:[0,0,0]
               )
             );
           }
+          setPayline(value.payline)
           count++;
           
         } else {
-          setAllSuccessIDs(()=>[
-            [0, 0, 0], // Initial state for successID1
-            [0, 0, 0], // Initial state for successID2
-            [0, 0, 0], // Initial state for successID3
-            [0, 0, 0], // Initial state for successID4
-            [0, 0, 0], // Initial state for successID5
-          ]);
           count=0
         }
       }, 2000); // Set for 2 seconds
-    // console.log("----------------->general win!")
   };
   useEffect(() => {
     const { scatter_winning, general_winning, result } = get_winning_paylines(
@@ -245,7 +243,6 @@ const Safari = () => {
       line,
       betValueArray[betValue - 1] * line
     );
-    console.log(general_winning)
     setWinning(result);
     if (general_winning.length > 0 || scatter_winning.count > 1) {
       setIsGamble(true);
@@ -262,7 +259,7 @@ const Safari = () => {
           lines: line,
           bet: betValueArray[betValue - 1] * line,
           spin_type: spin_type,
-          paylines: paylines,
+          pay_lines: paylines,
           winning: result,
         })
       );
@@ -291,6 +288,7 @@ const Safari = () => {
       setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
+    setIsSpinning(true);
     setSpinType(1);
     if (socket && isSpinning === false) {
       socket.emit(
@@ -298,7 +296,7 @@ const Safari = () => {
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
       );
     }
-    setIsSpinning(true);
+    
     setWinning(0.0);
     setAllSuccessIDs(() => [
       [0, 0, 0], // Initial state for successID1
@@ -339,7 +337,20 @@ const Safari = () => {
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
-
+  const sendGamble=()=>{
+    console.log(gamble.toFixed(2))
+    const value=isWinningGamble?(gamble-winning):-winning
+    if (socket) {
+      socket.emit(
+        'gamble',
+        JSON.stringify({ gamble: value.toFixed(2) })
+      );
+    }
+    console.log(isWinningGamble)
+    setWinning(isWinningGamble?gamble:0.00)
+    setGamble(0.00)
+    isWinningGamble=true
+  }
   return (
     <>
       {/* Main */}
@@ -435,6 +446,7 @@ const Safari = () => {
               onSpinEnd={handleSpinEnd}
               spinID={1}
               suceessID={allSuccessIDs[0]}
+              payline={payline}
             />
           </div>
           <Slot
@@ -444,6 +456,7 @@ const Safari = () => {
             onSpinEnd={handleSpinEnd}
             spinID={2}
             suceessID={allSuccessIDs[1]}
+            payline={payline}
           />
           <Slot
             count={15}
@@ -452,6 +465,7 @@ const Safari = () => {
             onSpinEnd={handleSpinEnd}
             spinID={3}
             suceessID={allSuccessIDs[2]}
+            payline={payline}
           />
           <Slot
             count={18}
@@ -460,6 +474,7 @@ const Safari = () => {
             onSpinEnd={handleSpinEnd}
             spinID={4}
             suceessID={allSuccessIDs[3]}
+            payline={payline}
           />
           <div className="flex gap-[4px]">
             <Slot
@@ -469,6 +484,7 @@ const Safari = () => {
               onSpinEnd={handleSpinEnd}
               spinID={5}
               suceessID={allSuccessIDs[4]}
+              payline={payline}
             />
             <div
               className="w-[64px] h-[628px] mt-[-12px]"
@@ -562,6 +578,7 @@ const Safari = () => {
         <img
           src={GambleImage}
           onClick={() => {
+            setGamble(winning)
             setBackgroundName('Gamble');
             setCardName('card');
             setIsGamble(false);
@@ -683,17 +700,21 @@ const Safari = () => {
                   : setCardName('black');
               }
               {
-                cardRandomValue == false
-                  ? setWinningString(true)
-                  : setTimeout(() => {
+                if(cardRandomValue == false){
+                  setWinningString(true)
+                  setGamble((previous)=>previous*2)
+                }else{
+                  isWinningGamble=false
+                  sendGamble();
+                  setTimeout(() => {
                       setBackgroundName('Main');
                     }, 1500);
+                }
               }
               setTimeout(() => {
                 setCardName('card');
                 setWinningString(false);
               }, 1500);
-              console.log(cardRandomValue);
             }}
             src={RedButtonImage}
             className="w-[339px] cursor-pointer hover:brightness-125"
@@ -717,15 +738,19 @@ const Safari = () => {
               {
                 cardRandomValue == false
                   ? setCardName('red')
-                  : setCardName('black');
+                  : setCardName('black')
               }
-
               {
-                cardRandomValue == true
-                  ? setWinningString(true)
-                  : setTimeout(() => {
+                if(cardRandomValue == true){
+                  setWinningString(true)
+                  setGamble((previous)=>previous*2)
+                }else{
+                  isWinningGamble=false
+                  sendGamble();
+                  setTimeout(() => {
                       setBackgroundName('Main');
                     }, 1500);
+                }
               }
               setTimeout(() => {
                 setCardName('card');
@@ -742,21 +767,23 @@ const Safari = () => {
               winingString ? '' : 'hidden'
             } text-white text-center font-bold text-[32px]`}
           >
-            YOU WIN {(winning * 2).toFixed(2)}
+            YOU WIN {(gamble * 2).toFixed(2)}
           </p>
         </div>
 
         <div className="grid grid-cols-2 px-[442px] gap mt-[28px]">
           <p className="text-white text-center font-bold text-[32px]">
-            {winning.toFixed(2)}
+            {gamble.toFixed(2)}
           </p>
           <p className="text-white text-center font-bold text-[32px]">
-            {(winning * 2).toFixed(2)}
+            {(gamble * 2).toFixed(2)}
           </p>
         </div>
         <div className="flex justify-center">
           <img
             onClick={() => {
+              isWinningGamble=true
+              sendGamble()
               setBackgroundName('Main');
               setCardName('card');
               setIsGamble(false);
