@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, SetStateAction, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
@@ -89,12 +89,12 @@ const Safari = () => {
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
 
+
   const suceessID1 = [0, 0, 0];
   const suceessID2 = [0, 0, 0];
   const suceessID3 = [0, 0, 0];
   const suceessID4 = [0, 0, 0];
   const suceessID5 = [0, 0, 0];
-
   const intervalID = useRef<number | null>();
   const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
     suceessID1,
@@ -113,7 +113,9 @@ const Safari = () => {
     setRandomValue(newValue);
     cardRandomValue = newValue;
   };
+
   const [socket, setSocket] = useState<Socket | null>(null);
+
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -127,7 +129,7 @@ const Safari = () => {
     });
     newSocket.on('jackpot', (message) => {
       const { jackpot } = JSON.parse(message);
-      setJackpot(jackpot.toFixed(2));
+      setJackpot(jackpot.toFixed(4));
     });
     newSocket.on('update', (message) => {
       const { balance } = JSON.parse(message);
@@ -193,42 +195,45 @@ const Safari = () => {
         break;
     }
   }, [line]);
-  useEffect(() => {
-    if (intervalID.current && isSpinning === true)
-      clearInterval(intervalID.current);
-  }, [isSpinning]);
-  const showWinningCombinations = (
-    scatter_winning: any,
-    winningCombos: any
-  ) => {
+  useEffect(()=>{
+    if(intervalID.current&&isSpinning===true)
+      clearInterval(intervalID.current)
+  },[isSpinning])
+  const showWinningCombinations = (winningCombos: any) => {
     let count = 0;
-    if (scatter_winning.count >= 2) {
-      setAllSuccessIDs(scatter_winning.locations);
-      setTimeout(() => console.log(scatter_winning), 1000);
-    }
-    intervalID.current = setInterval(() => {
-      if (count < winningCombos.length) {
-        const value = winningCombos[count];
-        for (let i = 0; i < value.count; i++) {
-          setAllSuccessIDs((prevAllSuccessIDs) =>
-            prevAllSuccessIDs.map((successID, index) =>
-              index === i
-                ? [
-                    PAYLINES[value.payline][i] === 0 ? 1 : 0,
-                    PAYLINES[value.payline][i] === 1 ? 1 : 0,
-                    PAYLINES[value.payline][i] === 2 ? 1 : 0,
-                  ]
-                : index < value.count
-                ? successID
-                : [0, 0, 0]
-            )
-          );
+      intervalID.current = setInterval(() => {
+        
+        if (count < winningCombos.length) {
+          const value = winningCombos[count];
+          // console.log(value.count, value.payline);
+          // console.log(PAYLINES[value.payline]);
+          for (let i = 0; i < value.count; i++) {
+            setAllSuccessIDs((prevAllSuccessIDs) =>
+              prevAllSuccessIDs.map((successID, index) =>
+                index === i
+                  ? [
+                      PAYLINES[value.payline][i] === 0 ? 1 : 0,
+                      PAYLINES[value.payline][i] === 1 ? 1 : 0,
+                      PAYLINES[value.payline][i] === 2 ? 1 : 0,
+                    ]
+                  : successID
+              )
+            );
+          }
+          count++;
+          
+        } else {
+          setAllSuccessIDs(()=>[
+            [0, 0, 0], // Initial state for successID1
+            [0, 0, 0], // Initial state for successID2
+            [0, 0, 0], // Initial state for successID3
+            [0, 0, 0], // Initial state for successID4
+            [0, 0, 0], // Initial state for successID5
+          ]);
+          count=0
         }
-        count++;
-      } else {
-        count = 0;
-      }
-    }, 2000); // Set for 2 seconds
+      }, 2000); // Set for 2 seconds
+    // console.log("----------------->general win!")
   };
   useEffect(() => {
     const { scatter_winning, general_winning, result } = get_winning_paylines(
@@ -240,17 +245,17 @@ const Safari = () => {
       line,
       betValueArray[betValue - 1] * line
     );
+    console.log(general_winning)
     setWinning(result);
     if (general_winning.length > 0 || scatter_winning.count > 1) {
       setIsGamble(true);
     }
-    console.log('---------->scatter', scatter_winning);
     let paylines = new Array();
     general_winning.forEach((winning) => {
       paylines.push(winning.payline);
     });
+    if(socket){
 
-    if (socket) {
       socket.emit(
         'spinresult',
         JSON.stringify({
@@ -305,8 +310,11 @@ const Safari = () => {
     setIsGamble(false);
   };
   const handleAutoSpinClick = () => {
+
     setSpinType(0);
+
     if (socket && isSpinning === false) {
+
       socket.emit(
         'bet',
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
