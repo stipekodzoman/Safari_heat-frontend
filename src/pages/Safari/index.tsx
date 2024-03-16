@@ -10,7 +10,7 @@ import Background from '../../assets/background.png';
 import MinusImage from '../../assets/minus.png';
 import PlusImage from '../../assets/plus.png';
 import AutoStartImage from '../../assets/auto_start.png';
-import AutoStopImage from '../../assets/autostop.png';
+// import AutoStopImage from '../../assets/autostop.png';
 import SpinImage from '../../assets/spin.png';
 import StopSpinImage from '../../assets/stop.png';
 import MenuBtnImage from '../../assets/menubar/menu_btn.png';
@@ -78,8 +78,8 @@ const Safari = () => {
   const [jackpot, setJackpot] = useState(0.0);
 
   const [isSpinning, setIsSpinning] = useState(false);
-  const [sideLeft, setSideLeft] = useState(SideLeft1);
-  const [sideRight, setSideRight] = useState(SideRight1);
+  const [sideLeft, setSideLeft] = useState(SideLeft13);
+  const [sideRight, setSideRight] = useState(SideRight15);
   const [backgroundName, setBackgroundName] = useState('Main');
   const [helpBackground, setHelpBackground] = useState(HelpBackground1);
   const [pageNumber, setPageNumber] = useState(1);
@@ -89,12 +89,13 @@ const Safari = () => {
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
 
-  const [suceessID1, setSuccessID1] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID2, setSuccessID2] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID3, setSuccessID3] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID4, setSuccessID4] = useState<Array<number>>([0, 0, 0]);
-  const [suceessID5, setSuccessID5] = useState<Array<number>>([0, 0, 0]);
-  const intervalID=useRef<number|null>()
+
+  const suceessID1 = [0, 0, 0];
+  const suceessID2 = [0, 0, 0];
+  const suceessID3 = [0, 0, 0];
+  const suceessID4 = [0, 0, 0];
+  const suceessID5 = [0, 0, 0];
+  const intervalID = useRef<number | null>();
   const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
     suceessID1,
     suceessID2,
@@ -102,18 +103,19 @@ const Safari = () => {
     suceessID4,
     suceessID5,
   ]);
-
   const [cardName, setCardName] = useState('card');
-  const [randomValue, setRandomValue] = useState<boolean | null>(null);
+  const [, setRandomValue] = useState<boolean | null>(null);
   const [winingString, setWinningString] = useState(false);
+  const [isGamble, setIsGamble] = useState(false);
   let cardRandomValue = false;
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
     setRandomValue(newValue);
     cardRandomValue = newValue;
   };
+
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [socket, setSocket] = useState<Socket | null>(null);
+
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -245,11 +247,15 @@ const Safari = () => {
     );
     console.log(general_winning)
     setWinning(result);
+    if (general_winning.length > 0 || scatter_winning.count > 1) {
+      setIsGamble(true);
+    }
     let paylines = new Array();
     general_winning.forEach((winning) => {
       paylines.push(winning.payline);
     });
     if(socket){
+
       socket.emit(
         'spinresult',
         JSON.stringify({
@@ -262,7 +268,7 @@ const Safari = () => {
       );
     }
     setTimeout(() => {
-      showWinningCombinations(general_winning);
+      showWinningCombinations(scatter_winning, general_winning);
     }, 0); // Wait for 2 seconds
   }, [result5]);
 
@@ -286,7 +292,7 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     setSpinType(1);
-    if (socket&&isSpinning === false) {
+    if (socket && isSpinning === false) {
       socket.emit(
         'bet',
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
@@ -294,18 +300,21 @@ const Safari = () => {
     }
     setIsSpinning(true);
     setWinning(0.0);
-    setAllSuccessIDs(()=>[
+    setAllSuccessIDs(() => [
       [0, 0, 0], // Initial state for successID1
       [0, 0, 0], // Initial state for successID2
       [0, 0, 0], // Initial state for successID3
       [0, 0, 0], // Initial state for successID4
       [0, 0, 0], // Initial state for successID5
     ]);
+    setIsGamble(false);
   };
   const handleAutoSpinClick = () => {
 
     setSpinType(0);
-    if (socket&&isSpinning===false) {
+
+    if (socket && isSpinning === false) {
+
       socket.emit(
         'bet',
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
@@ -313,13 +322,14 @@ const Safari = () => {
     }
     setIsSpinning(true);
     setWinning(0.0);
-    setAllSuccessIDs(()=>[
+    setAllSuccessIDs(() => [
       [0, 0, 0], // Initial state for successID1
       [0, 0, 0], // Initial state for successID2
       [0, 0, 0], // Initial state for successID3
       [0, 0, 0], // Initial state for successID4
       [0, 0, 0], // Initial state for successID5
     ]);
+    setIsGamble(false);
   };
   const handleSpinEnd = () => {
     setIsSpinning(false);
@@ -355,6 +365,8 @@ const Safari = () => {
               {minor}
             </p>
           </div>
+          {/* <img src="https://i.postimg.cc/FswCXSFY/animal-1.png" /> */}
+          {/* <img src="https://i.ibb.co/wJ28Pfs/lion.png" alt="lion" /> */}
           <div>
             <button
               onClick={toggleDrawer}
@@ -531,9 +543,7 @@ const Safari = () => {
                 onClick={handleAutoSpinClick}
                 className="h-[81px] w-[243px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
-                  backgroundImage: isSpinning
-                    ? `url(${AutoStopImage})`
-                    : `url(${AutoStartImage})`,
+                  backgroundImage: isSpinning ? `` : `url(${AutoStartImage})`,
                 }}
               ></button>
               <button
@@ -551,8 +561,14 @@ const Safari = () => {
         </div>
         <img
           src={GambleImage}
-          onClick={() => setBackgroundName('Gamble')}
-          className="fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125"
+          onClick={() => {
+            setBackgroundName('Gamble');
+            setCardName('card');
+            setIsGamble(false);
+          }}
+          className={`${
+            isGamble ? '' : 'hidden'
+          } fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125`}
         />
       </div>
       {/* Help */}
@@ -659,7 +675,7 @@ const Safari = () => {
         <div className="flex pl-[270px] pr-[275px] justify-between">
           <img
             onClick={() => {
-              setCardName('red');
+              // setCardName('red');
               generateCardRandomValue();
               {
                 cardRandomValue == false
@@ -671,8 +687,12 @@ const Safari = () => {
                   ? setWinningString(true)
                   : setTimeout(() => {
                       setBackgroundName('Main');
-                    }, 2000);
+                    }, 1500);
               }
+              setTimeout(() => {
+                setCardName('card');
+                setWinningString(false);
+              }, 1500);
               console.log(cardRandomValue);
             }}
             src={RedButtonImage}
@@ -692,7 +712,7 @@ const Safari = () => {
           />
           <img
             onClick={() => {
-              setCardName('black');
+              // setCardName('black');
               generateCardRandomValue();
               {
                 cardRandomValue == false
@@ -705,8 +725,12 @@ const Safari = () => {
                   ? setWinningString(true)
                   : setTimeout(() => {
                       setBackgroundName('Main');
-                    }, 2000);
+                    }, 1500);
               }
+              setTimeout(() => {
+                setCardName('card');
+                setWinningString(false);
+              }, 1500);
             }}
             src={BlackButtonImage}
             className="w-[339px] cursor-pointer hover:brightness-125"
@@ -735,6 +759,7 @@ const Safari = () => {
             onClick={() => {
               setBackgroundName('Main');
               setCardName('card');
+              setIsGamble(false);
             }}
             src={CollectButtonImage}
             className="mt-[26px] ml-[12px] w-[290px] cursor-pointer hover:brightness-105"
