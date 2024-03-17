@@ -4,6 +4,10 @@ import {
   get_initial_items,
   get_slot_items,
 } from '../../utils/get_slot_items.js';
+import {
+  SET_RESULT_ITEM,
+  INITIAL_ITEMS_GIF,
+} from '../../constants/iinitial_items.js';
 export interface Props {
   count: number;
   isSpinning: boolean; // New prop to control spinning
@@ -11,7 +15,7 @@ export interface Props {
   onSpinEnd: () => void;
   spinID: number;
   suceessID: Array<number>;
-  payline:number
+  payline: number;
   // paylineID?: number;
 }
 
@@ -41,7 +45,7 @@ const Slot: FC<Props> = ({
   onSpinEnd,
   spinID,
   suceessID,
-  payline
+  payline,
 }) => {
   const [currentImages, setCurrentImages] = useState<string[]>(() => []);
   const [initial_items, setInitialItems] = useState<string[]>(() => []);
@@ -61,7 +65,11 @@ const Slot: FC<Props> = ({
   }, [isSpinning]);
   const spinEnd = () => {
     setInitialItems([currentImages[0], currentImages[1], currentImages[2]]);
-    setResult([currentImages[0], currentImages[1], currentImages[2]]);
+    setResult([
+      SET_RESULT_ITEM[currentImages[0]],
+      SET_RESULT_ITEM[currentImages[1]],
+      SET_RESULT_ITEM[currentImages[2]],
+    ]);
   };
   return (
     <div className="slot-machine">
@@ -70,7 +78,7 @@ const Slot: FC<Props> = ({
           ? currentImages.map((imageSrc, index) => (
               <img
                 key={index}
-                src={`src/assets/${imageSrc}.png`}
+                src={`https://i.postimg.cc/${imageSrc}`}
                 className={`w-[280px] h-[206px] spinning${count}`}
                 alt={`Slot ${index}`}
                 onAnimationEnd={() => {
@@ -88,10 +96,14 @@ const Slot: FC<Props> = ({
                 key={index}
                 src={
                   suceessID[index] === 0
-                    ? `src/assets/${imageSrc}.png`
-                    : `src/assets/gif/${imageSrc}.gif`
+                    ? `https://i.postimg.cc/${imageSrc}`
+                    : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
                 }
-                className={suceessID[index] === 0?`w-[280px] h-[206px] `:paylineColor[payline]}
+                className={
+                  suceessID[index] === 0
+                    ? `w-[280px] h-[206px] `
+                    : paylineColor[payline]
+                }
                 alt={`Slot ${suceessID[index]}`}
               />
             ))}

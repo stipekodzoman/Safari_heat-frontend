@@ -5,64 +5,62 @@ import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
 import { PAYLINES } from '../../constants/paylines';
 import { SOCKET_SERVER_URL } from '../../config/config.tsx';
-
-import Background from '../../assets/background.png';
-import MinusImage from '../../assets/minus.png';
-import PlusImage from '../../assets/plus.png';
-import AutoStartImage from '../../assets/auto_start.png';
-// import AutoStopImage from '../../assets/autostop.png';
-import SpinImage from '../../assets/spin.png';
-import StopSpinImage from '../../assets/stop.png';
-import MenuBtnImage from '../../assets/menubar/menu_btn.png';
-import MenuImage from '../../assets/menubar/menu.png';
-import MenuBackImage from '../../assets/menubar/menu_back.png';
-import MenuHelpImage from '../../assets/menubar/menu_help.png';
-import MenuAudioOffImage from '../../assets/menubar/menu_audio_off.png';
-import MenuShakeImage from '../../assets/menubar/menu_shake.png';
-import MenuLogoutImage from '../../assets/menubar/menu_logout.png';
-import SideLeft1 from '../../assets/sider/left-1.png';
-import SideLeft2 from '../../assets/sider/left-2.png';
-import SideLeft3 from '../../assets/sider/left-3.png';
-import SideLeft4 from '../../assets/sider/left-4.png';
-import SideLeft5 from '../../assets/sider/left-5.png';
-import SideLeft10 from '../../assets/sider/left-10.png';
-import SideLeft11 from '../../assets/sider/left-11.png';
-import SideLeft12 from '../../assets/sider/left-12.png';
-import SideLeft13 from '../../assets/sider/left-13.png';
-import SideRight1 from '../../assets/sider/right-1.png';
-import SideRight2 from '../../assets/sider/right-2.png';
-import SideRight3 from '../../assets/sider/right-3.png';
-import SideRight6 from '../../assets/sider/right-6.png';
-import SideRight7 from '../../assets/sider/right-7.png';
-import SideRight8 from '../../assets/sider/right-8.png';
-import SideRight9 from '../../assets/sider/right-9.png';
-import SideRight14 from '../../assets/sider/right-14.png';
-import SideRight15 from '../../assets/sider/right-15.png';
-
-import HelpBackground1 from '../../assets/help/background1.png';
-import HelpBackground2 from '../../assets/help/background2.png';
-import HelpBackground3 from '../../assets/help/background3.png';
-import Back from '../../assets/help/back.png';
-import PaylineButton from '../../assets/help/paylines.png';
-import PaylineImage from '../../assets/help/payline.png';
-import HidePaylineImage from '../../assets/help/hidepayline.png';
-import HelpImage1 from '../../assets/help/help1.png';
-import HelpImageClick1 from '../../assets/help/help1_click.png';
-import HelpImage2 from '../../assets/help/help2.png';
-import HelpImageClick2 from '../../assets/help/help2_click.png';
-import HelpImage3 from '../../assets/help/help3.png';
-import HelpImageClick3 from '../../assets/help/help3_click.png';
-
-import GambleBackgroundImage from '../../assets/gamble/background.png';
-import GambleImage from '../../assets/gamble/gamble.png';
-import CollectButtonImage from '../../assets/gamble/collect.png';
-import BlackButtonImage from '../../assets/gamble/black_button.png';
-import RedButtonImage from '../../assets/gamble/red_button.png';
-import BlackCard from '../../assets/gamble/black_card.png';
-import Redcard from '../../assets/gamble/red_card.png';
-import Card from '../../assets/gamble/card.png';
-
 import './index.css';
+
+const Background = 'https://i.postimg.cc/MG85kfDT/background.png';
+const MinusImage = 'https://i.postimg.cc/1zpFDWDR/minus.png';
+const PlusImage = 'https://i.postimg.cc/Wzfqsxc8/plus.png';
+const AutoStartImage = 'https://i.postimg.cc/15CrzYrL/auto-start.png';
+const SpinImage = 'https://i.postimg.cc/LsBqJJMn/spin.png';
+const StopSpinImage = 'https://i.postimg.cc/k4TByLGC/stop.png';
+const MenuBtnImage = 'https://i.postimg.cc/rmgWkwT4/menu_btn.png';
+const MenuImage = 'https://i.postimg.cc/8CSrf6PW/menu.png';
+const MenuBackImage = 'https://i.postimg.cc/qMNKPr5t/menu_back.png';
+const MenuHelpImage = 'https://i.postimg.cc/76q7dTFD/menu_help.png';
+const MenuAudioOffImage = 'https://i.postimg.cc/LsKjkWvJ/menu_audio_off.png';
+const MenuShakeImage = 'https://i.postimg.cc/9Fs9Vk6L/menu_shake.png';
+const MenuLogoutImage = 'https://i.postimg.cc/v8q92T3F/menu_logout.png';
+const SideLeft1 = 'https://i.postimg.cc/rsh0RnZY/left-1.png';
+const SideLeft2 = 'https://i.postimg.cc/JnMG6V92/left-2.png';
+const SideLeft3 = 'https://i.postimg.cc/T2kp9sQt/left-3.png';
+const SideLeft4 = 'https://i.postimg.cc/05ZJ4j5d/left-4.png';
+const SideLeft5 = 'https://i.postimg.cc/3NwWhjrj/left-5.png';
+const SideLeft10 = 'https://i.postimg.cc/cHh6PkW4/left-10.png';
+const SideLeft11 = 'https://i.postimg.cc/gjBj2wrC/left-11.png';
+const SideLeft12 = 'https://i.postimg.cc/8C8FvrwD/left-12.png';
+const SideLeft13 = 'https://i.postimg.cc/DwG07whN/left-13.png';
+const SideRight1 = 'https://i.postimg.cc/Kvw4Xg6L/right-1.png';
+const SideRight2 = 'https://i.postimg.cc/1tm300Fx/right-2.png';
+const SideRight3 = 'https://i.postimg.cc/C5tMVWQY/right-3.png';
+const SideRight6 = 'https://i.postimg.cc/T2H3mDYS/right-6.png';
+const SideRight7 = 'https://i.postimg.cc/kX6Xyg25/right-7.png';
+const SideRight8 = 'https://i.postimg.cc/ZKGYszNx/right-8.png';
+const SideRight9 = 'https://i.postimg.cc/dVGszNmP/right-9.png';
+const SideRight14 = 'https://i.postimg.cc/TP9RPy4t/right-14.png';
+const SideRight15 = 'https://i.postimg.cc/TPGdGjCy/right-15.png';
+
+const HelpBackground1 = 'https://i.postimg.cc/7Z2vMRX2/background1.png';
+const HelpBackground2 = 'https://i.postimg.cc/SNVjbnpr/background2.png';
+const HelpBackground3 = 'https://i.postimg.cc/MpTH6z68/background3.png';
+const Back = 'https://i.postimg.cc/bJddv3Yw/back.png';
+const PaylineButton = 'https://i.postimg.cc/9f07nGRZ/paylines.png';
+const PaylineImage = 'https://i.postimg.cc/RZDFq2hJ/payline.png';
+const HidePaylineImage = 'https://i.postimg.cc/sDP7QfCQ/hidepayline.png';
+const HelpImage1 = 'https://i.postimg.cc/yd5x3cWX/help1.png';
+const HelpImageClick1 = 'https://i.postimg.cc/G3VqJmfX/help1-click.png';
+const HelpImage2 = 'https://i.postimg.cc/fTd5HhnD/help2.png';
+const HelpImageClick2 = 'https://i.postimg.cc/J7Gpkkpy/help2-click.png';
+const HelpImage3 = 'https://i.postimg.cc/65CLrLnQ/help3.png';
+const HelpImageClick3 = 'https://i.postimg.cc/Kc6D3sKV/help3-click.png';
+
+const GambleBackgroundImage = 'https://i.postimg.cc/6Q2w834C/background.png';
+const GambleImage = 'https://i.postimg.cc/5NnsDSK2/gamble.png';
+const CollectButtonImage = 'https://i.postimg.cc/8C339m56/collect.png';
+const BlackButtonImage = 'https://i.postimg.cc/q7d6L9ch/black-button.png';
+const RedButtonImage = 'https://i.postimg.cc/sXjQF7N3/red-button.png';
+const BlackCard = 'https://i.postimg.cc/mrhyxxzd/black-card.png';
+const Redcard = 'https://i.postimg.cc/XvyBcny0/red-card.png';
+const Card = 'https://i.postimg.cc/VNRvF5Lp/card.png';
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
@@ -71,12 +69,12 @@ const Safari = () => {
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
-  const [winning, setWinning] = useState<number>(0.00);
+  const [winning, setWinning] = useState<number>(0.0);
   const [spin_type, setSpinType] = useState<number>(1);
   const [minor, setMinor] = useState(0.0);
   const [major, setMajor] = useState(0.0);
   const [jackpot, setJackpot] = useState(0.0);
-  const [payline, setPayline]=useState<number>(0)
+  const [payline, setPayline] = useState<number>(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft13);
   const [sideRight, setSideRight] = useState(SideRight15);
@@ -88,7 +86,6 @@ const Safari = () => {
   const [result3, setResult3] = useState<String[]>(() => []);
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
-
 
   const suceessID1 = [0, 0, 0];
   const suceessID2 = [0, 0, 0];
@@ -107,9 +104,9 @@ const Safari = () => {
   const [randomValue, setRandomValue] = useState<boolean | null>(null);
   const [winingString, setWinningString] = useState(false);
   const [isGamble, setIsGamble] = useState(false);
-  const [gamble,setGamble]=useState<number>(0.00)
+  const [gamble, setGamble] = useState<number>(0.0);
   // const [isWinningGamble, setIsWinningGamble] = useState(true);
-  let isWinningGamble: boolean
+  let isWinningGamble: boolean;
   let cardRandomValue = false;
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
@@ -196,42 +193,44 @@ const Safari = () => {
         break;
     }
   }, [line]);
-  useEffect(()=>{
-    if(intervalID.current&&isSpinning===true)
-      clearInterval(intervalID.current)
-  },[isSpinning])
-  const showWinningCombinations = (scatter_winning:any,winningCombos: any) => {
-      let count = 0;
-      if (scatter_winning.count>=2){
-        setAllSuccessIDs(scatter_winning.locations)
-        setTimeout(()=>console.log(scatter_winning),1000)
-        setPayline(15)
-      }
-      intervalID.current = setInterval(() => {
-        
-        if (count < winningCombos.length) {
-          const value = winningCombos[count];
-          for (let i = 0; i < value.count; i++) {
-            setAllSuccessIDs((prevAllSuccessIDs) =>
-              prevAllSuccessIDs.map((successID, index) =>
-              
-                index === i
-                  ? [
-                      PAYLINES[value.payline][i] === 0 ? 1 : 0,
-                      PAYLINES[value.payline][i] === 1 ? 1 : 0,
-                      PAYLINES[value.payline][i] === 2 ? 1 : 0,
-                    ]
-                  : index<value.count?successID:[0,0,0]
-              )
-            );
-          }
-          setPayline(value.payline)
-          count++;
-          
-        } else {
-          count=0
+  useEffect(() => {
+    if (intervalID.current && isSpinning === true)
+      clearInterval(intervalID.current);
+  }, [isSpinning]);
+  const showWinningCombinations = (
+    scatter_winning: any,
+    winningCombos: any
+  ) => {
+    let count = 0;
+    if (scatter_winning.count >= 2) {
+      setAllSuccessIDs(scatter_winning.locations);
+      setTimeout(() => console.log(scatter_winning), 1000);
+      setPayline(15);
+    }
+    intervalID.current = setInterval(() => {
+      if (count < winningCombos.length) {
+        const value = winningCombos[count];
+        for (let i = 0; i < value.count; i++) {
+          setAllSuccessIDs((prevAllSuccessIDs) =>
+            prevAllSuccessIDs.map((successID, index) =>
+              index === i
+                ? [
+                    PAYLINES[value.payline][i] === 0 ? 1 : 0,
+                    PAYLINES[value.payline][i] === 1 ? 1 : 0,
+                    PAYLINES[value.payline][i] === 2 ? 1 : 0,
+                  ]
+                : index < value.count
+                ? successID
+                : [0, 0, 0]
+            )
+          );
         }
-      }, 2000); // Set for 2 seconds
+        setPayline(value.payline);
+        count++;
+      } else {
+        count = 0;
+      }
+    }, 2000); // Set for 2 seconds
   };
   useEffect(() => {
     const { scatter_winning, general_winning, result } = get_winning_paylines(
@@ -251,8 +250,7 @@ const Safari = () => {
     general_winning.forEach((winning) => {
       paylines.push(winning.payline);
     });
-    if(socket){
-
+    if (socket) {
       socket.emit(
         'spinresult',
         JSON.stringify({
@@ -296,7 +294,7 @@ const Safari = () => {
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
       );
     }
-    
+
     setWinning(0.0);
     setAllSuccessIDs(() => [
       [0, 0, 0], // Initial state for successID1
@@ -308,11 +306,9 @@ const Safari = () => {
     setIsGamble(false);
   };
   const handleAutoSpinClick = () => {
-
     setSpinType(0);
 
     if (socket && isSpinning === false) {
-
       socket.emit(
         'bet',
         JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
@@ -337,20 +333,17 @@ const Safari = () => {
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
-  const sendGamble=()=>{
-    console.log(gamble.toFixed(2))
-    const value=isWinningGamble?(gamble-winning):-winning
+  const sendGamble = () => {
+    console.log(gamble.toFixed(2));
+    const value = isWinningGamble ? gamble - winning : -winning;
     if (socket) {
-      socket.emit(
-        'gamble',
-        JSON.stringify({ gamble: value.toFixed(2) })
-      );
+      socket.emit('gamble', JSON.stringify({ gamble: value.toFixed(2) }));
     }
-    console.log(isWinningGamble)
-    setWinning(isWinningGamble?gamble:0.00)
-    setGamble(0.00)
-    isWinningGamble=true
-  }
+    console.log(isWinningGamble);
+    setWinning(isWinningGamble ? gamble : 0.0);
+    setGamble(0.0);
+    isWinningGamble = true;
+  };
   return (
     <>
       {/* Main */}
@@ -578,7 +571,7 @@ const Safari = () => {
         <img
           src={GambleImage}
           onClick={() => {
-            setGamble(winning)
+            setGamble(winning);
             setBackgroundName('Gamble');
             setCardName('card');
             setIsGamble(false);
@@ -700,15 +693,15 @@ const Safari = () => {
                   : setCardName('black');
               }
               {
-                if(cardRandomValue == false){
-                  setWinningString(true)
-                  setGamble((previous)=>previous*2)
-                }else{
-                  isWinningGamble=false
+                if (cardRandomValue == false) {
+                  setWinningString(true);
+                  setGamble((previous) => previous * 2);
+                } else {
+                  isWinningGamble = false;
                   sendGamble();
                   setTimeout(() => {
-                      setBackgroundName('Main');
-                    }, 1500);
+                    setBackgroundName('Main');
+                  }, 1500);
                 }
               }
               setTimeout(() => {
@@ -738,18 +731,18 @@ const Safari = () => {
               {
                 cardRandomValue == false
                   ? setCardName('red')
-                  : setCardName('black')
+                  : setCardName('black');
               }
               {
-                if(cardRandomValue == true){
-                  setWinningString(true)
-                  setGamble((previous)=>previous*2)
-                }else{
-                  isWinningGamble=false
+                if (cardRandomValue == true) {
+                  setWinningString(true);
+                  setGamble((previous) => previous * 2);
+                } else {
+                  isWinningGamble = false;
                   sendGamble();
                   setTimeout(() => {
-                      setBackgroundName('Main');
-                    }, 1500);
+                    setBackgroundName('Main');
+                  }, 1500);
                 }
               }
               setTimeout(() => {
@@ -782,8 +775,8 @@ const Safari = () => {
         <div className="flex justify-center">
           <img
             onClick={() => {
-              isWinningGamble=true
-              sendGamble()
+              isWinningGamble = true;
+              sendGamble();
               setBackgroundName('Main');
               setCardName('card');
               setIsGamble(false);
