@@ -65,12 +65,16 @@ const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
 ];
+let freeSpinCount=15
+let freeSpinWinning=0.0
+let isAutoSpin=false
 const Safari = () => {
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
   const [winning, setWinning] = useState<number>(0.0);
   const [spin_type, setSpinType] = useState<number>(1);
+  const [isFreeSpin,setIsFreeSpin] = useState(false);
   const [minor, setMinor] = useState(0.0);
   const [major, setMajor] = useState(0.0);
   const [jackpot, setJackpot] = useState(0.0);
@@ -86,7 +90,7 @@ const Safari = () => {
   const [result3, setResult3] = useState<String[]>(() => []);
   const [result4, setResult4] = useState<String[]>(() => []);
   const [result5, setResult5] = useState<String[]>(() => []);
-
+  const [result6, setResult6] = useState<String[]>(() => []);
   const suceessID1 = [0, 0, 0];
   const suceessID2 = [0, 0, 0];
   const suceessID3 = [0, 0, 0];
@@ -108,6 +112,7 @@ const Safari = () => {
   // const [isWinningGamble, setIsWinningGamble] = useState(true);
   let isWinningGamble: boolean;
   let cardRandomValue = false;
+  
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
     setRandomValue(newValue);
@@ -243,88 +248,185 @@ const Safari = () => {
       betValueArray[betValue - 1] * line
     );
     setWinning(result);
-    if (general_winning.length > 0 || scatter_winning.count > 1) {
+    if(scatter_winning.count>=3){
+      setIsFreeSpin(true)
+      isAutoSpin=false
+      freespin()
+    }else{
+      if ((general_winning.length > 0 || scatter_winning.count > 1)&&isAutoSpin===false&&isFreeSpin===false) {
+        setIsGamble(true);
+      }
+      let paylines = new Array();
+      general_winning.forEach((winning) => {
+        paylines.push(winning.payline);
+      });
+      if(socket){
+  
+        socket.emit(
+          'spinresult',
+          JSON.stringify({
+            lines: line,
+            bet: betValueArray[betValue - 1] * line,
+            spin_type: spin_type,
+            pay_lines: paylines,
+            winning: result,
+          })
+        );
+      }
+      setTimeout(() => {
+        showWinningCombinations(scatter_winning, general_winning);
+      }, 0); // Wait for 2 seconds
+    }
+    
+  }, [result5]);
+  
+  const freespin=async()=>{
+    for (let i = 0; i < freeSpinCount; i++) {
+      await new Promise<void>(resolve => {
+        setTimeout(() => {
+          setIsSpinning(true);
+          setSpinType(1);
+          setAllSuccessIDs(() => [
+            [0, 0, 0], // Initial state for successID1
+            [0, 0, 0], // Initial state for successID2
+            [0, 0, 0], // Initial state for successID3
+            [0, 0, 0], // Initial state for successID4
+            [0, 0, 0], // Initial state for successID5
+          ]);
+          resolve();
+        }, 1500);
+      });
+    }
+    setTimeout(()=>{
       setIsGamble(true);
-    }
-    let paylines = new Array();
-    general_winning.forEach((winning) => {
-      paylines.push(winning.payline);
-    });
-    if (socket) {
-      socket.emit(
-        'spinresult',
-        JSON.stringify({
-          lines: line,
-          bet: betValueArray[betValue - 1] * line,
-          spin_type: spin_type,
-          pay_lines: paylines,
-          winning: result,
-        })
-      );
-    }
+      let paylines = new Array();
+      if(socket){
+        socket.emit(
+          'spinresult',
+          JSON.stringify({
+            lines: line,
+            bet: betValueArray[betValue - 1] * line,
+            spin_type: spin_type,
+            pay_lines: paylines,
+            winning: freeSpinWinning,
+          })
+        );
+      }
+      setIsFreeSpin(false)
+      freeSpinCount=15
+      freeSpinWinning=0.0
+    },1500)
+    
+  }
+  useEffect(() => {
+    const { scatter_winning, general_winning, result } = get_winning_paylines(
+      result1,
+      result2,
+      result3,
+      result4,
+      result6,
+      line,
+      betValueArray[betValue - 1] * line
+    );
+    freeSpinWinning+=parseFloat((result*3).toFixed(2))
+    setWinning((previous)=>previous+parseFloat((result*3).toFixed(2)));
+    if(scatter_winning.count>=3){
+      freeSpinCount+=15
+    }else
     setTimeout(() => {
       showWinningCombinations(scatter_winning, general_winning);
     }, 0); // Wait for 2 seconds
-  }, [result5]);
-
+  
+    
+  }, [result6]);
   const handleIncrementLine = () => {
-    if (isSpinning === false)
+    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
 
   const handleDecrementLine = () => {
-    if (isSpinning === false)
+    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
       setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
   };
   const handleIncrementBet = () => {
-    if (isSpinning === false)
+    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
       setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
   };
 
   const handleDecrementBet = () => {
-    if (isSpinning === false)
+    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
       setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
-    setIsSpinning(true);
-    setSpinType(1);
-    if (socket && isSpinning === false) {
-      socket.emit(
-        'bet',
-        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-      );
+    if(isSpinning === false){
+      setSpinType(1);
+      if (socket && isSpinning === false) {
+        socket.emit(
+          'bet',
+          JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+        );
+      }
+      setIsSpinning(true);
+      setWinning(0.0);
+      setAllSuccessIDs(() => [
+        [0, 0, 0], // Initial state for successID1
+        [0, 0, 0], // Initial state for successID2
+        [0, 0, 0], // Initial state for successID3
+        [0, 0, 0], // Initial state for successID4
+        [0, 0, 0], // Initial state for successID5
+      ]);
+      setIsGamble(false);
+    }else{
+      setIsSpinning(false)
     }
-
-    setWinning(0.0);
-    setAllSuccessIDs(() => [
-      [0, 0, 0], // Initial state for successID1
-      [0, 0, 0], // Initial state for successID2
-      [0, 0, 0], // Initial state for successID3
-      [0, 0, 0], // Initial state for successID4
-      [0, 0, 0], // Initial state for successID5
-    ]);
-    setIsGamble(false);
   };
   const handleAutoSpinClick = () => {
-    setSpinType(0);
-
-    if (socket && isSpinning === false) {
-      socket.emit(
-        'bet',
-        JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-      );
+    if(isFreeSpin===false&&isSpinning===false&&isAutoSpin===false){
+      setIsGamble(false);
+      setSpinType(0);
+      if (socket && isSpinning === false) {
+        socket.emit(
+          'bet',
+          JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+        );
+      }
+      setIsSpinning(true);
+      setWinning(0.0);
+      setAllSuccessIDs(() => [
+        [0, 0, 0], // Initial state for successID1
+        [0, 0, 0], // Initial state for successID2
+        [0, 0, 0], // Initial state for successID3
+        [0, 0, 0], // Initial state for successID4
+        [0, 0, 0], // Initial state for successID5
+      ]);
+      isAutoSpin=true
+      autoSpin()
+    }else{
+      isAutoSpin=false
     }
-    setIsSpinning(true);
-    setWinning(0.0);
-    setAllSuccessIDs(() => [
-      [0, 0, 0], // Initial state for successID1
-      [0, 0, 0], // Initial state for successID2
-      [0, 0, 0], // Initial state for successID3
-      [0, 0, 0], // Initial state for successID4
-      [0, 0, 0], // Initial state for successID5
-    ]);
-    setIsGamble(false);
   };
+  const autoSpin=()=>{
+    if(isAutoSpin===true)
+      setTimeout(()=>{
+        setSpinType(0);
+        if (socket && isSpinning === false) {
+          socket.emit(
+            'bet',
+            JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+          );
+        }
+        setIsSpinning(true);
+        setWinning(0.0);
+        setAllSuccessIDs(() => [
+          [0, 0, 0], // Initial state for successID1
+          [0, 0, 0], // Initial state for successID2
+          [0, 0, 0], // Initial state for successID3
+          [0, 0, 0], // Initial state for successID4
+          [0, 0, 0], // Initial state for successID5
+        ]);
+        autoSpin()
+      },2500)
+  }
   const handleSpinEnd = () => {
     setIsSpinning(false);
   };
@@ -333,17 +435,16 @@ const Safari = () => {
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
-  const sendGamble = () => {
-    console.log(gamble.toFixed(2));
-    const value = isWinningGamble ? gamble - winning : -winning;
+  const sendGamble=()=>{
+
+    const value=isWinningGamble?(gamble-winning):-winning
     if (socket) {
       socket.emit('gamble', JSON.stringify({ gamble: value.toFixed(2) }));
     }
-    console.log(isWinningGamble);
-    setWinning(isWinningGamble ? gamble : 0.0);
-    setGamble(0.0);
-    isWinningGamble = true;
-  };
+    setWinning(isWinningGamble?gamble:0.00)
+    setGamble(0.00)
+    isWinningGamble=true
+  }
   return (
     <>
   
@@ -499,7 +600,7 @@ const Safari = () => {
             <Slot
               count={21}
               isSpinning={isSpinning}
-              setResult={setResult5}
+              setResult={isFreeSpin?setResult6:setResult5}
               onSpinEnd={handleSpinEnd}
               spinID={5}
               suceessID={allSuccessIDs[4]}
@@ -531,7 +632,7 @@ const Safari = () => {
                 onClick={handleDecrementLine}
                 className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
-                  backgroundImage: isSpinning ? '' : `url(${MinusImage})`,
+                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${MinusImage})`,
                   backgroundSize: 'cover',
                 }}
               ></button>
@@ -540,7 +641,7 @@ const Safari = () => {
                 onClick={handleIncrementLine}
                 className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
                 style={{
-                  backgroundImage: isSpinning ? '' : `url(${PlusImage})`,
+                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${PlusImage})`,
                   backgroundSize: 'cover',
                 }}
               ></button>
@@ -556,8 +657,8 @@ const Safari = () => {
                 onClick={handleDecrementBet}
                 className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
-                  backgroundImage: isSpinning ? '' : `url(${MinusImage})`,
-                  backgroundSize: 'cover',
+                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${MinusImage})`,
+                   backgroundSize: 'cover',
                 }}
               ></button>
               <button
@@ -566,8 +667,8 @@ const Safari = () => {
                 onClick={handleIncrementBet}
                 className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
                 style={{
-                  backgroundImage: isSpinning ? '' : `url(${PlusImage})`,
-                  backgroundSize: 'cover',
+                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${PlusImage})`,
+                   backgroundSize: 'cover',
                 }}
               ></button>
             </div>
@@ -583,7 +684,7 @@ const Safari = () => {
                 onClick={handleAutoSpinClick}
                 className="2xl:h-[81px] h-[60px] 2xl:w-[243px] w-[180px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
-                  backgroundImage: isSpinning ? `` : `url(${AutoStartImage})`,
+                  backgroundImage: isAutoSpin ? `url(${StopSpinImage})` :isSpinning||isFreeSpin?'': `url(${AutoStartImage})`,
                   backgroundSize: 'cover',
                 }}
               ></button>
