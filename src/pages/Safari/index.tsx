@@ -65,16 +65,16 @@ const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
 ];
-let freeSpinCount=15
-let freeSpinWinning=0.0
-let isAutoSpin=false
+let freeSpinCount = 15;
+let freeSpinWinning = 0.0;
+let isAutoSpin = false;
 const Safari = () => {
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
   const [winning, setWinning] = useState<number>(0.0);
   const [spin_type, setSpinType] = useState<number>(1);
-  const [isFreeSpin,setIsFreeSpin] = useState(false);
+  const [isFreeSpin, setIsFreeSpin] = useState(false);
   const [minor, setMinor] = useState(0.0);
   const [major, setMajor] = useState(0.0);
   const [jackpot, setJackpot] = useState(0.0);
@@ -112,7 +112,7 @@ const Safari = () => {
   // const [isWinningGamble, setIsWinningGamble] = useState(true);
   let isWinningGamble: boolean;
   let cardRandomValue = false;
-  
+
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
     setRandomValue(newValue);
@@ -248,20 +248,23 @@ const Safari = () => {
       betValueArray[betValue - 1] * line
     );
     setWinning(result);
-    if(scatter_winning.count>=3){
-      setIsFreeSpin(true)
-      isAutoSpin=false
-      freespin()
-    }else{
-      if ((general_winning.length > 0 || scatter_winning.count > 1)&&isAutoSpin===false&&isFreeSpin===false) {
+    if (scatter_winning.count >= 3) {
+      setIsFreeSpin(true);
+      isAutoSpin = false;
+      freespin();
+    } else {
+      if (
+        (general_winning.length > 0 || scatter_winning.count > 1) &&
+        isAutoSpin === false &&
+        isFreeSpin === false
+      ) {
         setIsGamble(true);
       }
       let paylines = new Array();
       general_winning.forEach((winning) => {
         paylines.push(winning.payline);
       });
-      if(socket){
-  
+      if (socket) {
         socket.emit(
           'spinresult',
           JSON.stringify({
@@ -277,12 +280,11 @@ const Safari = () => {
         showWinningCombinations(scatter_winning, general_winning);
       }, 0); // Wait for 2 seconds
     }
-    
   }, [result5]);
-  
-  const freespin=async()=>{
+
+  const freespin = async () => {
     for (let i = 0; i < freeSpinCount; i++) {
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         setTimeout(() => {
           setIsSpinning(true);
           setSpinType(1);
@@ -297,10 +299,10 @@ const Safari = () => {
         }, 1500);
       });
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       setIsGamble(true);
       let paylines = new Array();
-      if(socket){
+      if (socket) {
         socket.emit(
           'spinresult',
           JSON.stringify({
@@ -312,12 +314,11 @@ const Safari = () => {
           })
         );
       }
-      setIsFreeSpin(false)
-      freeSpinCount=15
-      freeSpinWinning=0.0
-    },1500)
-    
-  }
+      setIsFreeSpin(false);
+      freeSpinCount = 15;
+      freeSpinWinning = 0.0;
+    }, 1500);
+  };
   useEffect(() => {
     const { scatter_winning, general_winning, result } = get_winning_paylines(
       result1,
@@ -328,42 +329,42 @@ const Safari = () => {
       line,
       betValueArray[betValue - 1] * line
     );
-    freeSpinWinning+=parseFloat((result*3).toFixed(2))
-    setWinning((previous)=>previous+parseFloat((result*3).toFixed(2)));
-    if(scatter_winning.count>=3){
-      freeSpinCount+=15
-    }else
-    setTimeout(() => {
-      showWinningCombinations(scatter_winning, general_winning);
-    }, 0); // Wait for 2 seconds
-  
-    
+    freeSpinWinning += parseFloat((result * 3).toFixed(2));
+    setWinning((previous) => previous + parseFloat((result * 3).toFixed(2)));
+    if (scatter_winning.count >= 3) {
+      freeSpinCount += 15;
+    } else
+      setTimeout(() => {
+        showWinningCombinations(scatter_winning, general_winning);
+      }, 0); // Wait for 2 seconds
   }, [result6]);
   const handleIncrementLine = () => {
-    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
   };
 
   const handleDecrementLine = () => {
-    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
       setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
   };
   const handleIncrementBet = () => {
-    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
       setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
   };
 
   const handleDecrementBet = () => {
-    if (isSpinning === false&&isFreeSpin===false&&isAutoSpin===false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
       setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
   };
   const handleSpinClick = () => {
-    if(isSpinning === false){
+    if (isSpinning === false) {
       setSpinType(1);
       if (socket && isSpinning === false) {
         socket.emit(
           'bet',
-          JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+          JSON.stringify({
+            bet: (line * betValueArray[betValue - 1]).toFixed(2),
+          })
         );
       }
       setIsSpinning(true);
@@ -376,18 +377,20 @@ const Safari = () => {
         [0, 0, 0], // Initial state for successID5
       ]);
       setIsGamble(false);
-    }else{
-      setIsSpinning(false)
+    } else {
+      setIsSpinning(false);
     }
   };
   const handleAutoSpinClick = () => {
-    if(isFreeSpin===false&&isSpinning===false&&isAutoSpin===false){
+    if (isFreeSpin === false && isSpinning === false && isAutoSpin === false) {
       setIsGamble(false);
       setSpinType(0);
       if (socket && isSpinning === false) {
         socket.emit(
           'bet',
-          JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+          JSON.stringify({
+            bet: (line * betValueArray[betValue - 1]).toFixed(2),
+          })
         );
       }
       setIsSpinning(true);
@@ -399,20 +402,22 @@ const Safari = () => {
         [0, 0, 0], // Initial state for successID4
         [0, 0, 0], // Initial state for successID5
       ]);
-      isAutoSpin=true
-      autoSpin()
-    }else{
-      isAutoSpin=false
+      isAutoSpin = true;
+      autoSpin();
+    } else {
+      isAutoSpin = false;
     }
   };
-  const autoSpin=()=>{
-    if(isAutoSpin===true)
-      setTimeout(()=>{
+  const autoSpin = () => {
+    if (isAutoSpin === true)
+      setTimeout(() => {
         setSpinType(0);
         if (socket && isSpinning === false) {
           socket.emit(
             'bet',
-            JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+            JSON.stringify({
+              bet: (line * betValueArray[betValue - 1]).toFixed(2),
+            })
           );
         }
         setIsSpinning(true);
@@ -424,9 +429,9 @@ const Safari = () => {
           [0, 0, 0], // Initial state for successID4
           [0, 0, 0], // Initial state for successID5
         ]);
-        autoSpin()
-      },2500)
-  }
+        autoSpin();
+      }, 2500);
+  };
   const handleSpinEnd = () => {
     setIsSpinning(false);
   };
@@ -435,19 +440,17 @@ const Safari = () => {
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
-  const sendGamble=()=>{
-
-    const value=isWinningGamble?(gamble-winning):-winning
+  const sendGamble = () => {
+    const value = isWinningGamble ? gamble - winning : -winning;
     if (socket) {
       socket.emit('gamble', JSON.stringify({ gamble: value.toFixed(2) }));
     }
-    setWinning(isWinningGamble?gamble:0.00)
-    setGamble(0.00)
-    isWinningGamble=true
-  }
+    setWinning(isWinningGamble ? gamble : 0.0);
+    setGamble(0.0);
+    isWinningGamble = true;
+  };
   return (
     <>
-  
       {/* <img
         className="h-[800px] w-[100%] flex flex-wrap bg-no-repeat"
         style={{
@@ -458,262 +461,288 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Main' ? 'hidden' : ''
-        }relative flex flex-col 2xl:w-[100%] w-[98.8%] bg-no-repeat inset-0 2xl:h-[906px] xl:h-[674px] h-full bg-cover rotate`}
+        } flex flex-col 2xl:w-[100%] w-[98.8%] bg-no-repeat inset-0 2xl:h-[906px] xl:h-[674px] h-full bg-cover rotate`}
         style={{
           backgroundImage: `url(${Background})`,
         }}
       >
-        {/* header */}
-        <div className="flex justify-between 2xl:h-[50px] h-[34px]">
-          <div className="flex 2xl:mt-[4px] mt-0">
-            <p className="text-white text-center font-extrabold text-[24px] 2xl:w-[493px] w-[360px] 2xl:pl-[275px] pl-[200px]">
-              {major}
-            </p>
-            <p className="text-white font-extrabold text-center text-[24px] 2xl:pl-[157px] 2xl:w-[450px] pl-[125px] w-[335px]">
-              {jackpot}
-            </p>
-            <p className="text-white font-extrabold text-[24px] text-center 2xl:pl-[150px] 2xl:w-[365px] pl-[115px] w-[283px]">
-              {minor}
-            </p>
-          </div>
-          <div className="relative">
-            <button
-              onClick={toggleDrawer}
-              className="2xl:w-[71px] w-[50px] 2xl:h-[91px] h-[70px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none p-0"
-              style={{
-                backgroundImage: `url(${MenuBtnImage})`,
-                backgroundSize: 'cover',
-              }}
-            ></button>
-            {isOpen && (
-              <div
-                className="fixed inset-0 z-20 bg-black bg-opacity-50"
+        <div className='relative'>
+          {/* header */}
+          <div className="flex justify-between 2xl:h-[50px] h-[34px]">
+            <div className="flex 2xl:mt-[4px] mt-0">
+              <p className="text-white text-center font-extrabold text-[24px] 2xl:w-[493px] w-[360px] 2xl:pl-[275px] pl-[200px]">
+                {major}
+              </p>
+              <p className="text-white font-extrabold text-center text-[24px] 2xl:pl-[157px] 2xl:w-[450px] pl-[125px] w-[335px]">
+                {jackpot}
+              </p>
+              <p className="text-white font-extrabold text-[24px] text-center 2xl:pl-[150px] 2xl:w-[365px] pl-[115px] w-[283px]">
+                {minor}
+              </p>
+            </div>
+            <div className="relative">
+              <button
                 onClick={toggleDrawer}
-              ></div>
-            )}
-            <div
-              className={`absolute top-[0px] z-40 2xl:w-[326px] w-[245px] 2xl:h-[906px] h-[675px] shadow-lg transform ease-in-out duration-300 ${
-                isOpen
-                  ? 'translate-x-0 right-[0px]'
-                  : 'translate-x-full 2xl:right-[180px] hidden'
-              }`}
-              style={{
-                backgroundImage: `url(${MenuImage})`,
-                backgroundSize: 'cover',
-              }}
-            >
-              {/* Drawer content here */}
-              <div className="flex flex-col 2xl:gap-[37.5px] gap-[29px] 2xl:pt-[162px] pt-[121px] 2xl:px-[21px] px-[16px] ">
-                <button
-                  onClick={() => navigate('/')}
-                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{
-                    backgroundImage: `url(${MenuBackImage})`,
-                    backgroundSize: 'cover',
-                  }}
-                ></button>
-                <button
-                  onClick={() => {
-                    setBackgroundName('Help');
-                    setIsOpen(false);
-                  }}
-                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{
-                    backgroundImage: `url(${MenuHelpImage})`,
-                    backgroundSize: 'cover',
-                  }}
-                ></button>
-                <button
-                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{
-                    backgroundImage: `url(${MenuAudioOffImage})`,
-                    backgroundSize: 'cover',
-                  }}
-                ></button>
-                <button
-                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{
-                    backgroundImage: `url(${MenuShakeImage})`,
-                    backgroundSize: 'cover',
-                  }}
-                ></button>
-                <button
-                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{
-                    backgroundImage: `url(${MenuLogoutImage})`,
-                    backgroundSize: 'cover',
-                  }}
-                ></button>
-                {/*  */}
+                className="2xl:w-[71px] w-[50px] 2xl:h-[91px] h-[70px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none p-0"
+                style={{
+                  backgroundImage: `url(${MenuBtnImage})`,
+                  backgroundSize: 'cover',
+                }}
+              ></button>
+              {isOpen && (
+                <div
+                  className="fixed inset-0 z-20 bg-black bg-opacity-50"
+                  onClick={toggleDrawer}
+                ></div>
+              )}
+              <div
+                className={`absolute top-[0px] z-40 2xl:w-[326px] w-[245px] 2xl:h-[906px] h-[675px] shadow-lg transform ease-in-out duration-300 ${
+                  isOpen
+                    ? 'translate-x-0 right-[0px]'
+                    : 'translate-x-full 2xl:right-[180px] hidden'
+                }`}
+                style={{
+                  backgroundImage: `url(${MenuImage})`,
+                  backgroundSize: 'cover',
+                }}
+              >
+                {/* Drawer content here */}
+                <div className="flex flex-col 2xl:gap-[37.5px] gap-[29px] 2xl:pt-[162px] pt-[121px] 2xl:px-[21px] px-[16px] ">
+                  <button
+                    onClick={() => navigate('/')}
+                    className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                    style={{
+                      backgroundImage: `url(${MenuBackImage})`,
+                      backgroundSize: 'cover',
+                    }}
+                  ></button>
+                  <button
+                    onClick={() => {
+                      setBackgroundName('Help');
+                      setIsOpen(false);
+                    }}
+                    className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                    style={{
+                      backgroundImage: `url(${MenuHelpImage})`,
+                      backgroundSize: 'cover',
+                    }}
+                  ></button>
+                  <button
+                    className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                    style={{
+                      backgroundImage: `url(${MenuAudioOffImage})`,
+                      backgroundSize: 'cover',
+                    }}
+                  ></button>
+                  <button
+                    className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                    style={{
+                      backgroundImage: `url(${MenuShakeImage})`,
+                      backgroundSize: 'cover',
+                    }}
+                  ></button>
+                  <button
+                    className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                    style={{
+                      backgroundImage: `url(${MenuLogoutImage})`,
+                      backgroundSize: 'cover',
+                    }}
+                  ></button>
+                  {/*  */}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* content */}
-        <div className="flex 2xl:mt-[102px] mt-[82px] 2xl:gap-[19.2px] gap-[14.2px]">
-          <div className="flex gap-[3px]">
-            <div
-              className="2xl:w-[64px] 2xl:h-[628px] 2xl:mt-[-11px] w-[47px] h-[468px] mt-[-11px]"
-              style={{
-                backgroundImage: `url(${sideLeft})`,
-                backgroundSize: 'cover',
-              }}
-            ></div>
+          {/* content */}
+          <div className="flex 2xl:mt-[102px] mt-[82px] 2xl:gap-[19.2px] gap-[14.2px]">
+            <div className="flex gap-[3px]">
+              <div
+                className="2xl:w-[64px] 2xl:h-[628px] 2xl:mt-[-11px] w-[47px] h-[468px] mt-[-11px]"
+                style={{
+                  backgroundImage: `url(${sideLeft})`,
+                  backgroundSize: 'cover',
+                }}
+              ></div>
+              <Slot
+                count={9}
+                isSpinning={isSpinning}
+                setResult={setResult1}
+                onSpinEnd={handleSpinEnd}
+                spinID={1}
+                suceessID={allSuccessIDs[0]}
+                payline={payline}
+              />
+            </div>
             <Slot
-              count={9}
+              count={12}
               isSpinning={isSpinning}
-              setResult={setResult1}
+              setResult={setResult2}
               onSpinEnd={handleSpinEnd}
-              spinID={1}
-              suceessID={allSuccessIDs[0]}
+              spinID={2}
+              suceessID={allSuccessIDs[1]}
               payline={payline}
             />
-          </div>
-          <Slot
-            count={12}
-            isSpinning={isSpinning}
-            setResult={setResult2}
-            onSpinEnd={handleSpinEnd}
-            spinID={2}
-            suceessID={allSuccessIDs[1]}
-            payline={payline}
-          />
-          <Slot
-            count={15}
-            isSpinning={isSpinning}
-            setResult={setResult3}
-            onSpinEnd={handleSpinEnd}
-            spinID={3}
-            suceessID={allSuccessIDs[2]}
-            payline={payline}
-          />
-          <Slot
-            count={18}
-            isSpinning={isSpinning}
-            setResult={setResult4}
-            onSpinEnd={handleSpinEnd}
-            spinID={4}
-            suceessID={allSuccessIDs[3]}
-            payline={payline}
-          />
-          <div className="flex gap-[4px]">
             <Slot
-              count={21}
+              count={15}
               isSpinning={isSpinning}
-              setResult={isFreeSpin?setResult6:setResult5}
+              setResult={setResult3}
               onSpinEnd={handleSpinEnd}
-              spinID={5}
-              suceessID={allSuccessIDs[4]}
+              spinID={3}
+              suceessID={allSuccessIDs[2]}
               payline={payline}
             />
-            <div
-              className="2xl:w-[64px] 2xl:h-[628px] 2xl:mt-[-12px] w-[47px] h-[468px] mt-[-12px]"
-              style={{
-                backgroundImage: `url(${sideRight})`,
-                backgroundSize: 'cover',
-              }}
-            ></div>
+            <Slot
+              count={18}
+              isSpinning={isSpinning}
+              setResult={setResult4}
+              onSpinEnd={handleSpinEnd}
+              spinID={4}
+              suceessID={allSuccessIDs[3]}
+              payline={payline}
+            />
+            <div className="flex gap-[4px]">
+              <Slot
+                count={21}
+                isSpinning={isSpinning}
+                setResult={isFreeSpin ? setResult6 : setResult5}
+                onSpinEnd={handleSpinEnd}
+                spinID={5}
+                suceessID={allSuccessIDs[4]}
+                payline={payline}
+              />
+              <div
+                className="2xl:w-[64px] 2xl:h-[628px] 2xl:mt-[-12px] w-[47px] h-[468px] mt-[-12px]"
+                style={{
+                  backgroundImage: `url(${sideRight})`,
+                  backgroundSize: 'cover',
+                }}
+              ></div>
+            </div>
           </div>
+          {/* bottom */}
+          <div className="flex mt-[2px]">
+            <div className="2xl:w-[374px] w-[280px]">
+              <p className="gradient-text 2xl:pt-[55px] pt-[30px] bg-[#300E0C] text-[36px] font-bold">
+                {balance}
+              </p>
+            </div>
+            <div className="2xl:w-[373px] w-[280px]">
+              <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[50px] 2xl:mt-[-4px] mt-[-8px]">
+                {line}
+              </p>
+              <div className="flex 2xl:mt-[2px] mt-[1px]">
+                <button
+                  type="submit"
+                  onClick={handleDecrementLine}
+                  className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage:
+                      isAutoSpin || isFreeSpin
+                        ? ''
+                        : isSpinning
+                        ? ''
+                        : `url(${MinusImage})`,
+                    backgroundSize: 'cover',
+                  }}
+                ></button>
+                <button
+                  type="submit"
+                  onClick={handleIncrementLine}
+                  className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
+                  style={{
+                    backgroundImage:
+                      isAutoSpin || isFreeSpin
+                        ? ''
+                        : isSpinning
+                        ? ''
+                        : `url(${PlusImage})`,
+                    backgroundSize: 'cover',
+                  }}
+                ></button>
+              </div>
+            </div>
+            <div className="2xl:w-[373px] w-[280px]">
+              <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[25px] 2xl:mt-[-4px] mt-[-8px]">
+                {(line * betValueArray[betValue - 1]).toFixed(2)}
+              </p>
+              <div className="flex 2xl:mt-[2px] mt-[1px] 2xl:ml-[7px] ml-[3px]">
+                <button
+                  type="submit"
+                  onClick={handleDecrementBet}
+                  className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage:
+                      isAutoSpin || isFreeSpin
+                        ? ''
+                        : isSpinning
+                        ? ''
+                        : `url(${MinusImage})`,
+                    backgroundSize: 'cover',
+                  }}
+                ></button>
+                <button
+                  type="submit"
+                  // onMouseEnter={handleIncrementBet}
+                  onClick={handleIncrementBet}
+                  className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
+                  style={{
+                    backgroundImage:
+                      isAutoSpin || isFreeSpin
+                        ? ''
+                        : isSpinning
+                        ? ''
+                        : `url(${PlusImage})`,
+                    backgroundSize: 'cover',
+                  }}
+                ></button>
+              </div>
+            </div>
+            <div className="w-auto">
+              <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[90px] 2xl:mt-[-4px] mt-[-8px]">
+                {winning.toFixed(2)}
+              </p>
+              <div className="flex gap-[6px] 2xl:mt-[2px] ml-[7px]">
+                <button
+                  type="submit"
+                  // onClick={handleDecrementLine}
+                  onClick={handleAutoSpinClick}
+                  className="2xl:h-[81px] h-[60px] 2xl:w-[243px] w-[180px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: isAutoSpin
+                      ? `url(${StopSpinImage})`
+                      : isSpinning || isFreeSpin
+                      ? ''
+                      : `url(${AutoStartImage})`,
+                    backgroundSize: 'cover',
+                  }}
+                ></button>
+                <button
+                  type="submit"
+                  onClick={handleSpinClick}
+                  className="focus:outline-none hover:brightness-125 border-none 2xl:w-[234px] w-[180px] 2xl:h-[79px] h-[56px] bg-opacity-0 aspect-auto object-cover"
+                  style={{
+                    backgroundImage: isSpinning
+                      ? `url(${StopSpinImage})`
+                      : `url(${SpinImage})`,
+                    backgroundSize: 'cover',
+                  }}
+                ></button>
+              </div>
+            </div>
+          </div>
+          <img
+            src={GambleImage}
+            onClick={() => {
+              setGamble(winning);
+              setBackgroundName('Gamble');
+              setCardName('card');
+              setIsGamble(false);
+            }}
+            className={`${
+              isGamble ? '' : 'hidden'
+            } absolute gamble-image right-[1%] 2xl:bottom-[127px] bottom-[100px] 2xl:w-[250px] w-[200px] cursor-pointer hover:brightness-125`}
+          />
         </div>
-        {/* bottom */}
-        <div className="flex mt-[2px]">
-          <div className="2xl:w-[374px] w-[280px]">
-            <p className="gradient-text 2xl:pt-[55px] pt-[30px] bg-[#300E0C] text-[36px] font-bold">
-              {balance}
-            </p>
-          </div>
-          <div className="2xl:w-[373px] w-[280px]">
-            <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[50px] 2xl:mt-[-4px] mt-[-8px]">
-              {line}
-            </p>
-            <div className="flex 2xl:mt-[2px] mt-[1px]">
-              <button
-                type="submit"
-                onClick={handleDecrementLine}
-                className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
-                style={{
-                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${MinusImage})`,
-                  backgroundSize: 'cover',
-                }}
-              ></button>
-              <button
-                type="submit"
-                onClick={handleIncrementLine}
-                className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
-                style={{
-                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${PlusImage})`,
-                  backgroundSize: 'cover',
-                }}
-              ></button>
-            </div>
-          </div>
-          <div className="2xl:w-[373px] w-[280px]">
-            <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[25px] 2xl:mt-[-4px] mt-[-8px]">
-              {(line * betValueArray[betValue - 1]).toFixed(2)}
-            </p>
-            <div className="flex 2xl:mt-[2px] mt-[1px] 2xl:ml-[7px] ml-[3px]">
-              <button
-                type="submit"
-                onClick={handleDecrementBet}
-                className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
-                style={{
-                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${MinusImage})`,
-                   backgroundSize: 'cover',
-                }}
-              ></button>
-              <button
-                type="submit"
-                // onMouseEnter={handleIncrementBet}
-                onClick={handleIncrementBet}
-                className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
-                style={{
-                  backgroundImage: isAutoSpin||isFreeSpin?'':isSpinning ? '' : `url(${PlusImage})`,
-                   backgroundSize: 'cover',
-                }}
-              ></button>
-            </div>
-          </div>
-          <div className="w-auto">
-            <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[90px] 2xl:mt-[-4px] mt-[-8px]">
-              {winning.toFixed(2)}
-            </p>
-            <div className="flex gap-[6px] 2xl:mt-[2px] ml-[7px]">
-              <button
-                type="submit"
-                // onClick={handleDecrementLine}
-                onClick={handleAutoSpinClick}
-                className="2xl:h-[81px] h-[60px] 2xl:w-[243px] w-[180px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
-                style={{
-                  backgroundImage: isAutoSpin ? `url(${StopSpinImage})` :isSpinning||isFreeSpin?'': `url(${AutoStartImage})`,
-                  backgroundSize: 'cover',
-                }}
-              ></button>
-              <button
-                type="submit"
-                onClick={handleSpinClick}
-                className="focus:outline-none hover:brightness-125 border-none 2xl:w-[234px] w-[180px] 2xl:h-[79px] h-[56px] bg-opacity-0 aspect-auto object-cover"
-                style={{
-                  backgroundImage: isSpinning
-                    ? `url(${StopSpinImage})`
-                    : `url(${SpinImage})`,
-                  backgroundSize: 'cover',
-                }}
-              ></button>
-            </div>
-          </div>
-        </div>
-        <img
-          src={GambleImage}
-          onClick={() => {
-            setGamble(winning);
-            setBackgroundName('Gamble');
-            setCardName('card');
-            setIsGamble(false);
-          }}
-          className={`${
-            isGamble ? '' : 'hidden'
-          } absolute gamble-image right-[1%] 2xl:bottom-[127px] bottom-[100px] 2xl:w-[250px] w-[200px] cursor-pointer hover:brightness-125`}
-        />
       </div>
       {/* Help */}
       <div
