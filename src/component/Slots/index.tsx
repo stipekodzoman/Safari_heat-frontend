@@ -21,22 +21,22 @@ export interface Props {
 
 let items = new Array();
 const paylineColor = [
-  `w-[280px] h-[206px] border-[10px] border-[#FFF516]`,
-  `w-[280px] h-[206px] border-[10px] border-[#DF398E]`,
-  `w-[280px] h-[206px] border-[10px] border-[#2586C5]`,
-  `w-[280px] h-[206px] border-[10px] border-[#AD03DD]`,
-  `w-[280px] h-[206px] border-[10px] border-[#1B4CA4]`,
-  `w-[280px] h-[206px] border-[10px] border-[#D5C023]`,
-  `w-[280px] h-[206px] border-[10px] border-[#7EA60C]`,
-  `w-[280px] h-[206px] border-[10px] border-[#0ABA48]`,
-  `w-[280px] h-[206px] border-[10px] border-[#E63009]`,
-  `w-[280px] h-[206px] border-[10px] border-[#C2E21A]`,
-  `w-[280px] h-[206px] border-[10px] border-[#FBBD00]`,
-  `w-[280px] h-[206px] border-[10px] border-[#FBBD00]`,
-  `w-[280px] h-[206px] border-[10px] border-[#03D78E]`,
-  `w-[280px] h-[206px] border-[10px] border-[#810792]`,
-  `w-[280px] h-[206px] border-[10px] border-[#1E0FA6]`,
-  `w-[280px] h-[206px] border-[10px] border-[#04BC45]`,
+  `border-[10px] border-[#FFF516]`,
+  `border-[10px] border-[#DF398E]`,
+  `border-[10px] border-[#2586C5]`,
+  `border-[10px] border-[#AD03DD]`,
+  `border-[10px] border-[#1B4CA4]`,
+  `border-[10px] border-[#D5C023]`,
+  `border-[10px] border-[#7EA60C]`,
+  `border-[10px] border-[#0ABA48]`,
+  `border-[10px] border-[#E63009]`,
+  `border-[10px] border-[#C2E21A]`,
+  `border-[10px] border-[#FBBD00]`,
+  `border-[10px] border-[#FBBD00]`,
+  `border-[10px] border-[#03D78E]`,
+  `border-[10px] border-[#810792]`,
+  `border-[10px] border-[#1E0FA6]`,
+  `border-[10px] border-[#04BC45]`,
 ];
 const Slot: FC<Props> = ({
   count,
@@ -73,13 +73,13 @@ const Slot: FC<Props> = ({
   };
   return (
     <div className="slot-machine">
-      <div className="slot-container">
+      <div className="overflow-hidden 2xl:w-[280px] w-[208px] 2xl:h-[618px] h-[459px]">
         {isSpinning
           ? currentImages.map((imageSrc, index) => (
               <img
                 key={index}
                 src={`https://i.postimg.cc/${imageSrc}`}
-                className={`w-[280px] h-[206px] spinning${count}`}
+                className={`2xl:w-[280px] 2xl:h-[206px] w-[208px] h-[153px] spinning${count}`}
                 alt={`Slot ${index}`}
                 onAnimationEnd={() => {
                   if (spinID == 5) {
@@ -99,11 +99,9 @@ const Slot: FC<Props> = ({
                     ? `https://i.postimg.cc/${imageSrc}`
                     : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
                 }
-                className={
-                  suceessID[index] === 0
-                    ? `w-[280px] h-[206px] `
-                    : paylineColor[payline]
-                }
+                className={`2xl:w-[280px] 2xl:h-[206px] w-[208px] h-[153px] ${
+                  suceessID[index] === 0 ? '' : paylineColor[payline]
+                }`}
                 alt={`Slot ${suceessID[index]}`}
               />
             ))}

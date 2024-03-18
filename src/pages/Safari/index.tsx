@@ -346,36 +346,43 @@ const Safari = () => {
   };
   return (
     <>
+  
+      {/* <img
+        className="h-[800px] w-[100%] flex flex-wrap bg-no-repeat"
+        style={{
+          backgroundImage: `url(${Background})`,
+        }}
+      /> */}
       {/* Main */}
       <div
         className={`${
           backgroundName != 'Main' ? 'hidden' : ''
-        } flex flex-col 2xl:w-[1612px] h-[100vh] xl:w-[1200px] lg:w-[960px] md:w-[700px] sm:w-[540px] bg-no-repeat inset-0 2xl:h-[906px] xl:h-[576px] lg:h-[462px] md:h-[335px] sm:h-[257px] bg-cover rotate`}
+        }relative flex flex-col 2xl:w-[100%] w-[98.8%] bg-no-repeat inset-0 2xl:h-[906px] xl:h-[674px] h-full bg-cover rotate`}
         style={{
           backgroundImage: `url(${Background})`,
-          backgroundSize: 'cover',
         }}
       >
         {/* header */}
-        <div className="flex justify-between h-[50px]">
-          <div className="flex mt-[4px]">
-            <p className="text-white text-center font-extrabold text-[24px] w-[493px] pl-[275px]">
+        <div className="flex justify-between 2xl:h-[50px] h-[34px]">
+          <div className="flex 2xl:mt-[4px] mt-0">
+            <p className="text-white text-center font-extrabold text-[24px] 2xl:w-[493px] w-[360px] 2xl:pl-[275px] pl-[200px]">
               {major}
             </p>
-            <p className="text-white font-extrabold text-center text-[24px] pl-[157px]  w-[450px]">
+            <p className="text-white font-extrabold text-center text-[24px] 2xl:pl-[157px] 2xl:w-[450px] pl-[125px] w-[335px]">
               {jackpot}
             </p>
-            <p className="text-white font-extrabold text-[24px] text-center pl-[150px] w-[365px]">
+            <p className="text-white font-extrabold text-[24px] text-center 2xl:pl-[150px] 2xl:w-[365px] pl-[115px] w-[283px]">
               {minor}
             </p>
           </div>
-          {/* <img src="https://i.postimg.cc/FswCXSFY/animal-1.png" /> */}
-          {/* <img src="https://i.ibb.co/wJ28Pfs/lion.png" alt="lion" /> */}
-          <div>
+          <div className="relative">
             <button
               onClick={toggleDrawer}
-              className="w-[71px] h-[91px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none p-0"
-              style={{ backgroundImage: `url(${MenuBtnImage})` }}
+              className="2xl:w-[71px] w-[50px] 2xl:h-[91px] h-[70px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none p-0"
+              style={{
+                backgroundImage: `url(${MenuBtnImage})`,
+                backgroundSize: 'cover',
+              }}
             ></button>
             {isOpen && (
               <div
@@ -384,39 +391,57 @@ const Safari = () => {
               ></div>
             )}
             <div
-              className={`fixed top-[6px] z-40 w-[326px] h-[906px] shadow-lg transform ease-in-out duration-300 ${
+              className={`absolute top-[0px] z-40 2xl:w-[326px] w-[245px] 2xl:h-[906px] h-[675px] shadow-lg transform ease-in-out duration-300 ${
                 isOpen
-                  ? 'translate-x-0 right-[153px]'
-                  : 'translate-x-full right-[180px] hidden'
+                  ? 'translate-x-0 right-[0px]'
+                  : 'translate-x-full 2xl:right-[180px] hidden'
               }`}
-              style={{ backgroundImage: `url(${MenuImage})` }}
+              style={{
+                backgroundImage: `url(${MenuImage})`,
+                backgroundSize: 'cover',
+              }}
             >
               {/* Drawer content here */}
-              <div className="flex flex-col gap-[37.5px] pt-[162px] px-[21px] ">
+              <div className="flex flex-col 2xl:gap-[37.5px] gap-[29px] 2xl:pt-[162px] pt-[121px] 2xl:px-[21px] px-[16px] ">
                 <button
                   onClick={() => navigate('/')}
-                  className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MenuBackImage})` }}
+                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: `url(${MenuBackImage})`,
+                    backgroundSize: 'cover',
+                  }}
                 ></button>
                 <button
                   onClick={() => {
                     setBackgroundName('Help');
                     setIsOpen(false);
                   }}
-                  className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MenuHelpImage})` }}
+                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: `url(${MenuHelpImage})`,
+                    backgroundSize: 'cover',
+                  }}
                 ></button>
                 <button
-                  className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MenuAudioOffImage})` }}
+                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: `url(${MenuAudioOffImage})`,
+                    backgroundSize: 'cover',
+                  }}
                 ></button>
                 <button
-                  className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MenuShakeImage})` }}
+                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: `url(${MenuShakeImage})`,
+                    backgroundSize: 'cover',
+                  }}
                 ></button>
                 <button
-                  className="h-[83px] w-[286px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                  style={{ backgroundImage: `url(${MenuLogoutImage})` }}
+                  className="2xl:h-[83px] h-[62px] 2xl:w-[286px] w-[216px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
+                  style={{
+                    backgroundImage: `url(${MenuLogoutImage})`,
+                    backgroundSize: 'cover',
+                  }}
                 ></button>
                 {/*  */}
               </div>
@@ -424,12 +449,13 @@ const Safari = () => {
           </div>
         </div>
         {/* content */}
-        <div className="flex mt-[102px] gap-[19.2px]">
+        <div className="flex 2xl:mt-[102px] mt-[82px] 2xl:gap-[19.2px] gap-[14.2px]">
           <div className="flex gap-[3px]">
             <div
-              className="w-[64px] h-[628px] mt-[-11px]"
+              className="2xl:w-[64px] 2xl:h-[628px] 2xl:mt-[-11px] w-[47px] h-[468px] mt-[-11px]"
               style={{
                 backgroundImage: `url(${sideLeft})`,
+                backgroundSize: 'cover',
               }}
             ></div>
             <Slot
@@ -480,89 +506,96 @@ const Safari = () => {
               payline={payline}
             />
             <div
-              className="w-[64px] h-[628px] mt-[-12px]"
+              className="2xl:w-[64px] 2xl:h-[628px] 2xl:mt-[-12px] w-[47px] h-[468px] mt-[-12px]"
               style={{
                 backgroundImage: `url(${sideRight})`,
+                backgroundSize: 'cover',
               }}
             ></div>
           </div>
         </div>
         {/* bottom */}
         <div className="flex mt-[2px]">
-          <div className="w-[374px]">
-            <p className="gradient-text pt-[55px] bg-[#300E0C] text-[36px] font-bold">
+          <div className="2xl:w-[374px] w-[280px]">
+            <p className="gradient-text 2xl:pt-[55px] pt-[30px] bg-[#300E0C] text-[36px] font-bold">
               {balance}
             </p>
           </div>
-          <div className="w-[373px]">
-            <p className="gradient-text  text-[36px] font-bold pl-[76px] mt-[-4px]">
+          <div className="2xl:w-[373px] w-[280px]">
+            <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[50px] 2xl:mt-[-4px] mt-[-8px]">
               {line}
             </p>
-            <div className="flex mt-[2px]">
+            <div className="flex 2xl:mt-[2px] mt-[1px]">
               <button
                 type="submit"
                 onClick={handleDecrementLine}
-                className="h-[81px] w-[173px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
                   backgroundImage: isSpinning ? '' : `url(${MinusImage})`,
+                  backgroundSize: 'cover',
                 }}
               ></button>
               <button
                 type="submit"
                 onClick={handleIncrementLine}
-                className="h-[81px] w-[172px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
+                className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
                 style={{
                   backgroundImage: isSpinning ? '' : `url(${PlusImage})`,
+                  backgroundSize: 'cover',
                 }}
               ></button>
             </div>
           </div>
-          <div className="w-[373px]">
-            <p className="gradient-text text-[36px] font-bold pl-[40px] mt-[-4px]">
+          <div className="2xl:w-[373px] w-[280px]">
+            <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[25px] 2xl:mt-[-4px] mt-[-8px]">
               {(line * betValueArray[betValue - 1]).toFixed(2)}
             </p>
-            <div className="flex mt-[2px] ml-[7px]">
+            <div className="flex 2xl:mt-[2px] mt-[1px] 2xl:ml-[7px] ml-[3px]">
               <button
                 type="submit"
                 onClick={handleDecrementBet}
-                className="h-[81px] w-[172px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                className="2xl:h-[81px] 2xl:w-[173px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
                   backgroundImage: isSpinning ? '' : `url(${MinusImage})`,
+                  backgroundSize: 'cover',
                 }}
               ></button>
               <button
                 type="submit"
                 // onMouseEnter={handleIncrementBet}
                 onClick={handleIncrementBet}
-                className="h-[81px] w-[172px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
+                className="2xl:h-[81px] 2xl:w-[172px] h-[55px] w-[130px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none ml-[-2px]"
                 style={{
                   backgroundImage: isSpinning ? '' : `url(${PlusImage})`,
+                  backgroundSize: 'cover',
                 }}
               ></button>
             </div>
           </div>
           <div className="w-auto">
-            <p className="gradient-text text-[36px] font-bold pl-[70px] mt-[-4px]">
+            <p className="gradient-text 2xl:text-[36px] text-[30px] font-bold 2xl:pl-[76px] pl-[90px] 2xl:mt-[-4px] mt-[-8px]">
               {winning.toFixed(2)}
             </p>
-            <div className="flex gap-[6px] mt-[2px] ml-[7px]">
+            <div className="flex gap-[6px] 2xl:mt-[2px] ml-[7px]">
               <button
                 type="submit"
                 // onClick={handleDecrementLine}
                 onClick={handleAutoSpinClick}
-                className="h-[81px] w-[243px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                className="2xl:h-[81px] h-[60px] 2xl:w-[243px] w-[180px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                 style={{
                   backgroundImage: isSpinning ? `` : `url(${AutoStartImage})`,
+                  backgroundSize: 'cover',
                 }}
               ></button>
               <button
                 type="submit"
                 onClick={handleSpinClick}
-                className="focus:outline-none hover:brightness-125 border-none w-[234px] h-[79px] bg-opacity-0 aspect-auto object-cover"
+                className="focus:outline-none hover:brightness-125 border-none 2xl:w-[234px] w-[180px] 2xl:h-[79px] h-[56px] bg-opacity-0 aspect-auto object-cover"
                 style={{
                   backgroundImage: isSpinning
                     ? `url(${StopSpinImage})`
                     : `url(${SpinImage})`,
+                  backgroundSize: 'cover',
                 }}
               ></button>
             </div>
@@ -578,14 +611,14 @@ const Safari = () => {
           }}
           className={`${
             isGamble ? '' : 'hidden'
-          } fixed gamble-image right-[150px] bottom-[127px] w-[250px] cursor-pointer hover:brightness-125`}
+          } absolute gamble-image right-[1%] 2xl:bottom-[127px] bottom-[100px] 2xl:w-[250px] w-[200px] cursor-pointer hover:brightness-125`}
         />
       </div>
       {/* Help */}
       <div
         className={`${
           backgroundName != 'Help' ? 'hidden' : ''
-        } flex flex-col justify-end w-[1602px] h-[906px]
+        } flex flex-col justify-end 2xl:w-[1602px] w-[1200px] 2xl:h-[906px] h-[674px]
         `}
         style={{
           backgroundImage: `url(${helpBackground})`,
@@ -594,15 +627,21 @@ const Safari = () => {
         }}
       >
         <div className="flex justify-between px-[8px]">
-          <div className="pl-[59px]">
+          <div className="2xl:pl-[59px] pl-[43px]">
             <img
               onClick={() => setBackgroundName('Main')}
               src={Back}
-              className="cursor-pointer mb-0.5 hover:brightness-110"
+              className="2xl:w-auto w-[200px] cursor-pointer mb-0.5 hover:brightness-110 bg-cover"
             />
             {/* </button> */}
           </div>
-          <div className={`${pageNumber != 4 ? 'mr-[152px]' : 'mr-[470px]'} `}>
+          <div
+            className={`${
+              pageNumber != 4
+                ? '2xl:mr-[152px] mr-[116px]'
+                : '2xl:mr-[470px] mr-[359px]'
+            } `}
+          >
             <button
               onClick={() => {
                 {
@@ -614,7 +653,7 @@ const Safari = () => {
                   pageNumber == 4 ? setPageNumber(1) : setPageNumber(4);
                 }
               }}
-              className="h-[81px] w-[636px] focus:outline-none hover:brightness-105 bg-no-repeat bg-center border-none"
+              className="2xl:h-[81px] h-[62px] 2xl:w-[636px] w-[465px] focus:outline-none hover:brightness-105 bg-no-repeat bg-center border-none bg-cover"
               style={{
                 backgroundImage:
                   pageNumber != 4
@@ -624,7 +663,7 @@ const Safari = () => {
             ></button>
           </div>
           <div
-            className={`flex gap-[8px] mt-[35px] ${
+            className={`flex 2xl:gap-[8px] gap-[6px] 2xl:mt-[35px] mt-[30px] ${
               pageNumber == 4 ? 'hidden' : ''
             }`}
           >
@@ -633,7 +672,7 @@ const Safari = () => {
                 setHelpBackground(HelpBackground1);
                 setPageNumber(1);
               }}
-              className={`h-[40px] w-[50px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none `}
+              className={`2xl:h-[40px] h-[27px] 2xl:w-[50px] w-[24px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
               style={{
                 backgroundImage:
                   pageNumber == 1
@@ -646,7 +685,7 @@ const Safari = () => {
                 setHelpBackground(HelpBackground2);
                 setPageNumber(2);
               }}
-              className={`h-[40px] w-[50px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none `}
+              className={`2xl:h-[40px] h-[27px] 2xl:w-[49px] w-[24px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
               style={{
                 backgroundImage:
                   pageNumber == 2
@@ -659,7 +698,7 @@ const Safari = () => {
                 setHelpBackground(HelpBackground3);
                 setPageNumber(3);
               }}
-              className={`h-[38px] w-[48px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none `}
+              className={`2xl:h-[38px] h-[27px] 2xl:w-[48px] w-[24px]  focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
               style={{
                 backgroundImage:
                   pageNumber == 3
@@ -674,7 +713,7 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
-        } flex flex-col  w-[1602px] h-[906px] pt-[278px] gap-[20px] 
+        } flex flex-col  2xl:w-[1602px] w-[1200px] 2xl:h-[906px] h-[674px] 2xl:pt-[278px] pt-[208px] 2xl:gap-[20px] 
         `}
         style={{
           backgroundImage: `url(${GambleBackgroundImage})`,
@@ -682,7 +721,7 @@ const Safari = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="flex pl-[270px] pr-[275px] justify-between">
+        <div className="flex 2xl:pl-[270px] pl-[202px] pr-[275px] gap-[36px] justify-between">
           <img
             onClick={() => {
               // setCardName('red');
@@ -710,7 +749,7 @@ const Safari = () => {
               }, 1500);
             }}
             src={RedButtonImage}
-            className="w-[339px] cursor-pointer hover:brightness-125"
+            className="2xl:w-[339px] w-[250px] 2xl:h-auto h-[200px] cursor-pointer hover:brightness-125 bg-cover"
           />
           <img
             src={`${
@@ -722,7 +761,7 @@ const Safari = () => {
             }`}
             className={`${
               cardName == 'card' ? 'gamble-image' : ' '
-            } w-[269px] ml-[12px]`}
+            } 2xl:w-[269px] w-[200px] ml-[12px]`}
           />
           <img
             onClick={() => {
@@ -751,24 +790,24 @@ const Safari = () => {
               }, 1500);
             }}
             src={BlackButtonImage}
-            className="w-[339px] cursor-pointer hover:brightness-125"
+            className="2xl:w-[339px] w-[250px] 2xl:h-auto h-[200px] cursor-pointer hover:brightness-125"
           />
         </div>
         <div className="h-[48px]">
           <p
             className={`${
               winingString ? '' : 'hidden'
-            } text-white text-center font-bold text-[32px]`}
+            } text-white text-center font-bold 2xl:text-[32px] 2xl:pt-[0px] text-[26px] pt-[10px]`}
           >
             YOU WIN {(gamble * 2).toFixed(2)}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 px-[442px] gap mt-[28px]">
-          <p className="text-white text-center font-bold text-[32px]">
+        <div className="grid grid-cols-2 2xl:px-[442px] px-[340px] gap 2xl:mt-[28px] mt-[36px] 2xl:text-[32px] text-[26px]">
+          <p className="text-white text-center font-bold">
             {gamble.toFixed(2)}
           </p>
-          <p className="text-white text-center font-bold text-[32px]">
+          <p className="text-white text-center font-bold">
             {(gamble * 2).toFixed(2)}
           </p>
         </div>
@@ -782,7 +821,7 @@ const Safari = () => {
               setIsGamble(false);
             }}
             src={CollectButtonImage}
-            className="mt-[26px] ml-[12px] w-[290px] cursor-pointer hover:brightness-105"
+            className="2xl:mt-[26px] mt-[32px] ml-[12px] 2xl:w-[290px] 2xl:h-auto w-[220px] h-[80px] bg-cover cursor-pointer hover:brightness-105"
           />
         </div>
       </div>
