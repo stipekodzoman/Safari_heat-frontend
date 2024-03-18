@@ -209,9 +209,28 @@ const Safari = () => {
     let count = 0;
     if (scatter_winning.count >= 2) {
       setAllSuccessIDs(scatter_winning.locations);
-      setTimeout(() => console.log(scatter_winning), 1000);
       setPayline(15);
     }
+    else if (count < winningCombos.length) {
+      const value = winningCombos[count];
+      for (let i = 0; i < value.count; i++) {
+        setAllSuccessIDs((prevAllSuccessIDs) =>
+          prevAllSuccessIDs.map((successID, index) =>
+            index === i
+              ? [
+                  PAYLINES[value.payline][i] === 0 ? 1 : 0,
+                  PAYLINES[value.payline][i] === 1 ? 1 : 0,
+                  PAYLINES[value.payline][i] === 2 ? 1 : 0,
+                ]
+              : index < value.count
+              ? successID
+              : [0, 0, 0]
+          )
+        );
+      }
+      setPayline(value.payline);
+      count++;
+    } 
     intervalID.current = setInterval(() => {
       if (count < winningCombos.length) {
         const value = winningCombos[count];
@@ -406,25 +425,28 @@ const Safari = () => {
     }
   };
   const autoSpin=()=>{
-    if(isAutoSpin===true)
+    
       setTimeout(()=>{
-        setSpinType(0);
-        if (socket && isSpinning === false) {
-          socket.emit(
-            'bet',
-            JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-          );
+        if(isAutoSpin===true){
+          setSpinType(0);
+          if (socket && isSpinning === false) {
+            socket.emit(
+              'bet',
+              JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
+            );
+          }
+          setIsSpinning(true);
+          setWinning(0.0);
+          setAllSuccessIDs(() => [
+            [0, 0, 0], // Initial state for successID1
+            [0, 0, 0], // Initial state for successID2
+            [0, 0, 0], // Initial state for successID3
+            [0, 0, 0], // Initial state for successID4
+            [0, 0, 0], // Initial state for successID5
+          ]);
+          autoSpin()
         }
-        setIsSpinning(true);
-        setWinning(0.0);
-        setAllSuccessIDs(() => [
-          [0, 0, 0], // Initial state for successID1
-          [0, 0, 0], // Initial state for successID2
-          [0, 0, 0], // Initial state for successID3
-          [0, 0, 0], // Initial state for successID4
-          [0, 0, 0], // Initial state for successID5
-        ]);
-        autoSpin()
+        
       },2500)
   }
   const handleSpinEnd = () => {
