@@ -73,13 +73,13 @@ const Slot: FC<Props> = ({
   };
   return (
     <div className="slot-machine">
-      <div className="overflow-hidden 2xl:w-[280px] w-[208px] 2xl:h-[618px] h-[459px]">
+      <div className="overflow-hidden 2xl:w-[280px] xl:w-[208px] 2xl:h-[618px] xl:h-[459px] h-[255px]">
         {isSpinning
           ? currentImages.map((imageSrc, index) => (
               <img
                 key={index}
                 src={`https://i.postimg.cc/${imageSrc}`}
-                className={`2xl:w-[280px] 2xl:h-[206px] w-[208px] h-[153px] spinning${count}`}
+                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}`}
                 alt={`Slot ${index}`}
                 onAnimationEnd={() => {
                   if (spinID == 5) {
@@ -99,7 +99,7 @@ const Slot: FC<Props> = ({
                     ? `https://i.postimg.cc/${imageSrc}`
                     : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
                 }
-                className={`2xl:w-[280px] 2xl:h-[206px] w-[208px] h-[153px] ${
+                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] ${
                   suceessID[index] === 0 ? '' : paylineColor[payline]
                 }`}
                 alt={`Slot ${suceessID[index]}`}
