@@ -18,7 +18,7 @@ export interface Props {
   payline: number;
   // paylineID?: number;
 }
-
+let isSpinEnd=false
 let items = new Array();
 const paylineColor = [
   `border-[10px] border-[#FFF516]`,
@@ -49,21 +49,31 @@ const Slot: FC<Props> = ({
 }) => {
   const [currentImages, setCurrentImages] = useState<string[]>(() => []);
   const [initial_items, setInitialItems] = useState<string[]>(() => []);
-  useEffect(() => {
-    let items = get_initial_items();
-    setInitialItems(() => items);
-  }, []);
-
+  
   useEffect(() => {
     if (isSpinning) {
+      isSpinEnd=false
       items = get_slot_items(count);
       items.push(...initial_items);
       setCurrentImages(items);
 
       items = [];
+    }else if(isSpinEnd===false){
+      setInitialItems([currentImages[4], currentImages[5], currentImages[6]]);
+      setResult([
+        SET_RESULT_ITEM[currentImages[4]],
+        SET_RESULT_ITEM[currentImages[5]],
+        SET_RESULT_ITEM[currentImages[6]],
+      ]);
     }
   }, [isSpinning]);
+  useEffect(() => {
+    let items = get_initial_items();
+    setInitialItems(() => items);
+  }, []);
+
   const spinEnd = () => {
+    isSpinEnd=true
     setInitialItems([currentImages[0], currentImages[1], currentImages[2]]);
     setResult([
       SET_RESULT_ITEM[currentImages[0]],
@@ -83,8 +93,9 @@ const Slot: FC<Props> = ({
                 alt={`Slot ${index}`}
                 onAnimationEnd={() => {
                   if (spinID == 5) {
-                    onSpinEnd();
                     spinEnd();
+                    onSpinEnd();
+                    
                   } else {
                     spinEnd();
                   }
