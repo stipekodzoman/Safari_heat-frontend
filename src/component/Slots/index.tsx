@@ -110,7 +110,7 @@ const Slot: FC<Props> = ({
                     ? `https://i.postimg.cc/${imageSrc}`
                     : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
                 }
-                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] ${
+                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
                   suceessID[index] === 0 ? '' : paylineColor[payline]
                 }`}
                 alt={`Slot ${suceessID[index]}`}
