@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './index.css';
 import { useState } from 'react';
 
@@ -17,16 +17,16 @@ const LandingPage = () => {
         backgroundImage: `url(${Background})`,
       }}
     >
-      <div className="flex flex-col justify-center gap-[61px] mt-[287px] px-[442px]">
-        <input className="ml-[243px] pl-2 h-[62px] text-[32px] text-white rounded-xl border-2 border-black bg-[#0C0142]" />
-        <input className="ml-[243px] pl-2 h-[62px] text-[32px] text-white rounded-xl border-2 border-black bg-[#0C0142]" />
+      <div className="flex flex-col justify-center 2xl:gap-[61px] xl:gap-[39px] gap-[26px] 2xl:mt-[287px] 2xl:px-[442px] xl:mt-[211px] xl:px-[336px] mt-[118px] px-[181px]">
+        <input className="2xl:ml-[243px] xl:ml-[172px] ml-[100px] pl-2 2xl:h-[62px] xl:h-[52px] h-[24px] xl:text-[32px] text-white xl:rounded-xl rounded-md border-2 border-black bg-[#0C0142]" />
+        <input className="2xl:ml-[243px] xl:ml-[172px] ml-[100px] pl-2 2xl:h-[62px] xl:h-[52px] h-[24px] xl:text-[32px] text-white xl:rounded-xl rounded-md border-2 border-black bg-[#0C0142]" />
       </div>
-      <div className="mt-[190px] pl-[552px]">
+      <div className="2xl:mt-[190px] 2xl:pl-[552px] xl:mt-[138px] xl:pl-[410px] mt-[77px] pl-[224px]">
         <div
           onClick={() => {
             setCheckImage(!checkImage);
           }}
-          className="w-[59px] h-[59px] cursor-pointer hover:brightness-110 "
+          className="2xl:w-[59px] 2xl:h-[59px] xl:w-[44px] xl:h-[44px] w-[26px] h-[26px] cursor-pointer hover:brightness-110 "
           style={{
             backgroundImage: checkImage
               ? `url(${CheckboxDisable})`
@@ -36,16 +36,15 @@ const LandingPage = () => {
           }}
         />
       </div>
-      <div className="mt-[77px] ml-[28px] justify-end">
+      <div className="2xl:mt-[77px] 2xl:ml-[28px] xl:mt-[57px] xl:ml-[12px] mt-[31px] ml-[9px] justify-end">
         <button
           type="button"
           onClick={() => navigate('/safari')}
-          className="text-white w-[348px] h-[97px] rounded-lg text-sm focus:outline-none bg-no-repeat border-none"
+          className="text-white 2xl:w-[348px] 2xl:h-[97px] xl:w-[260px] xl:h-[72px] w-[140px] h-[40px] hover:brightness-110 bg-no-repeat border-none bg-cover"
           style={{
-            background: `url(${LoginImage})`,
+            backgroundImage: `url(${LoginImage})`,
           }}
-        >
-        </button>
+        ></button>
       </div>
       {/* <Outlet /> */}
     </div>
