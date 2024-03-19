@@ -1,4 +1,4 @@
-import { PAYLINES } from '../constants/paylines';
+import { PAYLINES } from '../../constants/paylines';
 let winning = 0.0;
 let isJackpotSuccess=false
 const get_winning_paylines = (
