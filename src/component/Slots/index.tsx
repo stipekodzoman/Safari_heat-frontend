@@ -21,22 +21,22 @@ export interface Props {
 let isSpinEnd=false
 let items = new Array();
 const paylineColor = [
-  `border-[10px] border-[#FFF516]`,
-  `border-[10px] border-[#DF398E]`,
-  `border-[10px] border-[#2586C5]`,
-  `border-[10px] border-[#AD03DD]`,
-  `border-[10px] border-[#1B4CA4]`,
-  `border-[10px] border-[#D5C023]`,
-  `border-[10px] border-[#7EA60C]`,
-  `border-[10px] border-[#0ABA48]`,
-  `border-[10px] border-[#E63009]`,
-  `border-[10px] border-[#C2E21A]`,
-  `border-[10px] border-[#FBBD00]`,
-  `border-[10px] border-[#FBBD00]`,
-  `border-[10px] border-[#03D78E]`,
-  `border-[10px] border-[#810792]`,
-  `border-[10px] border-[#1E0FA6]`,
-  `border-[10px] border-[#04BC45]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#FFF516]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#DF398E]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#2586C5]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#AD03DD]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#1B4CA4]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#D5C023]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#7EA60C]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#0ABA48]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#E63009]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#FBBD00]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#C2E21A]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#FBBD00]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#03D78E]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#810792]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#1E0FA6]`,
+  `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#04BC45]`,
 ];
 const Slot: FC<Props> = ({
   count,
@@ -82,14 +82,14 @@ const Slot: FC<Props> = ({
     ]);
   };
   return (
-    <div className="slot-machine">
+    <div>
       <div className="overflow-hidden 2xl:w-[280px] xl:w-[208px] 2xl:h-[618px] xl:h-[459px] h-[255px]">
         {isSpinning
           ? currentImages.map((imageSrc, index) => (
               <img
                 key={index}
                 src={`https://i.postimg.cc/${imageSrc}`}
-                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}`}
+                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}-2xl spinning${count} spinning${count}-xl`}
                 alt={`Slot ${index}`}
                 onAnimationEnd={() => {
                   if (spinID == 5) {
@@ -110,11 +110,12 @@ const Slot: FC<Props> = ({
                     ? `https://i.postimg.cc/${imageSrc}`
                     : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
                 }
-                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
+                className={`relative 2xl:w-[280px] ${suceessID[index] === 0?'z-[0]':'z-[30]'} 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
                   suceessID[index] === 0 ? '' : paylineColor[payline]
                 }`}
                 alt={`Slot ${suceessID[index]}`}
               />
+              
             ))}
       </div>
     </div>
