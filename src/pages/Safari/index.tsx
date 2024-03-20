@@ -78,7 +78,7 @@ const Safari = () => {
   const [minor, setMinor] = useState(0.0);
   const [major, setMajor] = useState(0.0);
   const [jackpot, setJackpot] = useState(0.0);
-  const [payline, setPayline] = useState<number>(0);
+  const [payline, setPayline] = useState<number>(15);
   const [isSpinning, setIsSpinning] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft13);
   const [sideRight, setSideRight] = useState(SideRight15);
@@ -314,6 +314,7 @@ const Safari = () => {
         setTimeout(() => {
           setIsSpinning(true);
           setSpinType(1);
+          setPayline(15)
           setAllSuccessIDs(() => [
             [0, 0, 0], // Initial state for successID1
             [0, 0, 0], // Initial state for successID2
@@ -384,6 +385,7 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     if (isSpinning === false) {
+      setPayline(15)
       setSpinType(1);
       if (socket && isSpinning === false) {
         socket.emit(
@@ -409,6 +411,7 @@ const Safari = () => {
   };
   const handleAutoSpinClick = () => {
     if (isFreeSpin === false && isSpinning === false && isAutoSpin === false) {
+      setPayline(15)
       setIsGamble(false);
       setSpinType(0);
       if (socket && isSpinning === false) {
@@ -439,6 +442,7 @@ const Safari = () => {
       setTimeout(()=>{
         if(isAutoSpin===true){
           setSpinType(0);
+          setPayline(15)
           if (socket && isSpinning === false) {
             socket.emit(
               'bet',
@@ -580,6 +584,7 @@ const Safari = () => {
               </div>
             </div>
           </div>
+          {payline!==15?<img src={`/src/assets/paylines/${payline}.png`} className={'absolute 2xl:ml-[55px] z-10 2xl:w-[1500px] 2xl:h-[560px] 2xl:mt-[135px] xl:w-[1120px] xl:h-[410px] xl:ml-[40px] xl:mt-[110px] h-[235px] w-[628px] ml-[25px] mt-[53px]'}  />:''}
           {/* content */}
           <div className="flex 2xl:mt-[102px] xl:mt-[82px] 2xl:gap-[19.2px] xl:gap-[14.2px] mt-[42px] gap-[8.2px] ">
             <div className="flex xl:gap-[3px] gap-[4px]">
@@ -767,7 +772,7 @@ const Safari = () => {
             }}
             className={`${
               isGamble ? '' : 'hidden'
-            } absolute gamble-image right-[1%] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
+            } absolute gamble-image right-[1%] z-[40] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
           />
         </div>
       </div>
@@ -870,7 +875,7 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
-        } flex flex-col  2xl:w-[1602px] xl:w-[1200px] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 2xl:pt-[278px] xl:pt-[208px] pt-[114px] 2xl:gap-[20px]  
+        } flex flex-col 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 2xl:pt-[278px] xl:pt-[208px] pt-[114px] 2xl:gap-[20px]  
         `}
         style={{
           backgroundImage: `url(${GambleBackgroundImage})`,
