@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useRef ,useContext} from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
@@ -8,7 +7,7 @@ import { PAYLINES } from '../../constants/paylines';
 import { BASE_URL, SOCKET_SERVER_URL } from '../../config/config.tsx';
 import './index.css';
 //@ts-ignore
-import {AuthContext} from '../../context/AuthContext.jsx'
+import { AuthContext } from '../../context/AuthContext.jsx';
 const Background = 'https://i.postimg.cc/MG85kfDT/background.png';
 const MinusImage = 'https://i.postimg.cc/1zpFDWDR/minus.png';
 const PlusImage = 'https://i.postimg.cc/Wzfqsxc8/plus.png';
@@ -20,7 +19,7 @@ const MenuImage = 'https://i.postimg.cc/bYLxZ5zD/menu.png';
 const MenuBackImage = 'https://i.postimg.cc/qMNKPr5t/menu_back.png';
 const MenuHelpImage = 'https://i.postimg.cc/76q7dTFD/menu_help.png';
 const MenuAudioOffImage = 'https://i.postimg.cc/LsKjkWvJ/menu_audio_off.png';
-const MenuAudioOnImage='https://i.postimg.cc/s2zhTFyJ/menu-audio-on.png'
+const MenuAudioOnImage = 'https://i.postimg.cc/s2zhTFyJ/menu-audio-on.png';
 const MenuLogoutImage = 'https://i.postimg.cc/v8q92T3F/menu_logout.png';
 const SideLeft1 = 'https://i.postimg.cc/rsh0RnZY/left-1.png';
 const SideLeft2 = 'https://i.postimg.cc/JnMG6V92/left-2.png';
@@ -801,219 +800,219 @@ const Safari = () => {
             } absolute gamble-image right-[1%] z-[30] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
           />
         </div>
-        {/* Help */}
-        <div
-          className={`${
-            backgroundName != 'Help' ? 'hidden' : ''
-          } flex flex-col justify-end 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 
+      </div>
+      {/* Help */}
+      <div
+        className={`${
+          backgroundName != 'Help' ? 'hidden' : ''
+        } flex flex-col justify-end 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 
         `}
-          style={{
-            backgroundImage: `url(${helpBackground})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          <div className="flex justify-between xl:px-[8px] px-[4px]">
-            <div className="2xl:pl-[59px] xl:pl-[43px] pl-[20px]">
-              <img
-                onClick={() => setBackgroundName('Main')}
-                src={Back}
-                className="2xl:w-auto xl:w-[200px] w-[110px] cursor-pointer mb-0.5 hover:brightness-110 bg-cover"
-              />
-              {/* </button> */}
-            </div>
-            <div
-              className={`${
-                pageNumber != 4
-                  ? '2xl:mr-[152px] xl:mr-[116px] mr-[6px]'
-                  : '2xl:mr-[470px] xl:mr-[359px] mr-[189px]'
-              } `}
-            >
-              <button
-                onClick={() => {
-                  {
-                    pageNumber == 4
-                      ? setHelpBackground(HelpBackground1)
-                      : setHelpBackground(PaylineImage);
-                  }
-                  {
-                    pageNumber == 4 ? setPageNumber(1) : setPageNumber(4);
-                  }
-                }}
-                className="2xl:h-[81px] xl:h-[62px] h-[33px] 2xl:w-[636px] xl:w-[465px] w-[260px] focus:outline-none hover:brightness-105 bg-no-repeat bg-center border-none bg-cover"
-                style={{
-                  backgroundImage:
-                    pageNumber != 4
-                      ? `url(${PaylineButton})`
-                      : `url(${HidePaylineImage})`,
-                }}
-              ></button>
-            </div>
-            <div
-              className={`flex 2xl:gap-[8px] xl:gap-[6px] lg:gap-[1px] gap-0 2xl:mt-[35px] xl:mt-[30px] lg:mt-[16px] ${
-                pageNumber == 4 ? 'hidden' : ''
-              }`}
-            >
-              <button
-                onClick={() => {
-                  setHelpBackground(HelpBackground1);
-                  setPageNumber(1);
-                }}
-                className={`2xl:h-[40px] xl:h-[27px] h-[10px] 2xl:w-[50px] xl:w-[24px] w-[12px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
-                style={{
-                  backgroundImage:
-                    pageNumber == 1
-                      ? `url(${HelpImageClick1})`
-                      : `url(${HelpImage1})`,
-                }}
-              ></button>
-              <button
-                onClick={() => {
-                  setHelpBackground(HelpBackground2);
-                  setPageNumber(2);
-                }}
-                className={`2xl:h-[40px] xl:h-[27px] h-[10px] 2xl:w-[49px] xl:w-[24px] w-[12px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
-                style={{
-                  backgroundImage:
-                    pageNumber == 2
-                      ? `url(${HelpImageClick2})`
-                      : `url(${HelpImage2})`,
-                }}
-              ></button>
-              <button
-                onClick={() => {
-                  setHelpBackground(HelpBackground3);
-                  setPageNumber(3);
-                }}
-                className={`2xl:h-[38px] xl:h-[27px] h-[10px] 2xl:w-[48px] xl:w-[24px] w-[12px]  focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
-                style={{
-                  backgroundImage:
-                    pageNumber == 3
-                      ? `url(${HelpImageClick3})`
-                      : `url(${HelpImage3})`,
-                }}
-              ></button>
-            </div>
+        style={{
+          backgroundImage: `url(${helpBackground})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="flex justify-between xl:px-[8px] px-[4px]">
+          <div className="2xl:pl-[59px] xl:pl-[43px] pl-[20px]">
+            <img
+              onClick={() => setBackgroundName('Main')}
+              src={Back}
+              className="2xl:w-auto xl:w-[200px] w-[110px] cursor-pointer mb-0.5 hover:brightness-110 bg-cover"
+            />
+            {/* </button> */}
+          </div>
+          <div
+            className={`${
+              pageNumber != 4
+                ? '2xl:mr-[152px] xl:mr-[116px] mr-[6px]'
+                : '2xl:mr-[470px] xl:mr-[359px] mr-[189px]'
+            } `}
+          >
+            <button
+              onClick={() => {
+                {
+                  pageNumber == 4
+                    ? setHelpBackground(HelpBackground1)
+                    : setHelpBackground(PaylineImage);
+                }
+                {
+                  pageNumber == 4 ? setPageNumber(1) : setPageNumber(4);
+                }
+              }}
+              className="2xl:h-[81px] xl:h-[62px] h-[33px] 2xl:w-[636px] xl:w-[465px] w-[260px] focus:outline-none hover:brightness-105 bg-no-repeat bg-center border-none bg-cover"
+              style={{
+                backgroundImage:
+                  pageNumber != 4
+                    ? `url(${PaylineButton})`
+                    : `url(${HidePaylineImage})`,
+              }}
+            ></button>
+          </div>
+          <div
+            className={`flex 2xl:gap-[8px] xl:gap-[6px] lg:gap-[1px] gap-0 2xl:mt-[35px] xl:mt-[30px] lg:mt-[16px] ${
+              pageNumber == 4 ? 'hidden' : ''
+            }`}
+          >
+            <button
+              onClick={() => {
+                setHelpBackground(HelpBackground1);
+                setPageNumber(1);
+              }}
+              className={`2xl:h-[40px] xl:h-[27px] h-[10px] 2xl:w-[50px] xl:w-[24px] w-[12px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
+              style={{
+                backgroundImage:
+                  pageNumber == 1
+                    ? `url(${HelpImageClick1})`
+                    : `url(${HelpImage1})`,
+              }}
+            ></button>
+            <button
+              onClick={() => {
+                setHelpBackground(HelpBackground2);
+                setPageNumber(2);
+              }}
+              className={`2xl:h-[40px] xl:h-[27px] h-[10px] 2xl:w-[49px] xl:w-[24px] w-[12px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
+              style={{
+                backgroundImage:
+                  pageNumber == 2
+                    ? `url(${HelpImageClick2})`
+                    : `url(${HelpImage2})`,
+              }}
+            ></button>
+            <button
+              onClick={() => {
+                setHelpBackground(HelpBackground3);
+                setPageNumber(3);
+              }}
+              className={`2xl:h-[38px] xl:h-[27px] h-[10px] 2xl:w-[48px] xl:w-[24px] w-[12px]  focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
+              style={{
+                backgroundImage:
+                  pageNumber == 3
+                    ? `url(${HelpImageClick3})`
+                    : `url(${HelpImage3})`,
+              }}
+            ></button>
           </div>
         </div>
-        {/* Gamble */}
-        <div
-          className={`${
-            backgroundName != 'Gamble' ? 'hidden' : ''
-          } flex flex-col 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 2xl:pt-[278px] xl:pt-[208px] pt-[114px] 2xl:gap-[20px]  
+      </div>
+      {/* Gamble */}
+      <div
+        className={`${
+          backgroundName != 'Gamble' ? 'hidden' : ''
+        } flex flex-col 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 2xl:pt-[278px] xl:pt-[208px] pt-[114px] 2xl:gap-[20px]  
         `}
-          style={{
-            backgroundImage: `url(${GambleBackgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          <div className="flex 2xl:pl-[270px] xl:pl-[202px] xl:pr-[275px] pl-[110px] pr-[113px] xl:gap-[36px] gap-[2px] justify-between">
-            <img
-              onClick={() => {
-                // setCardName('red');
-                generateCardRandomValue();
-                {
-                  cardRandomValue == false
-                    ? setCardName('red')
-                    : setCardName('black');
+        style={{
+          backgroundImage: `url(${GambleBackgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="flex 2xl:pl-[270px] xl:pl-[202px] xl:pr-[275px] pl-[110px] pr-[113px] xl:gap-[36px] gap-[2px] justify-between">
+          <img
+            onClick={() => {
+              // setCardName('red');
+              generateCardRandomValue();
+              {
+                cardRandomValue == false
+                  ? setCardName('red')
+                  : setCardName('black');
+              }
+              {
+                if (cardRandomValue == false) {
+                  setWinningString(true);
+                  setGamble((previous) => previous * 2);
+                } else {
+                  isWinningGamble = false;
+                  sendGamble();
+                  setTimeout(() => {
+                    setBackgroundName('Main');
+                  }, 1500);
                 }
-                {
-                  if (cardRandomValue == false) {
-                    setWinningString(true);
-                    setGamble((previous) => previous * 2);
-                  } else {
-                    isWinningGamble = false;
-                    sendGamble();
-                    setTimeout(() => {
-                      setBackgroundName('Main');
-                    }, 1500);
-                  }
-                }
-                setTimeout(() => {
-                  setCardName('card');
-                  setWinningString(false);
-                }, 1500);
-              }}
-              src={RedButtonImage}
-              className="2xl:w-[339px] xl:w-[250px] w-[139px] 2xl:h-auto xl:h-[200px] h-[105px] cursor-pointer hover:brightness-125 bg-cover"
-            />
-            <img
-              src={`${
-                cardName == 'card'
-                  ? Card
-                  : cardName == 'black'
-                  ? BlackCard
-                  : Redcard
-              }`}
-              className={`${
-                cardName == 'card' ? 'gamble-image' : ' '
-              } 2xl:w-[269px] xl:w-[200px] w-[111px] ml-[12px]`}
-            />
-            <img
-              onClick={() => {
-                // setCardName('black');
-                generateCardRandomValue();
-                {
-                  cardRandomValue == false
-                    ? setCardName('red')
-                    : setCardName('black');
-                }
-                {
-                  if (cardRandomValue == true) {
-                    setWinningString(true);
-                    setGamble((previous) => previous * 2);
-                  } else {
-                    isWinningGamble = false;
-                    sendGamble();
-                    setTimeout(() => {
-                      setBackgroundName('Main');
-                    }, 1500);
-                  }
-                }
-                setTimeout(() => {
-                  setCardName('card');
-                  setWinningString(false);
-                }, 1500);
-              }}
-              src={BlackButtonImage}
-              className="2xl:w-[339px] xl:w-[250px] w-[141px] 2xl:h-auto xl:h-[200px] h-[105px] cursor-pointer hover:brightness-125"
-            />
-          </div>
-          <div className="h-[48px]">
-            <p
-              className={`${
-                winingString ? '' : 'hidden'
-              } text-white text-center font-bold 2xl:text-[32px] 2xl:pt-[0px] xl:text-[26px] xl:pt-[10px] pt-[4px]`}
-            >
-              YOU WIN {(gamble * 2).toFixed(2)}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 2xl:px-[442px] xl:px-[340px] px-[187px] gap 2xl:mt-[28px] xl:mt-[36px] mt-[-4px] 2xl:text-[32px] xl:text-[26px]">
-            <p className="text-white text-center font-bold">
-              {gamble.toFixed(2)}
-            </p>
-            <p className="text-white text-center font-bold">
-              {(gamble * 2).toFixed(2)}
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <img
-              onClick={() => {
-                isWinningGamble = true;
-                sendGamble();
-                setBackgroundName('Main');
+              }
+              setTimeout(() => {
                 setCardName('card');
-                setIsGamble(false);
-              }}
-              src={CollectButtonImage}
-              className="2xl:mt-[26px] xl:mt-[32px] xl:ml-[12px] 2xl:w-[290px] 2xl:h-auto xl:w-[220px] xl:h-[80px] mt-[18px] ml-[6px] h-[40px] bg-cover cursor-pointer hover:brightness-105"
-            />
-          </div>
+                setWinningString(false);
+              }, 1500);
+            }}
+            src={RedButtonImage}
+            className="2xl:w-[339px] xl:w-[250px] w-[139px] 2xl:h-auto xl:h-[200px] h-[105px] cursor-pointer hover:brightness-125 bg-cover"
+          />
+          <img
+            src={`${
+              cardName == 'card'
+                ? Card
+                : cardName == 'black'
+                ? BlackCard
+                : Redcard
+            }`}
+            className={`${
+              cardName == 'card' ? 'gamble-image' : ' '
+            } 2xl:w-[269px] xl:w-[200px] w-[111px] ml-[12px]`}
+          />
+          <img
+            onClick={() => {
+              // setCardName('black');
+              generateCardRandomValue();
+              {
+                cardRandomValue == false
+                  ? setCardName('red')
+                  : setCardName('black');
+              }
+              {
+                if (cardRandomValue == true) {
+                  setWinningString(true);
+                  setGamble((previous) => previous * 2);
+                } else {
+                  isWinningGamble = false;
+                  sendGamble();
+                  setTimeout(() => {
+                    setBackgroundName('Main');
+                  }, 1500);
+                }
+              }
+              setTimeout(() => {
+                setCardName('card');
+                setWinningString(false);
+              }, 1500);
+            }}
+            src={BlackButtonImage}
+            className="2xl:w-[339px] xl:w-[250px] w-[141px] 2xl:h-auto xl:h-[200px] h-[105px] cursor-pointer hover:brightness-125"
+          />
+        </div>
+        <div className="h-[48px]">
+          <p
+            className={`${
+              winingString ? '' : 'hidden'
+            } text-white text-center font-bold 2xl:text-[32px] 2xl:pt-[0px] xl:text-[26px] xl:pt-[10px] pt-[4px]`}
+          >
+            YOU WIN {(gamble * 2).toFixed(2)}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 2xl:px-[442px] xl:px-[340px] px-[187px] gap 2xl:mt-[28px] xl:mt-[36px] mt-[-4px] 2xl:text-[32px] xl:text-[26px]">
+          <p className="text-white text-center font-bold">
+            {gamble.toFixed(2)}
+          </p>
+          <p className="text-white text-center font-bold">
+            {(gamble * 2).toFixed(2)}
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <img
+            onClick={() => {
+              isWinningGamble = true;
+              sendGamble();
+              setBackgroundName('Main');
+              setCardName('card');
+              setIsGamble(false);
+            }}
+            src={CollectButtonImage}
+            className="2xl:mt-[26px] xl:mt-[32px] xl:ml-[12px] 2xl:w-[290px] 2xl:h-auto xl:w-[220px] xl:h-[80px] mt-[18px] ml-[6px] h-[40px] bg-cover cursor-pointer hover:brightness-105"
+          />
         </div>
       </div>
     </div>
   );
-}
+};
 export default Safari;
