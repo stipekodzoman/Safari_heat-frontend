@@ -1,6 +1,7 @@
 import { Outlet, useRoutes } from 'react-router-dom';
 import LandingPage from '../pages/LandingPage';
 import Safari from '../pages/Safari';
+//@ts-ignore
 import {AuthContext} from '../context/AuthContext.jsx'
 import { useContext, useEffect, useState } from 'react';
 import { BASE_URL } from '../config/config.tsx';
@@ -30,6 +31,7 @@ const CommonRoutes = {
 
  const ThemeRoutes=()=> {
   const [isValid,setIsValid]=useState(false)
+  //@ts-ignore
   const {user, accessToken} = useContext(AuthContext)
   const verify=async()=>{
     try{

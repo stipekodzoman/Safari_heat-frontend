@@ -8,60 +8,63 @@ import { BASE_URL, SOCKET_SERVER_URL } from '../../config/config.tsx';
 import './index.css';
 //@ts-ignore
 import { AuthContext } from '../../context/AuthContext.jsx';
-const Background = 'https://i.postimg.cc/MG85kfDT/background.png';
-const MinusImage = 'https://i.postimg.cc/1zpFDWDR/minus.png';
-const PlusImage = 'https://i.postimg.cc/Wzfqsxc8/plus.png';
-const AutoStartImage = 'https://i.postimg.cc/15CrzYrL/auto-start.png';
-const SpinImage = 'https://i.postimg.cc/LsBqJJMn/spin.png';
-const StopSpinImage = 'https://i.postimg.cc/k4TByLGC/stop.png';
-const MenuBtnImage = 'https://i.postimg.cc/rmgWkwT4/menu_btn.png';
-const MenuImage = 'https://i.postimg.cc/bYLxZ5zD/menu.png';
-const MenuBackImage = 'https://i.postimg.cc/qMNKPr5t/menu_back.png';
-const MenuHelpImage = 'https://i.postimg.cc/76q7dTFD/menu_help.png';
-const MenuAudioOffImage = 'https://i.postimg.cc/LsKjkWvJ/menu_audio_off.png';
-const MenuAudioOnImage = 'https://i.postimg.cc/s2zhTFyJ/menu-audio-on.png';
-const MenuLogoutImage = 'https://i.postimg.cc/v8q92T3F/menu_logout.png';
-const SideLeft1 = 'https://i.postimg.cc/rsh0RnZY/left-1.png';
-const SideLeft2 = 'https://i.postimg.cc/JnMG6V92/left-2.png';
-const SideLeft3 = 'https://i.postimg.cc/T2kp9sQt/left-3.png';
-const SideLeft4 = 'https://i.postimg.cc/05ZJ4j5d/left-4.png';
-const SideLeft5 = 'https://i.postimg.cc/3NwWhjrj/left-5.png';
-const SideLeft10 = 'https://i.postimg.cc/cHh6PkW4/left-10.png';
-const SideLeft11 = 'https://i.postimg.cc/gjBj2wrC/left-11.png';
-const SideLeft12 = 'https://i.postimg.cc/8C8FvrwD/left-12.png';
-const SideLeft13 = 'https://i.postimg.cc/DwG07whN/left-13.png';
-const SideRight1 = 'https://i.postimg.cc/Kvw4Xg6L/right-1.png';
-const SideRight2 = 'https://i.postimg.cc/1tm300Fx/right-2.png';
-const SideRight3 = 'https://i.postimg.cc/C5tMVWQY/right-3.png';
-const SideRight6 = 'https://i.postimg.cc/T2H3mDYS/right-6.png';
-const SideRight7 = 'https://i.postimg.cc/kX6Xyg25/right-7.png';
-const SideRight8 = 'https://i.postimg.cc/ZKGYszNx/right-8.png';
-const SideRight9 = 'https://i.postimg.cc/dVGszNmP/right-9.png';
-const SideRight14 = 'https://i.postimg.cc/TP9RPy4t/right-14.png';
-const SideRight15 = 'https://i.postimg.cc/TPGdGjCy/right-15.png';
+import Background from '../../assets/main/back.jpg';
+import MinusImage from '../../assets/main/minus.jpg';
+import PlusImage from '../../assets/main/plus.jpg';
+import AutoStartImage from '../../assets/main/auto_start.jpg';
+import SpinImage from '../../assets/main/spin.jpg';
+import StopSpinImage from '../../assets/main/stop.jpg';
 
-const HelpBackground1 = 'https://i.postimg.cc/7Z2vMRX2/background1.png';
-const HelpBackground2 = 'https://i.postimg.cc/SNVjbnpr/background2.png';
-const HelpBackground3 = 'https://i.postimg.cc/MpTH6z68/background3.png';
-const Back = 'https://i.postimg.cc/bJddv3Yw/back.png';
-const PaylineButton = 'https://i.postimg.cc/9f07nGRZ/paylines.png';
-const PaylineImage = 'https://i.postimg.cc/RZDFq2hJ/payline.png';
-const HidePaylineImage = 'https://i.postimg.cc/sDP7QfCQ/hidepayline.png';
-const HelpImage1 = 'https://i.postimg.cc/yd5x3cWX/help1.png';
-const HelpImageClick1 = 'https://i.postimg.cc/G3VqJmfX/help1-click.png';
-const HelpImage2 = 'https://i.postimg.cc/fTd5HhnD/help2.png';
-const HelpImageClick2 = 'https://i.postimg.cc/J7Gpkkpy/help2-click.png';
-const HelpImage3 = 'https://i.postimg.cc/65CLrLnQ/help3.png';
-const HelpImageClick3 = 'https://i.postimg.cc/Kc6D3sKV/help3-click.png';
+import MenuBtnImage from '../../assets/menubar/menu_btn.jpg';
+import MenuImage from '../../assets/menubar/menu.jpg';
+import MenuBackImage from '../../assets/menubar/menu_back.jpg';
+import MenuHelpImage from '../../assets/menubar/menu_help.jpg';
+import MenuAudioOffImage from '../../assets/menubar/menu-audio-off.jpg';
+import MenuAudioOnImage from '../../assets/menubar/menu_audio_on.jpg';
+import MenuLogoutImage from '../../assets/menubar/menu_logout.jpg';
 
-const GambleBackgroundImage = 'https://i.postimg.cc/6Q2w834C/background.png';
-const GambleImage = 'https://i.postimg.cc/5NnsDSK2/gamble.png';
-const CollectButtonImage = 'https://i.postimg.cc/8C339m56/collect.png';
-const BlackButtonImage = 'https://i.postimg.cc/q7d6L9ch/black-button.png';
-const RedButtonImage = 'https://i.postimg.cc/sXjQF7N3/red-button.png';
-const BlackCard = 'https://i.postimg.cc/mrhyxxzd/black-card.png';
-const Redcard = 'https://i.postimg.cc/XvyBcny0/red-card.png';
-const Card = 'https://i.postimg.cc/VNRvF5Lp/card.png';
+import SideLeft1 from '../../assets/sider/left-1.jpg';
+import SideLeft2 from '../../assets/sider/left-2.jpg';
+import SideLeft3 from '../../assets/sider/left-3.jpg';
+import SideLeft4 from '../../assets/sider/left-4.jpg';
+import SideLeft5 from '../../assets/sider/left-5.jpg';
+import SideLeft10 from '../../assets/sider/left-10.jpg';
+import SideLeft11 from '../../assets/sider/left-11.jpg';
+import SideLeft12 from '../../assets/sider/left-12.jpg';
+import SideLeft13 from '../../assets/sider/left-13.jpg';
+import SideRight1 from '../../assets/sider/right-1.jpg';
+import SideRight2 from '../../assets/sider/right-2.jpg';
+import SideRight3 from '../../assets/sider/right-3.jpg';
+import SideRight6 from '../../assets/sider/right-6.jpg';
+import SideRight7 from '../../assets/sider/right-7.jpg';
+import SideRight8 from '../../assets/sider/right-8.jpg';
+import SideRight9 from '../../assets/sider/right-9.jpg';
+import SideRight14 from '../../assets/sider/right-14.jpg';
+import SideRight15 from '../../assets/sider/right-15.jpg';
+
+import HelpBackground1 from '../../assets/help/background1.jpg';
+import HelpBackground2 from '../../assets/help/background2.jpg';
+import HelpBackground3 from '../../assets/help/background3.jpg';
+import Back from '../../assets/help/back.png';
+import PaylineButton from '../../assets/help/paylines.jpg';
+import PaylineImage from '../../assets/help/payline.jpg';
+import HidePaylineImage from '../../assets/help/hidepayline.jpg';
+import HelpImage1 from '../../assets/help/help1.jpg';
+import HelpImageClick1 from '../../assets/help/help1_click.jpg';
+import HelpImage2 from '../../assets/help/help2.jpg';
+import HelpImageClick2 from '../../assets/help/help2_click.jpg';
+import HelpImage3 from '../../assets/help/help3.jpg';
+import HelpImageClick3 from '../../assets/help/help3_click.jpg';
+
+import GambleBackgroundImage from '../../assets/gamble/background.jpg';
+import GambleImage from '../../assets/gamble/gamble.png';
+import CollectButtonImage from '../../assets/gamble/collect.jpg';
+import BlackButtonImage from '../../assets/gamble/black_button.png';
+import RedButtonImage from '../../assets/gamble/red_button.png';
+import BlackCard from '../../assets/gamble/black_card.jpg';
+import Redcard from '../../assets/gamble/red_card.jpg';
+import Card from '../../assets/gamble/card.jpg';
+
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
@@ -507,6 +510,7 @@ const Safari = () => {
   };
   return (
     <div>
+      {/* Main */}
       <div
         className={`${
           backgroundName != 'Main' ? 'hidden' : ''
@@ -678,12 +682,12 @@ const Safari = () => {
           </div>
           {/* bottom */}
           <div className="flex mt-[2px]">
-            <div className="2xl:w-[374px] xl:w-[280px] w-[157px]">
+            <div className="2xl:w-[374px] xl:w-[280px] w-[157px] ">
               <p className="gradient-text 2xl:pt-[55px] xl:pt-[30px] pt-[22px] bg-[#300E0C] xl:text-[36px] font-bold">
                 {balance}
               </p>
             </div>
-            <div className="2xl:w-[373px] xl:w-[280px] w-[144px] mt-[-3px] ">
+            <div className="2xl:w-[373px] xl:w-[280px] w-[144px] xl:mt-0 mt-[-3px]">
               <p className="gradient-text 2xl:text-[36px] xl:text-[30px] font-bold 2xl:pl-[76px] xl:pl-[50px] pl-[30px] 2xl:mt-[-4px] xl:mt-[-8px] mt-[0px]">
                 {line}
               </p>
@@ -718,7 +722,7 @@ const Safari = () => {
                 ></button>
               </div>
             </div>
-            <div className="2xl:w-[373px] xl:w-[280px] w-[166px] mt-[-4px]">
+            <div className="2xl:w-[373px] xl:w-[280px] w-[166px] xl:mt-[-1px] mt-[-3px]">
               <p className="gradient-text 2xl:text-[36px] xl:text-[30px] font-bold 2xl:pl-[76px] pl-[25px] 2xl:mt-[-4px] mt-[-8px]">
                 {(line * betValueArray[betValue - 1]).toFixed(2)}
               </p>
@@ -754,7 +758,7 @@ const Safari = () => {
                 ></button>
               </div>
             </div>
-            <div className="w-auto mt-[-3px]">
+            <div className="w-auto xl:mt-[0px] mt-[-3px]">
               <p className="gradient-text 2xl:text-[36px] xl:text-[30px] font-bold 2xl:pl-[76px] xl:pl-[90px] pl-[40px] 2xl:mt-[-4px] mt-[-8px]">
                 {winning.toFixed(2)}
               </p>
@@ -763,7 +767,7 @@ const Safari = () => {
                   type="submit"
                   // onClick={handleDecrementLine}
                   onClick={handleAutoSpinClick}
-                  className="2xl:h-[81px] xl:h-[60px] 2xl:w-[243px] xl:w-[180px] h-[32px] w-[103px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
+                  className="2xl:h-[81px] xl:h-[58px] 2xl:w-[243px] xl:w-[180px] h-[32px] w-[103px] focus:outline-none hover:brightness-125 bg-no-repeat bg-center border-none"
                   style={{
                     backgroundImage: isAutoSpin
                       ? `url(${StopSpinImage})`
@@ -825,8 +829,8 @@ const Safari = () => {
           <div
             className={`${
               pageNumber != 4
-                ? '2xl:mr-[152px] xl:mr-[116px] mr-[6px]'
-                : '2xl:mr-[470px] xl:mr-[359px] mr-[189px]'
+                ? '2xl:mr-[152px] xl:mr-[116px] mr-[9px]'
+                : '2xl:mr-[470px] xl:mr-[359px] mr-[193px]'
             } `}
           >
             <button
@@ -850,7 +854,7 @@ const Safari = () => {
             ></button>
           </div>
           <div
-            className={`flex 2xl:gap-[8px] xl:gap-[6px] lg:gap-[1px] gap-0 2xl:mt-[35px] xl:mt-[30px] lg:mt-[16px] ${
+            className={`flex 2xl:gap-[8px] xl:gap-[6px] lg:gap-[1px] gap-0 2xl:mt-[35px] xl:mt-[30px] mt-[10px] ${
               pageNumber == 4 ? 'hidden' : ''
             }`}
           >
@@ -859,7 +863,7 @@ const Safari = () => {
                 setHelpBackground(HelpBackground1);
                 setPageNumber(1);
               }}
-              className={`2xl:h-[40px] xl:h-[27px] h-[10px] 2xl:w-[50px] xl:w-[24px] w-[12px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
+              className={`2xl:h-[40px] xl:h-[27px] h-[22px] 2xl:w-[50px] xl:w-[24px] w-[24px] focus:outline-none hover:brightness-110 bg-no-repeat border-none bg-cover`}
               style={{
                 backgroundImage:
                   pageNumber == 1
@@ -872,7 +876,7 @@ const Safari = () => {
                 setHelpBackground(HelpBackground2);
                 setPageNumber(2);
               }}
-              className={`2xl:h-[40px] xl:h-[27px] h-[10px] 2xl:w-[49px] xl:w-[24px] w-[12px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
+              className={`2xl:h-[40px] xl:h-[27px] h-[22px] 2xl:w-[49px] xl:w-[24px] w-[24px] focus:outline-none hover:brightness-110 bg-no-repeat border-none bg-cover`}
               style={{
                 backgroundImage:
                   pageNumber == 2
@@ -885,7 +889,7 @@ const Safari = () => {
                 setHelpBackground(HelpBackground3);
                 setPageNumber(3);
               }}
-              className={`2xl:h-[38px] xl:h-[27px] h-[10px] 2xl:w-[48px] xl:w-[24px] w-[12px]  focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none bg-cover`}
+              className={`2xl:h-[38px] xl:h-[27px] h-[22px] 2xl:w-[48px] xl:w-[24px] w-[24px]  focus:outline-none hover:brightness-110 bg-no-repeat border-none bg-cover`}
               style={{
                 backgroundImage:
                   pageNumber == 3
