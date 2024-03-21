@@ -4,10 +4,6 @@ import {
   get_initial_items,
   get_slot_items,
 } from '../../utils/get_slot_items.js';
-import {
-  SET_RESULT_ITEM,
-  INITIAL_ITEMS_GIF,
-} from '../../constants/iinitial_items.js';
 export interface Props {
   count: number;
   isSpinning: boolean; // New prop to control spinning
@@ -18,7 +14,7 @@ export interface Props {
   payline: number;
   // paylineID?: number;
 }
-let isSpinEnd=false
+let isSpinEnd = false;
 let items = new Array();
 const paylineColor = [
   `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#FFF516]`,
@@ -49,22 +45,18 @@ const Slot: FC<Props> = ({
 }) => {
   const [currentImages, setCurrentImages] = useState<string[]>(() => []);
   const [initial_items, setInitialItems] = useState<string[]>(() => []);
-  
+
   useEffect(() => {
     if (isSpinning) {
-      isSpinEnd=false
+      isSpinEnd = false;
       items = get_slot_items(count);
       items.push(...initial_items);
       setCurrentImages(items);
 
       items = [];
-    }else if(isSpinEnd===false){
+    } else if (isSpinEnd === false) {
       setInitialItems([currentImages[4], currentImages[5], currentImages[6]]);
-      setResult([
-        SET_RESULT_ITEM[currentImages[4]],
-        SET_RESULT_ITEM[currentImages[5]],
-        SET_RESULT_ITEM[currentImages[6]],
-      ]);
+      setResult([currentImages[4], currentImages[5], currentImages[6]]);
     }
   }, [isSpinning]);
   useEffect(() => {
@@ -73,51 +65,46 @@ const Slot: FC<Props> = ({
   }, []);
 
   const spinEnd = () => {
-    isSpinEnd=true
+    isSpinEnd = true;
     setInitialItems([currentImages[0], currentImages[1], currentImages[2]]);
-    setResult([
-      SET_RESULT_ITEM[currentImages[0]],
-      SET_RESULT_ITEM[currentImages[1]],
-      SET_RESULT_ITEM[currentImages[2]],
-    ]);
+    setResult([currentImages[0], currentImages[1], currentImages[2]]);
   };
   return (
-      <div className="overflow-hidden 2xl:w-[280px] xl:w-[208px] 2xl:h-[618px] xl:h-[459px] h-[255px]">
-        {isSpinning
-          ? currentImages.map((imageSrc, index) => (
-              <img
-                key={index}
-                src={`https://i.postimg.cc/${imageSrc}`}
-
-                className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}-2xl spinning${count} spinning${count}-xl`}
-                alt={`Slot ${index}`}
-                onAnimationEnd={() => {
-                  if (spinID == 5) {
-                    spinEnd();
-                    onSpinEnd();
-                    
-                  } else {
-                    spinEnd();
-                  }
-                }}
-              />
-            ))
-          : initial_items.map((imageSrc, index) => (
-              <img
-                key={index}
-                src={
-                  suceessID[index] === 0
-                    ? `https://i.postimg.cc/${imageSrc}`
-                    : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
+    <div className="overflow-hidden 2xl:w-[280px] xl:w-[208px] 2xl:h-[618px] xl:h-[459px] h-[255px]">
+      {isSpinning
+        ? currentImages.map((imageSrc, index) => (
+            <img
+              key={index}
+              src={`src/assets/items/${imageSrc}.jpg`}
+              className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}-2xl spinning${count} spinning${count}-xl`}
+              alt={`Slot ${index}`}
+              onAnimationEnd={() => {
+                if (spinID == 5) {
+                  spinEnd();
+                  onSpinEnd();
+                } else {
+                  spinEnd();
                 }
-                className={`relative 2xl:w-[280px] ${suceessID[index] === 0?'z-[0]':'z-[20]'} 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
-                  suceessID[index] === 0 ? '' : paylineColor[payline]
-                }`}
-                alt={`Slot ${suceessID[index]}`}
-              />
-              
-            ))}
-      </div>
+              }}
+            />
+          ))
+        : initial_items.map((imageSrc, index) => (
+            <img
+              key={index}
+              src={
+                suceessID[index] === 0
+                  ? `src/assets/items/${imageSrc}.jpg`
+                  : `src/assets/gif/${imageSrc}.gif`
+              }
+              className={`relative 2xl:w-[280px] ${
+                suceessID[index] === 0 ? 'z-[0]' : 'z-[20]'
+              } 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
+                suceessID[index] === 0 ? '' : paylineColor[payline]
+              }`}
+              alt={`Slot ${suceessID[index]}`}
+            />
+          ))}
+    </div>
   );
 };
 export default Slot;
