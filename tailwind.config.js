@@ -8,8 +8,7 @@ export default {
       md: '768px',
       lg: '1024px',
       xl: '1280px',
-      '2xl': '1536px',
-      '3xl': '1836px',
+      '2xl': '1612px',
     },
     extend: {
       colors: {
@@ -27,6 +26,23 @@ export default {
         default: '#000000',
         layout: '#040a0f',
         drawer: '#011018',
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Merriweather', 'serif'],
+        mono: ['Fira Code', 'monospace'],
+        custom1: ['CustomFontOne', 'sans-serif'],
+        custom2: ['CustomFontTwo', 'serif'],
+        // Add as many custom fonts as needed
+      },
+      keyframes: {
+        slide: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(var(--mt))' }, // Using CSS variables
+        },
+      },
+      animation: {
+        slide: 'slide 10s ease-in-out forwards', // Define the total animation time here
       },
     },
   },

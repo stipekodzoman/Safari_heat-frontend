@@ -1,7 +1,35 @@
 .gradient-text {
-  background: linear-gradient(to top, #F9620D, #fad087);
+  background: linear-gradient(to top, #f9620d, #fad087);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent; /* Make the text color transparent so the gradient shows through */
   display: inline-block; /* Required for gradients on text */
+}
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.background-slide-down {
+  animation: slideDown 1s ease forwards; /* Adjust duration and easing as needed */
+}
+
+@keyframes darken-brighten {
+  0% {
+    filter: brightness(90%);
+  }
+  50% {
+    filter: brightness(130%);
+  }
+  100% {
+    filter: brightness(90%);
+  }
+}
+
+.gamble-image {
+  animation: darken-brighten 2s infinite;
 }

@@ -6,6 +6,11 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
   ],
+  variants: {
+    extend: {
+      backgroundImage: ['hover'], // Enable hover state for backgroundImage
+    },
+  },
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
@@ -15,4 +20,4 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
-}
+};
