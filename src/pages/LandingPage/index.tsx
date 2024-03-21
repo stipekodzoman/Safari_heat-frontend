@@ -4,14 +4,14 @@ import { useState, useContext, useEffect } from 'react';
 import { BASE_URL } from '../../config/config';
 //@ts-ignore
 import { AuthContext } from '../../context/AuthContext.jsx';
-const Background = 'https://i.postimg.cc/yx3Bkh9B/login.gif';
-const CheckboxDisable = 'https://i.postimg.cc/kMLNZqfp/disable-check.png';
-const CheckboxEnable = 'https://i.postimg.cc/TYmjvFsY/enable-check.png';
-const LoginImage = 'https://i.postimg.cc/KjcsJrKz/login_btn.png';
-const HideExit = 'https://i.postimg.cc/G28HGdLG/exit_hide.png';
-const Version = 'https://i.postimg.cc/FRxSKkSP/hide_versioin.png';
-const ContentImage = 'https://i.postimg.cc/rwPwhPwq/Snag_12ccac4f.png';
-const ErrorPanel = 'https://i.postimg.cc/nVwsyc2t/error.png';
+import  Background from '../../assets/login/login_back.gif';
+import  CheckboxDisable from '../../assets/login/disable_check.png';
+import CheckboxEnable from '../../assets/login/enable_check.png';
+import LoginImage from '../../assets/login/login_btn.jpg';
+import HideExit from '../../assets/login/exit_hide.jpg';
+import Version from '../../assets/login/hide_versioin.jpg';
+import ContentImage from '../../assets/login/log.jpg';
+import  ErrorPanel from '../../assets/login/error.png';
 
 const LandingPage = () => {
   const navigate = useNavigate();
