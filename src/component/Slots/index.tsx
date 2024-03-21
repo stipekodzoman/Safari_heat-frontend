@@ -82,13 +82,13 @@ const Slot: FC<Props> = ({
     ]);
   };
   return (
-    <div>
       <div className="overflow-hidden 2xl:w-[280px] xl:w-[208px] 2xl:h-[618px] xl:h-[459px] h-[255px]">
         {isSpinning
           ? currentImages.map((imageSrc, index) => (
               <img
                 key={index}
                 src={`https://i.postimg.cc/${imageSrc}`}
+
                 className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}-2xl spinning${count} spinning${count}-xl`}
                 alt={`Slot ${index}`}
                 onAnimationEnd={() => {
@@ -110,7 +110,7 @@ const Slot: FC<Props> = ({
                     ? `https://i.postimg.cc/${imageSrc}`
                     : `https://i.postimg.cc/${INITIAL_ITEMS_GIF[imageSrc]}.gif`
                 }
-                className={`relative 2xl:w-[280px] ${suceessID[index] === 0?'z-[0]':'z-[30]'} 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
+                className={`relative 2xl:w-[280px] ${suceessID[index] === 0?'z-[0]':'z-[20]'} 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px]  ${
                   suceessID[index] === 0 ? '' : paylineColor[payline]
                 }`}
                 alt={`Slot ${suceessID[index]}`}
@@ -118,7 +118,6 @@ const Slot: FC<Props> = ({
               
             ))}
       </div>
-    </div>
   );
 };
 export default Slot;

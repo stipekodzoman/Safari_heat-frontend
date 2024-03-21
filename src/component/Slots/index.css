@@ -97,6 +97,7 @@
   to {
     transform: translateY(-3213px); /* Single image height */
   }
+
 }
 
 @keyframes spinAnimation9{
@@ -209,3 +210,4 @@
     animation-direction: reverse;
   }
 }
+

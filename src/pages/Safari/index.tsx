@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+
+import { useState, useEffect, useRef ,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
 import { PAYLINES } from '../../constants/paylines';
-import { SOCKET_SERVER_URL } from '../../config/config.tsx';
+import { BASE_URL, SOCKET_SERVER_URL } from '../../config/config.tsx';
 import './index.css';
-
+import {AuthContext} from '../../context/AuthContext.jsx'
 const Background = 'https://i.postimg.cc/MG85kfDT/background.png';
 const MinusImage = 'https://i.postimg.cc/1zpFDWDR/minus.png';
 const PlusImage = 'https://i.postimg.cc/Wzfqsxc8/plus.png';
@@ -14,11 +15,11 @@ const AutoStartImage = 'https://i.postimg.cc/15CrzYrL/auto-start.png';
 const SpinImage = 'https://i.postimg.cc/LsBqJJMn/spin.png';
 const StopSpinImage = 'https://i.postimg.cc/k4TByLGC/stop.png';
 const MenuBtnImage = 'https://i.postimg.cc/rmgWkwT4/menu_btn.png';
-const MenuImage = 'https://i.postimg.cc/8CSrf6PW/menu.png';
+const MenuImage = 'https://i.postimg.cc/bYLxZ5zD/menu.png';
 const MenuBackImage = 'https://i.postimg.cc/qMNKPr5t/menu_back.png';
 const MenuHelpImage = 'https://i.postimg.cc/76q7dTFD/menu_help.png';
 const MenuAudioOffImage = 'https://i.postimg.cc/LsKjkWvJ/menu_audio_off.png';
-const MenuShakeImage = 'https://i.postimg.cc/9Fs9Vk6L/menu_shake.png';
+const MenuAudioOnImage='https://i.postimg.cc/s2zhTFyJ/menu-audio-on.png'
 const MenuLogoutImage = 'https://i.postimg.cc/v8q92T3F/menu_logout.png';
 const SideLeft1 = 'https://i.postimg.cc/rsh0RnZY/left-1.png';
 const SideLeft2 = 'https://i.postimg.cc/JnMG6V92/left-2.png';
@@ -69,6 +70,7 @@ let freeSpinCount = 15;
 let freeSpinWinning = 0.0;
 let isAutoSpin = false;
 const Safari = () => {
+  const {user,dispatch}=useContext(AuthContext)
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
@@ -80,6 +82,7 @@ const Safari = () => {
   const [jackpot, setJackpot] = useState(0.0);
   const [payline, setPayline] = useState<number>(15);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [isAudioOn,setIsAudioOn]=useState(false)
   const [sideLeft, setSideLeft] = useState(SideLeft13);
   const [sideRight, setSideRight] = useState(SideRight15);
   const [backgroundName, setBackgroundName] = useState('Main');
@@ -124,7 +127,7 @@ const Safari = () => {
   useEffect(() => {
     const newSocket = io(SOCKET_SERVER_URL);
     setSocket(newSocket);
-    newSocket.emit('username', 'test1');
+    newSocket.emit('username', user);
     newSocket.on('major_minor', (message) => {
       const { major, minor } = JSON.parse(message);
       setMajor(major);
@@ -410,7 +413,6 @@ const Safari = () => {
     }
   };
   const handleAutoSpinClick = () => {
-    if (isFreeSpin === false && isSpinning === false && isAutoSpin === false) {
       setPayline(15)
       setIsGamble(false);
       setSpinType(0);
@@ -421,21 +423,20 @@ const Safari = () => {
             bet: (line * betValueArray[betValue - 1]).toFixed(2),
           })
         );
+        setIsSpinning(true);
+        setWinning(0.0);
+        setAllSuccessIDs(() => [
+          [0, 0, 0], // Initial state for successID1
+          [0, 0, 0], // Initial state for successID2
+          [0, 0, 0], // Initial state for successID3
+          [0, 0, 0], // Initial state for successID4
+          [0, 0, 0], // Initial state for successID5
+        ]);
+        isAutoSpin = true;
+        autoSpin();
+      } else {
+        isAutoSpin = false;
       }
-      setIsSpinning(true);
-      setWinning(0.0);
-      setAllSuccessIDs(() => [
-        [0, 0, 0], // Initial state for successID1
-        [0, 0, 0], // Initial state for successID2
-        [0, 0, 0], // Initial state for successID3
-        [0, 0, 0], // Initial state for successID4
-        [0, 0, 0], // Initial state for successID5
-      ]);
-      isAutoSpin = true;
-      autoSpin();
-    } else {
-      isAutoSpin = false;
-    }
   };
   const autoSpin=()=>{
     
@@ -480,15 +481,18 @@ const Safari = () => {
     setGamble(0.0);
     isWinningGamble = true;
   };
+  const logout=async()=>{
+    await fetch(`${BASE_URL}/auth/logout?username=${user}`,{
+      method:"post",
+      headers:{
+        "content-type":"application/json"
+      }
+    })
+    navigate("/")
+    dispatch({type:"LOGOUT"})
+  }
   return (
-    <>
-      {/* <img
-        className="h-[800px] w-[100%] flex flex-wrap bg-no-repeat"
-        style={{
-          backgroundImage: `url(${Background})`,
-        }}
-      /> */}
-      {/* Main */}
+    <div>
       <div
         className={`${
           backgroundName != 'Main' ? 'hidden' : ''
@@ -561,16 +565,10 @@ const Safari = () => {
                   <button
                     className="2xl:h-[83px] xl:h-[62px] 2xl:w-[286px] xl:w-[216px] h-[35px] w-[123px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
                     style={{
-                      backgroundImage: `url(${MenuAudioOffImage})`,
+                      backgroundImage: `url(${isAudioOn?MenuAudioOnImage:MenuAudioOffImage})`,
                       backgroundSize: 'cover',
                     }}
-                  ></button>
-                  <button
-                    className="2xl:h-[83px] xl:h-[62px] 2xl:w-[286px] xl:w-[216px] h-[35px] w-[123px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
-                    style={{
-                      backgroundImage: `url(${MenuShakeImage})`,
-                      backgroundSize: 'cover',
-                    }}
+                    onClick={()=>setIsAudioOn((previous)=>!previous)}
                   ></button>
                   <button
                     className="2xl:h-[83px] xl:h-[62px] 2xl:w-[286px] xl:w-[216px] h-[35px] w-[123px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
@@ -578,12 +576,14 @@ const Safari = () => {
                       backgroundImage: `url(${MenuLogoutImage})`,
                       backgroundSize: 'cover',
                     }}
+                    onClick={logout}
                   ></button>
                   {/*  */}
                 </div>
               </div>
             </div>
           </div>
+
           {payline!==15?<img src={`/src/assets/paylines/${payline}.png`} className={'absolute 2xl:ml-[55px] z-10 2xl:w-[1500px] 2xl:h-[560px] 2xl:mt-[135px] xl:w-[1120px] xl:h-[410px] xl:ml-[40px] xl:mt-[110px] h-[235px] w-[628px] ml-[25px] mt-[53px]'}  />:''}
           {/* content */}
           <div className="flex 2xl:mt-[102px] xl:mt-[82px] 2xl:gap-[19.2px] xl:gap-[14.2px] mt-[42px] gap-[8.2px] ">
@@ -772,15 +772,16 @@ const Safari = () => {
             }}
             className={`${
               isGamble ? '' : 'hidden'
-            } absolute gamble-image right-[1%] z-[40] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
+
+            } absolute gamble-image right-[1%] z-[30] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
           />
-        </div>
       </div>
       {/* Help */}
       <div
         className={`${
           backgroundName != 'Help' ? 'hidden' : ''
-        } flex flex-col justify-end 2xl:w-[1602px] xl:w-[1200px] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 
+
+        } flex flex-col justify-end 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 
         `}
         style={{
           backgroundImage: `url(${helpBackground})`,
@@ -875,6 +876,7 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
+
         } flex flex-col 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 2xl:pt-[278px] xl:pt-[208px] pt-[114px] 2xl:gap-[20px]  
         `}
         style={{
@@ -987,8 +989,8 @@ const Safari = () => {
           />
         </div>
       </div>
-    </>
+      </div>
+    </div>
   );
-};
-
+}
 export default Safari;
