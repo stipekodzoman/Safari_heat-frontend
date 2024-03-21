@@ -776,6 +776,7 @@ const Safari = () => {
             } absolute gamble-image right-[1%] z-[30] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
           />
       </div>
+      </div>
       {/* Help */}
       <div
         className={`${
@@ -988,7 +989,6 @@ const Safari = () => {
             className="2xl:mt-[26px] xl:mt-[32px] xl:ml-[12px] 2xl:w-[290px] 2xl:h-auto xl:w-[220px] xl:h-[80px] mt-[18px] ml-[6px] h-[40px] bg-cover cursor-pointer hover:brightness-105"
           />
         </div>
-      </div>
       </div>
     </div>
   );
