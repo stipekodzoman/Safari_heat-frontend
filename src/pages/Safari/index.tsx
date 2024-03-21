@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useRef ,useContext} from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Socket, io } from 'socket.io-client';
 import Slot from '../../component/Slots';
@@ -7,7 +6,8 @@ import get_winning_paylines from '../../utils/get_winning_paylines';
 import { PAYLINES } from '../../constants/paylines';
 import { BASE_URL, SOCKET_SERVER_URL } from '../../config/config.tsx';
 import './index.css';
-import {AuthContext} from '../../context/AuthContext.jsx'
+//@ts-ignore
+import { AuthContext } from '../../context/AuthContext.jsx';
 const Background = 'https://i.postimg.cc/MG85kfDT/background.png';
 const MinusImage = 'https://i.postimg.cc/1zpFDWDR/minus.png';
 const PlusImage = 'https://i.postimg.cc/Wzfqsxc8/plus.png';
@@ -19,7 +19,7 @@ const MenuImage = 'https://i.postimg.cc/bYLxZ5zD/menu.png';
 const MenuBackImage = 'https://i.postimg.cc/qMNKPr5t/menu_back.png';
 const MenuHelpImage = 'https://i.postimg.cc/76q7dTFD/menu_help.png';
 const MenuAudioOffImage = 'https://i.postimg.cc/LsKjkWvJ/menu_audio_off.png';
-const MenuAudioOnImage='https://i.postimg.cc/s2zhTFyJ/menu-audio-on.png'
+const MenuAudioOnImage = 'https://i.postimg.cc/s2zhTFyJ/menu-audio-on.png';
 const MenuLogoutImage = 'https://i.postimg.cc/v8q92T3F/menu_logout.png';
 const SideLeft1 = 'https://i.postimg.cc/rsh0RnZY/left-1.png';
 const SideLeft2 = 'https://i.postimg.cc/JnMG6V92/left-2.png';
@@ -70,7 +70,8 @@ let freeSpinCount = 15;
 let freeSpinWinning = 0.0;
 let isAutoSpin = false;
 const Safari = () => {
-  const {user,dispatch}=useContext(AuthContext)
+  //@ts-ignore
+  const { user, dispatch } = useContext(AuthContext);
   const [line, setLine] = useState(15);
   const [betValue, setBetValue] = useState(1);
   const [balance, setBalance] = useState(10000.0);
@@ -82,7 +83,7 @@ const Safari = () => {
   const [jackpot, setJackpot] = useState(0.0);
   const [payline, setPayline] = useState<number>(15);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [isAudioOn,setIsAudioOn]=useState(false)
+  const [isAudioOn, setIsAudioOn] = useState(false);
   const [sideLeft, setSideLeft] = useState(SideLeft13);
   const [sideRight, setSideRight] = useState(SideRight15);
   const [backgroundName, setBackgroundName] = useState('Main');
@@ -213,8 +214,7 @@ const Safari = () => {
     if (scatter_winning.count >= 2) {
       setAllSuccessIDs(scatter_winning.locations);
       setPayline(15);
-    }
-    else if (count < winningCombos.length) {
+    } else if (count < winningCombos.length) {
       const value = winningCombos[count];
       for (let i = 0; i < value.count; i++) {
         setAllSuccessIDs((prevAllSuccessIDs) =>
@@ -233,7 +233,7 @@ const Safari = () => {
       }
       setPayline(value.payline);
       count++;
-    } 
+    }
     intervalID.current = setInterval(() => {
       if (count < winningCombos.length) {
         const value = winningCombos[count];
@@ -260,33 +260,47 @@ const Safari = () => {
     }, 2000); // Set for 2 seconds
   };
   useEffect(() => {
-    const { scatter_winning, general_winning, result ,isJackpot} = get_winning_paylines(
-      result1,
-      result2,
-      result3,
-      result4,
-      result5,
-      line,
-      betValueArray[betValue - 1] * line
-    );
+    const { scatter_winning, general_winning, result, isJackpot } =
+      get_winning_paylines(
+        result1,
+        result2,
+        result3,
+        result4,
+        result5,
+        line,
+        betValueArray[betValue - 1] * line
+      );
     setWinning(result);
-    if(isJackpot){
-      if(betValue==19){
-        socket?.emit("jackpot_success",JSON.stringify({jackpot:jackpot,win_username:"test1"}))
-      }else if(betValue==18||betValue==17){
-        socket?.emit("jackpot_success",JSON.stringify({jackpot:major,win_username:"test1"}))
-      }else{
-        socket?.emit("jackpot_success",JSON.stringify({jackpot:minor,win_username:"test1"}))
+    if (isJackpot) {
+      if (betValue == 19) {
+        socket?.emit(
+          'jackpot_success',
+          JSON.stringify({ jackpot: jackpot, win_username: 'test1' })
+        );
+      } else if (betValue == 18 || betValue == 17) {
+        socket?.emit(
+          'jackpot_success',
+          JSON.stringify({ jackpot: major, win_username: 'test1' })
+        );
+      } else {
+        socket?.emit(
+          'jackpot_success',
+          JSON.stringify({ jackpot: minor, win_username: 'test1' })
+        );
       }
     }
-    if(scatter_winning.count>=3){
-      setAllSuccessIDs(scatter_winning.locations)
-      setPayline(15)
-      setIsFreeSpin(true)
-      isAutoSpin=false
-      freespin()
-    }else{
-      if ((general_winning.length > 0 || scatter_winning.count > 1)&&isAutoSpin===false&&isFreeSpin===false) {
+    if (scatter_winning.count >= 3) {
+      setAllSuccessIDs(scatter_winning.locations);
+      setPayline(15);
+      setIsFreeSpin(true);
+      isAutoSpin = false;
+      freespin();
+    } else {
+      if (
+        (general_winning.length > 0 || scatter_winning.count > 1) &&
+        isAutoSpin === false &&
+        isFreeSpin === false
+      ) {
         setIsGamble(true);
       }
       let paylines = new Array();
@@ -317,7 +331,7 @@ const Safari = () => {
         setTimeout(() => {
           setIsSpinning(true);
           setSpinType(1);
-          setPayline(15)
+          setPayline(15);
           setAllSuccessIDs(() => [
             [0, 0, 0], // Initial state for successID1
             [0, 0, 0], // Initial state for successID2
@@ -388,7 +402,7 @@ const Safari = () => {
   };
   const handleSpinClick = () => {
     if (isSpinning === false) {
-      setPayline(15)
+      setPayline(15);
       setSpinType(1);
       if (socket && isSpinning === false) {
         socket.emit(
@@ -413,16 +427,44 @@ const Safari = () => {
     }
   };
   const handleAutoSpinClick = () => {
-      setPayline(15)
-      setIsGamble(false);
-      setSpinType(0);
-      if (socket && isSpinning === false) {
-        socket.emit(
-          'bet',
-          JSON.stringify({
-            bet: (line * betValueArray[betValue - 1]).toFixed(2),
-          })
-        );
+    setPayline(15);
+    setIsGamble(false);
+    setSpinType(0);
+    if (socket && isSpinning === false) {
+      socket.emit(
+        'bet',
+        JSON.stringify({
+          bet: (line * betValueArray[betValue - 1]).toFixed(2),
+        })
+      );
+      setIsSpinning(true);
+      setWinning(0.0);
+      setAllSuccessIDs(() => [
+        [0, 0, 0], // Initial state for successID1
+        [0, 0, 0], // Initial state for successID2
+        [0, 0, 0], // Initial state for successID3
+        [0, 0, 0], // Initial state for successID4
+        [0, 0, 0], // Initial state for successID5
+      ]);
+      isAutoSpin = true;
+      autoSpin();
+    } else {
+      isAutoSpin = false;
+    }
+  };
+  const autoSpin = () => {
+    setTimeout(() => {
+      if (isAutoSpin === true) {
+        setSpinType(0);
+        setPayline(15);
+        if (socket && isSpinning === false) {
+          socket.emit(
+            'bet',
+            JSON.stringify({
+              bet: (line * betValueArray[betValue - 1]).toFixed(2),
+            })
+          );
+        }
         setIsSpinning(true);
         setWinning(0.0);
         setAllSuccessIDs(() => [
@@ -432,38 +474,10 @@ const Safari = () => {
           [0, 0, 0], // Initial state for successID4
           [0, 0, 0], // Initial state for successID5
         ]);
-        isAutoSpin = true;
         autoSpin();
-      } else {
-        isAutoSpin = false;
       }
+    }, 2500);
   };
-  const autoSpin=()=>{
-    
-      setTimeout(()=>{
-        if(isAutoSpin===true){
-          setSpinType(0);
-          setPayline(15)
-          if (socket && isSpinning === false) {
-            socket.emit(
-              'bet',
-              JSON.stringify({ bet: (line * betValueArray[betValue - 1]).toFixed(2) })
-            );
-          }
-          setIsSpinning(true);
-          setWinning(0.0);
-          setAllSuccessIDs(() => [
-            [0, 0, 0], // Initial state for successID1
-            [0, 0, 0], // Initial state for successID2
-            [0, 0, 0], // Initial state for successID3
-            [0, 0, 0], // Initial state for successID4
-            [0, 0, 0], // Initial state for successID5
-          ]);
-          autoSpin()
-        }
-        
-      },2500)
-  }
   const handleSpinEnd = () => {
     setIsSpinning(false);
   };
@@ -481,16 +495,16 @@ const Safari = () => {
     setGamble(0.0);
     isWinningGamble = true;
   };
-  const logout=async()=>{
-    await fetch(`${BASE_URL}/auth/logout?username=${user}`,{
-      method:"post",
-      headers:{
-        "content-type":"application/json"
-      }
-    })
-    navigate("/")
-    dispatch({type:"LOGOUT"})
-  }
+  const logout = async () => {
+    await fetch(`${BASE_URL}/auth/logout?username=${user}`, {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+    navigate('/');
+    dispatch({ type: 'LOGOUT' });
+  };
   return (
     <div>
       <div
@@ -565,10 +579,12 @@ const Safari = () => {
                   <button
                     className="2xl:h-[83px] xl:h-[62px] 2xl:w-[286px] xl:w-[216px] h-[35px] w-[123px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
                     style={{
-                      backgroundImage: `url(${isAudioOn?MenuAudioOnImage:MenuAudioOffImage})`,
+                      backgroundImage: `url(${
+                        isAudioOn ? MenuAudioOnImage : MenuAudioOffImage
+                      })`,
                       backgroundSize: 'cover',
                     }}
-                    onClick={()=>setIsAudioOn((previous)=>!previous)}
+                    onClick={() => setIsAudioOn((previous) => !previous)}
                   ></button>
                   <button
                     className="2xl:h-[83px] xl:h-[62px] 2xl:w-[286px] xl:w-[216px] h-[35px] w-[123px] focus:outline-none hover:brightness-110 bg-no-repeat bg-center border-none"
@@ -584,7 +600,16 @@ const Safari = () => {
             </div>
           </div>
 
-          {payline!==15?<img src={`/src/assets/paylines/${payline}.png`} className={'absolute 2xl:ml-[55px] z-10 2xl:w-[1500px] 2xl:h-[560px] 2xl:mt-[135px] xl:w-[1120px] xl:h-[410px] xl:ml-[40px] xl:mt-[110px] h-[235px] w-[628px] ml-[25px] mt-[53px]'}  />:''}
+          {payline !== 15 ? (
+            <img
+              src={`/src/assets/paylines/${payline}.png`}
+              className={
+                'absolute 2xl:ml-[55px] z-10 2xl:w-[1500px] 2xl:h-[560px] 2xl:mt-[135px] xl:w-[1120px] xl:h-[410px] xl:ml-[40px] xl:mt-[110px] h-[235px] w-[628px] ml-[25px] mt-[53px]'
+              }
+            />
+          ) : (
+            ''
+          )}
           {/* content */}
           <div className="flex 2xl:mt-[102px] xl:mt-[82px] 2xl:gap-[19.2px] xl:gap-[14.2px] mt-[42px] gap-[8.2px] ">
             <div className="flex xl:gap-[3px] gap-[4px]">
@@ -772,16 +797,14 @@ const Safari = () => {
             }}
             className={`${
               isGamble ? '' : 'hidden'
-
             } absolute gamble-image right-[1%] z-[30] 2xl:bottom-[127px] xl:bottom-[100px] bottom-[57px] 2xl:w-[250px] xl:w-[200px] w-[130px] cursor-pointer hover:brightness-125`}
           />
-      </div>
+        </div>
       </div>
       {/* Help */}
       <div
         className={`${
           backgroundName != 'Help' ? 'hidden' : ''
-
         } flex flex-col justify-end 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 
         `}
         style={{
@@ -877,7 +900,6 @@ const Safari = () => {
       <div
         className={`${
           backgroundName != 'Gamble' ? 'hidden' : ''
-
         } flex flex-col 2xl:w-[1602px] xl:w-[1200px] z-[40] w-[657px] 2xl:h-[906px] xl:h-[674px] h-[371px] 2xl:pt-[278px] xl:pt-[208px] pt-[114px] 2xl:gap-[20px]  
         `}
         style={{
@@ -992,5 +1014,5 @@ const Safari = () => {
       </div>
     </div>
   );
-}
+};
 export default Safari;
