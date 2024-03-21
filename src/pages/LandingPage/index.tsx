@@ -17,11 +17,16 @@ const LandingPage = () => {
   const navigate = useNavigate();
   //@ts-ignore
   const { dispatch, user, accessToken } = useContext(AuthContext);
-  const [checkImage, setCheckImage] = useState(false);
+  const [checkImage, setCheckImage] = useState(true);
   const [isValid, setIsValid] = useState(true);
+  const [isAutoPassword,setIsAutoPassword]=useState("off")
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [modalText, setModalText] = useState('');
+  useEffect(()=>{
+    setIsAutoPassword(checkImage?"on":"off")
+    console.log(isAutoPassword)
+  },[checkImage])
   useEffect(() => {
     const verify = async () => {
       try {
@@ -111,12 +116,14 @@ const LandingPage = () => {
             <input
               id="username"
               onChange={handleChange}
+              autoComplete={isAutoPassword}
               className="2xl:ml-[232px] xl:ml-[176px] ml-[105px] pl-2 2xl:h-[62px] xl:h-[46px] h-[24px] 2xl:text-[32px] xl:text-[22px] text-white xl:rounded-xl rounded-md border-2 border-black bg-[#0C0142]"
             />
             <input
               id="password"
               type="password"
               onChange={handleChange}
+              autoComplete={isAutoPassword}
               className="2xl:ml-[232px] xl:ml-[176px] ml-[105px] pl-2 2xl:h-[62px] xl:h-[46px] h-[24px] 2xl:text-[32px] xl:text-[22px] text-white xl:rounded-xl rounded-md border-2 border-black bg-[#0C0142]"
             />
           </div>
