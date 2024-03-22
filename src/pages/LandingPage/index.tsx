@@ -54,8 +54,8 @@ const LandingPage = () => {
     }
   };
   useEffect(()=>{
-    setUsername(user)
-    setPassword(pwd)
+    setUsername(user || '')
+    setPassword(pwd || '')
   },[])
   const login = async () => {
     try {

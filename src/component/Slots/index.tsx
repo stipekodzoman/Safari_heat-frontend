@@ -15,7 +15,7 @@ export interface Props {
   // paylineID?: number;
 }
 let isSpinEnd = false;
-let items = new Array();
+let items = [];
 const paylineColor = [
   `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#FFF516]`,
   `border-[5px] xl:border-[8px] 2xl:border-[10px] border-[#DF398E]`,

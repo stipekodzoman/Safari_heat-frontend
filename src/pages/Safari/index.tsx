@@ -112,20 +112,12 @@ const Safari = () => {
     suceessID5,
   ]);
   const [cardName, setCardName] = useState('card');
-  const [, setRandomValue] = useState<boolean | null>(null);
   const [winingString, setWinningString] = useState(false);
   const [isGamble, setIsGamble] = useState(false);
   const [gamble, setGamble] = useState<number>(0.0);
   // const [isWinningGamble, setIsWinningGamble] = useState(true);
   let isWinningGamble: boolean;
   let cardRandomValue = false;
-
-  const generateCardRandomValue = () => {
-    const newValue = Math.floor(Math.random() * 2) % 2 === 0;
-    setRandomValue(newValue);
-    cardRandomValue = newValue;
-  };
-
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -206,9 +198,15 @@ const Safari = () => {
     }
   }, [line]);
   useEffect(() => {
-    if (intervalID.current && isSpinning === true)
+    if (intervalID.current && isSpinning === true) {
       clearInterval(intervalID.current);
+    }
   }, [isSpinning]);
+  const generateCardRandomValue = () => {
+    const newValue = Math.floor(Math.random() * 2) % 2 === 0;
+
+    cardRandomValue = newValue;
+  };
   const showWinningCombinations = (
     scatter_winning: any,
     winningCombos: any
@@ -306,7 +304,7 @@ const Safari = () => {
       ) {
         setIsGamble(true);
       }
-      let paylines = new Array();
+      let paylines: number[] = [];
       general_winning.forEach((winning) => {
         paylines.push(winning.payline);
       });
@@ -348,7 +346,7 @@ const Safari = () => {
     }
     setTimeout(() => {
       setIsGamble(true);
-      let paylines = new Array();
+      let paylines:number[] = []
       if (socket) {
         socket.emit(
           'spinresult',
@@ -380,28 +378,33 @@ const Safari = () => {
     setWinning((previous) => previous + parseFloat((result * 3).toFixed(2)));
     if (scatter_winning.count >= 3) {
       freeSpinCount += 15;
-    } else
+    } else {
       setTimeout(() => {
         showWinningCombinations(scatter_winning, general_winning);
-      }, 0); // Wait for 2 seconds
+      }, 0);
+    } // Wait for 2 seconds
   }, [result6]);
   const handleIncrementLine = () => {
-    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false) {
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
+    }
   };
 
   const handleDecrementLine = () => {
-    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false) {
       setLine((prevLine) => (prevLine > 1 ? prevLine - 1 : 15));
+    }
   };
   const handleIncrementBet = () => {
-    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false) {
       setBetValue((prevBetValue) => (prevBetValue < 19 ? prevBetValue + 1 : 1));
+    }
   };
 
   const handleDecrementBet = () => {
-    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
+    if (isSpinning === false && isFreeSpin === false && isAutoSpin === false) {
       setBetValue((prevBetValue) => (prevBetValue > 1 ? prevBetValue - 1 : 19));
+    }
   };
   const handleSpinClick = () => {
     if (isSpinning === false) {
