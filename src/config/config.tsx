@@ -1,2 +1,2 @@
-export const SOCKET_SERVER_URL = 'http://127.0.0.1:5000';
-export const BASE_URL="http://127.0.0.1:5000/api/v1"
+export const SOCKET_SERVER_URL = 'https://vaguely-famous-foal.ngrok-free.app/';
+export const BASE_URL="https://vaguely-famous-foal.ngrok-free.app/api/v1"
