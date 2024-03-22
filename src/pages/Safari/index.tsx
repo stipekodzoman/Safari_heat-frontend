@@ -64,7 +64,8 @@ import RedButtonImage from '../../assets/gamble/red_button.png';
 import BlackCard from '../../assets/gamble/black_card.jpg';
 import Redcard from '../../assets/gamble/red_card.jpg';
 import Card from '../../assets/gamble/card.jpg';
-
+import SpinAudio from '../../assets/reels-run.mp3';
+import WinAudio from '../../assets/coins.mp3';
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
@@ -305,6 +306,9 @@ const Safari = () => {
         isFreeSpin === false
       ) {
         setIsGamble(true);
+        if (winAudio.current !== null) {
+          winAudio.current.play();
+        }
       }
       let paylines = new Array();
       general_winning.forEach((winning) => {
@@ -385,6 +389,8 @@ const Safari = () => {
         showWinningCombinations(scatter_winning, general_winning);
       }, 0); // Wait for 2 seconds
   }, [result6]);
+  const winAudio = useRef<HTMLAudioElement>(null);
+  const spinAudio = useRef<HTMLAudioElement>(null);
   const handleIncrementLine = () => {
     if (isSpinning === false && isFreeSpin === false && isAutoSpin === false)
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
@@ -425,8 +431,19 @@ const Safari = () => {
         [0, 0, 0], // Initial state for successID5
       ]);
       setIsGamble(false);
+      if (spinAudio.current !== null) {
+        spinAudio.current.play();
+      }
+      if (winAudio.current !== null) {
+        winAudio.current.pause();
+        winAudio.current.currentTime = 0;
+      }
     } else {
       setIsSpinning(false);
+      if (spinAudio.current !== null) {
+        spinAudio.current.pause();
+        spinAudio.current.currentTime = 0;
+      }
     }
   };
   const handleAutoSpinClick = () => {
@@ -777,6 +794,7 @@ const Safari = () => {
                     backgroundSize: 'cover',
                   }}
                 ></button>
+                <audio ref={spinAudio} src={SpinAudio}></audio>
                 <button
                   type="submit"
                   onClick={handleSpinClick}
@@ -791,6 +809,8 @@ const Safari = () => {
               </div>
             </div>
           </div>
+          <audio ref={winAudio} src={WinAudio}></audio>
+
           <img
             src={GambleImage}
             onClick={() => {
