@@ -20,6 +20,9 @@
   from {
     transform: translateY(0);
   }
+  10%{
+    transform: translateY(100px);
+  }
   to {
     transform: translateY(-1854px); /* Single image height */
   }
@@ -27,6 +30,9 @@
 @keyframes spinAnimation12-2xl {
   from {
     transform: translateY(0);
+  }
+  10%{
+    transform: translateY(100px);
   }
   to {
     transform: translateY(-2472px); /* Single image height */
@@ -36,6 +42,9 @@
   from {
     transform: translateY(0);
   }
+  10%{
+    transform: translateY(100px);
+  }
   to {
     transform: translateY(-3090px); /* Single image height */
   }
@@ -44,6 +53,9 @@
   from {
     transform: translateY(0);
   }
+  10%{
+    transform: translateY(100px);
+  }
   to {
     transform: translateY(-3708px); /* Single image height */
   }
@@ -51,6 +63,9 @@
 @keyframes spinAnimation21-2xl {
   from {
     transform: translateY(0);
+  }
+  10%{
+    transform: translateY(100px);
   }
   to {
     transform: translateY(-4326px); /* Single image height */
@@ -62,6 +77,9 @@
   from {
     transform: translateY(0);
   }
+  10%{
+    transform: translateY(75px);
+  }
   to {
     transform: translateY(-1377px); /* Single image height */
   }
@@ -69,6 +87,9 @@
 @keyframes spinAnimation12-xl {
   from {
     transform: translateY(0);
+  }
+  10%{
+    transform: translateY(75px);
   }
   to {
     transform: translateY(-1836px); /* Single image height */
@@ -78,6 +99,9 @@
   from {
     transform: translateY(0);
   }
+  10%{
+    transform: translateY(75px);
+  }
   to {
     transform: translateY(-2295px); /* Single image height */
   }
@@ -85,6 +109,9 @@
 @keyframes spinAnimation18-xl {
   from {
     transform: translateY(0);
+  }
+  10%{
+    transform: translateY(75px);
   }
   to {
     transform: translateY(-2754px); /* Single image height */
@@ -94,6 +121,9 @@
   from {
     transform: translateY(0);
   }
+  10%{
+    transform: translateY(75px);
+  }
   to {
     transform: translateY(-3213px); /* Single image height */
   }
@@ -102,111 +132,126 @@
 
 @keyframes spinAnimation9{
   from {
-    transform: translateY(0);
+    transform: translateY(-85px);
+  }
+  10%{
+    transform: translateY(-35px);
   }
   to {
-    transform: translateY(-765px); /* Single image height */
+    transform: translateY(-850px); /* Single image height */
   }
 }
 @keyframes spinAnimation12{
   from {
-    transform: translateY(0);
+    transform: translateY(-85px);
+  }
+  10%{
+    transform: translateY(-35px);
   }
   to {
-    transform: translateY(-1020px); /* Single image height */
+    transform: translateY(-1105px); /* Single image height */
   }
 }
 @keyframes spinAnimation15{
   from {
-    transform: translateY(0);
+    transform: translateY(-85px);
+  }
+  10%{
+    transform: translateY(-35px);
   }
   to {
-    transform: translateY(-1275px); /* Single image height */
+    transform: translateY(-1360px); /* Single image height */
   }
 }
 @keyframes spinAnimation18{
   from {
-    transform: translateY(0);
+    transform: translateY(-85px);
+  }
+  10%{
+    transform: translateY(-35px);
   }
   to {
-    transform: translateY(-1530px); /* Single image height */
+    transform: translateY(-1615px); /* Single image height */
   }
 }
 @keyframes spinAnimation21{
   from {
-    transform: translateY(0);
+    transform: translateY(-85px);
+  }
+  10%{
+    transform: translateY(-35px);
   }
   to {
-    transform: translateY(-1785px); /* Single image height */
+    transform: translateY(-1870px); /* Single image height */
   }
 }
 
 
 @media (min-width: 1536px) {
   .spinning9-2xl {
-    animation: spinAnimation9-2xl 0.6s linear;
+    animation: spinAnimation9-2xl 0.9s linear;
     animation-direction: reverse;
   }
   .spinning12-2xl {
-    animation: spinAnimation12-2xl 0.8s linear;
+    animation: spinAnimation12-2xl 1.2s linear;
     animation-direction: reverse;
   }
   .spinning15-2xl {
-    animation: spinAnimation15-2xl 1s linear;
+    animation: spinAnimation15-2xl 1.5s linear;
     animation-direction: reverse;
   }
   .spinning18-2xl {
-    animation: spinAnimation18-2xl 1.2s linear;
+    animation: spinAnimation18-2xl 1.8s linear;
     animation-direction: reverse;
   }
   .spinning21-2xl {
-    animation: spinAnimation21-2xl 1.4s linear;
+    animation: spinAnimation21-2xl 2.1s linear;
     animation-direction: reverse;
   }
 }
 
 @media (min-width: 1280px) and (max-width: 1535px) {
   .spinning9-xl {
-    animation: spinAnimation9-xl 0.6s linear;
+    animation: spinAnimation9-xl 0.9s linear;
     animation-direction: reverse;
   }
   .spinning12-xl {
-    animation: spinAnimation12-xl 0.8s linear;
+    animation: spinAnimation12-xl 1.2s linear;
     animation-direction: reverse;
   }
   .spinning15-xl {
-    animation: spinAnimation15-xl 1s linear;
+    animation: spinAnimation15-xl 1.5s linear;
     animation-direction: reverse;
   }
   .spinning18-xl {
-    animation: spinAnimation18-xl 1.2s linear;
+    animation: spinAnimation18-xl 1.8s linear;
     animation-direction: reverse;
   }
   .spinning21-xl {
-    animation: spinAnimation21-xl 1.4s linear;
+    animation: spinAnimation21-xl 2.1s linear;
     animation-direction: reverse;
   }
 }
 
 @media (min-width: 480px) and (max-width: 1280px) {
   .spinning9 {
-    animation: spinAnimation9 0.6s linear;
+    animation: spinAnimation9 0.9s linear;
     animation-direction: reverse;
   }
   .spinning12 {
-    animation: spinAnimation12 0.8s linear;
+    animation: spinAnimation12 1.2s linear;
     animation-direction: reverse;
   }
   .spinning15{
-    animation: spinAnimation15 1s linear;
+    animation: spinAnimation15 1.5s linear;
     animation-direction: reverse;
   }
   .spinning18 {
-    animation: spinAnimation18 1.2s linear;
+    animation: spinAnimation18 1.8s linear;
     animation-direction: reverse;
   }
   .spinning21 {
-    animation: spinAnimation21 1.4s linear;
+    animation: spinAnimation21 2.1s linear;
     animation-direction: reverse;
   }
 }

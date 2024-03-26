@@ -1,6 +1,6 @@
 import { INITIAL_ITEMS } from "../constants/iinitial_items.js"
 import { generate_random_numbers } from "./generate_random_numbers.js"
-export const get_slot_items = (count:number) =>{
+export const get_slot_items = (count:number)=>{
     const index_list=generate_random_numbers(count)
     const items=new Array()
     index_list.map((index:number)=>{

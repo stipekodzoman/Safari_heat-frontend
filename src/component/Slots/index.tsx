@@ -66,8 +66,8 @@ const Slot: FC<Props> = ({
 
   const spinEnd = () => {
     isSpinEnd = true;
-    setInitialItems([currentImages[0], currentImages[1], currentImages[2]]);
-    setResult([currentImages[0], currentImages[1], currentImages[2]]);
+    setInitialItems([currentImages[1], currentImages[2], currentImages[3]]);
+    setResult([currentImages[1], currentImages[2], currentImages[3]]);
   };
   return (
     <div className="overflow-hidden 2xl:w-[280px] xl:w-[208px] 2xl:h-[618px] xl:h-[459px] h-[255px]">
@@ -76,7 +76,7 @@ const Slot: FC<Props> = ({
             <img
               key={index}
               src={`src/assets/items/${imageSrc}.jpg`}
-              className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count}-2xl spinning${count} spinning${count}-xl`}
+              className={`2xl:w-[280px] 2xl:h-[206px] xl:w-[208px] xl:h-[153px] w-[132px] h-[85px] spinning${count-1}-2xl spinning${count-1} spinning${count-1}-xl`}
               alt={`Slot ${index}`}
               onAnimationEnd={() => {
                 if (spinID == 5) {
@@ -84,6 +84,7 @@ const Slot: FC<Props> = ({
                   onSpinEnd();
                 } else {
                   spinEnd();
+                  
                 }
               }}
             />

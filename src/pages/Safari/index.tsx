@@ -5,6 +5,7 @@ import Slot from '../../component/Slots';
 import get_winning_paylines from '../../utils/get_winning_paylines';
 import { PAYLINES } from '../../constants/paylines';
 import { BASE_URL, SOCKET_SERVER_URL } from '../../config/config.tsx';
+import { increaseBalance } from '../../utils/increaseBalance.tsx';
 import './index.css';
 //@ts-ignore
 import { AuthContext } from '../../context/AuthContext.jsx';
@@ -64,8 +65,11 @@ import RedButtonImage from '../../assets/gamble/red_button.png';
 import BlackCard from '../../assets/gamble/black_card.jpg';
 import Redcard from '../../assets/gamble/red_card.jpg';
 import Card from '../../assets/gamble/card.jpg';
-import SpinAudio from '../../assets/reels-run.mp3';
-import WinAudio from '../../assets/coins.mp3';
+import SpinAudio from '../../../src/assets/audio/spinning.mp3'
+import WinAudio from '../../../src/assets/audio/win.mp3'
+import PaylineAudio from '../../../src/assets/audio/payline.mp3'
+import HelpAudio from '../../../src/assets/audio/help.mp3'
+import GambleAudio from '../../../src/assets/audio/gamble.mp3'
 const betValueArray = [
   0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.25, 0.5, 1.0,
   2.5, 5.0, 10.0, 20.0, 30.0, 40.0,
@@ -77,8 +81,8 @@ const Safari = () => {
   //@ts-ignore
   const { user, dispatch } = useContext(AuthContext);
   const [line, setLine] = useState(15);
-  const [betValue, setBetValue] = useState(1);
-  const [balance, setBalance] = useState(10000.0);
+  const [betValue, setBetValue] = useState(8);
+  const [balance, setBalance] = useState(0.0);
   const [winning, setWinning] = useState<number>(0.0);
   const [spin_type, setSpinType] = useState<number>(1);
   const [isFreeSpin, setIsFreeSpin] = useState(false);
@@ -105,6 +109,7 @@ const Safari = () => {
   const suceessID4 = [0, 0, 0];
   const suceessID5 = [0, 0, 0];
   const intervalID = useRef<number | null>();
+  const timer=useRef<number | null>();
   const [allSuccessIDs, setAllSuccessIDs] = useState<Array<Array<number>>>([
     suceessID1,
     suceessID2,
@@ -119,6 +124,11 @@ const Safari = () => {
   // const [isWinningGamble, setIsWinningGamble] = useState(true);
   let isWinningGamble: boolean;
   let cardRandomValue = false;
+  const winAudio = useRef<HTMLAudioElement>(null);
+  const spinAudio = useRef<HTMLAudioElement>(null);
+  const paylineAudio = useRef<HTMLAudioElement>(null);
+  const helpAudio = useRef<HTMLAudioElement>(null);
+  const gambleAudio = useRef<HTMLAudioElement>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -134,9 +144,9 @@ const Safari = () => {
       const { jackpot } = JSON.parse(message);
       setJackpot(jackpot.toFixed(2));
     });
-    newSocket.on('update', (message) => {
+    newSocket.on('balance', (message) => {
       const { balance } = JSON.parse(message);
-      setBalance(balance.toFixed(2));
+      setBalance(parseFloat(balance.toFixed(2)));
     });
     return () => {
       newSocket.disconnect();
@@ -198,11 +208,102 @@ const Safari = () => {
         break;
     }
   }, [line]);
+  useEffect(()=>{
+    if(isAudioOn&&spinAudio.current){
+      spinAudio.current.muted=false
+    }else if(isAudioOn===false&&spinAudio.current){
+      spinAudio.current.muted=true
+    }
+    if(isAudioOn&&winAudio.current){
+      winAudio.current.muted=false
+    }else if(isAudioOn===false&&winAudio.current){
+      winAudio.current.muted=true
+    }
+    if(isAudioOn&&paylineAudio.current){
+      paylineAudio.current.muted=false
+    }else if(isAudioOn===false&&paylineAudio.current){
+      paylineAudio.current.muted=true
+    }
+    if(isAudioOn&&helpAudio.current){
+      helpAudio.current.muted=false
+    }else if(isAudioOn===false&&helpAudio.current){
+      helpAudio.current.muted=true
+    }
+    if(isAudioOn&&gambleAudio.current){
+      gambleAudio.current.muted=false
+    }else if(isAudioOn===false&&gambleAudio.current){
+      gambleAudio.current.muted=true
+    }
+  },[isAudioOn])
   useEffect(() => {
     if (intervalID.current && isSpinning === true) {
       clearInterval(intervalID.current);
     }
-  }, [isSpinning]);
+    if (spinAudio.current !== null&&winAudio.current !== null&&isSpinning===true) {
+      spinAudio.current.play();
+      winAudio.current.pause();
+      winAudio.current.currentTime = 0;
+    }
+    else if (spinAudio.current !== null&&winAudio.current !== null&&paylineAudio.current!==null&&isSpinning===false&&isGamble===true) {
+      winAudio.current.play();
+      
+      // setTimeout(()=>{
+      //   winAudio.current !== null?winAudio.current.pause():''
+      //   paylineAudio.current!==null?paylineAudio.current.play():''
+      // },2000)
+      spinAudio.current.pause()
+      spinAudio.current.currentTime = 0;
+    } else if(spinAudio.current !== null&&winAudio.current !== null&&isSpinning==false&&paylineAudio.current!==null&&isGamble===false){
+      winAudio.current.pause();
+      
+      winAudio.current.currentTime = 0;
+      spinAudio.current.pause()
+      spinAudio.current.currentTime = 0;
+      paylineAudio.current.pause()
+      paylineAudio.current.currentTime = 0;
+    }
+    
+  }, [isSpinning,isGamble]);
+  useEffect(()=>{
+    if(backgroundName==="Help"&&helpAudio.current!==null&&winAudio.current!==null&&spinAudio.current!==null&&gambleAudio.current!==null&&paylineAudio.current!==null){
+      helpAudio.current.play()
+      spinAudio.current.pause()
+      spinAudio.current.currentTime = 0;
+      winAudio.current.pause()
+      winAudio.current.currentTime = 0;
+      gambleAudio.current.pause()
+      gambleAudio.current.currentTime = 0;
+      paylineAudio.current.muted=true
+      paylineAudio.current.currentTime = 0;
+    }else if(backgroundName==="Gamble"&&helpAudio.current!==null&&winAudio.current!==null&&spinAudio.current!==null&&gambleAudio.current!==null&&paylineAudio.current!==null){
+      gambleAudio.current.play()
+      spinAudio.current.pause()
+      spinAudio.current.currentTime = 0;
+      winAudio.current.pause()
+      winAudio.current.currentTime = 0;
+      helpAudio.current.pause()
+      helpAudio.current.currentTime = 0;
+      paylineAudio.current.muted=true
+      paylineAudio.current.currentTime = 0;
+    }else if(backgroundName==="Main"&&helpAudio.current!==null&&winAudio.current!==null&&spinAudio.current!==null&&gambleAudio.current!==null&&paylineAudio.current!==null){
+      gambleAudio.current.pause()
+      gambleAudio.current.currentTime=0
+      spinAudio.current.pause()
+      spinAudio.current.currentTime = 0;
+      winAudio.current.pause()
+      winAudio.current.currentTime = 0;
+      helpAudio.current.pause()
+      helpAudio.current.currentTime = 0;
+      paylineAudio.current.muted=false
+      // if(isGamble){
+      //   paylineAudio.current.muted=false
+      // }else{
+      //   paylineAudio.current.pause()
+      //   paylineAudio.current.currentTime = 0;
+      // }
+      
+    }
+  },[backgroundName])
   const generateCardRandomValue = () => {
     const newValue = Math.floor(Math.random() * 2) % 2 === 0;
 
@@ -238,6 +339,7 @@ const Safari = () => {
     }
     intervalID.current = setInterval(() => {
       if (count < winningCombos.length) {
+        paylineAudio.current!==null?paylineAudio.current.play():''
         const value = winningCombos[count];
         for (let i = 0; i < value.count; i++) {
           setAllSuccessIDs((prevAllSuccessIDs) =>
@@ -256,6 +358,7 @@ const Safari = () => {
         }
         setPayline(value.payline);
         count++;
+        
       } else {
         count = 0;
       }
@@ -272,7 +375,6 @@ const Safari = () => {
         line,
         betValueArray[betValue - 1] * line
       );
-    setWinning(result);
     if (isJackpot) {
       if (betValue == 19) {
         socket?.emit(
@@ -304,9 +406,6 @@ const Safari = () => {
         isFreeSpin === false
       ) {
         setIsGamble(true);
-        if (winAudio.current !== null) {
-          winAudio.current.play();
-        }
       }
       let paylines: number[] = [];
       general_winning.forEach((winning) => {
@@ -323,6 +422,10 @@ const Safari = () => {
             winning: result,
           })
         );
+      }
+      if(result!=0.0){
+        increaseBalance(result,setBalance)
+        increaseBalance(result, setWinning)
       }
       setTimeout(() => {
         showWinningCombinations(scatter_winning, general_winning);
@@ -363,6 +466,9 @@ const Safari = () => {
           })
         );
       }
+      if(freeSpinWinning!=0.0){
+        increaseBalance(freeSpinWinning,setBalance)
+      }
       setIsFreeSpin(false);
       freeSpinCount = 15;
       freeSpinWinning = 0.0;
@@ -378,8 +484,11 @@ const Safari = () => {
       line,
       betValueArray[betValue - 1] * line
     );
-    freeSpinWinning += parseFloat((result * 3).toFixed(2));
-    setWinning((previous) => previous + parseFloat((result * 3).toFixed(2)));
+    if(result!==0.0){
+      freeSpinWinning += parseFloat((result * 3).toFixed(2));
+      increaseBalance(parseFloat((result * 3).toFixed(2)),setWinning)
+    }
+    
     if (scatter_winning.count >= 3) {
       freeSpinCount += 15;
     } else {
@@ -388,8 +497,7 @@ const Safari = () => {
       }, 0);
     } // Wait for 2 seconds
   }, [result6]);
-  const winAudio = useRef<HTMLAudioElement>(null);
-  const spinAudio = useRef<HTMLAudioElement>(null);
+  
   const handleIncrementLine = () => {
     if (isSpinning === false && isFreeSpin === false && isAutoSpin === false) {
       setLine((prevLine) => (prevLine < 15 ? prevLine + 1 : 1));
@@ -423,6 +531,7 @@ const Safari = () => {
             bet: (line * betValueArray[betValue - 1]).toFixed(2),
           })
         );
+        setBalance((prev)=>parseFloat((prev-(line * betValueArray[betValue - 1])).toFixed(2)))
       }
       setIsSpinning(true);
       setWinning(0.0);
@@ -434,19 +543,9 @@ const Safari = () => {
         [0, 0, 0], // Initial state for successID5
       ]);
       setIsGamble(false);
-      if (spinAudio.current !== null) {
-        spinAudio.current.play();
-      }
-      if (winAudio.current !== null) {
-        winAudio.current.pause();
-        winAudio.current.currentTime = 0;
-      }
+
     } else {
       setIsSpinning(false);
-      if (spinAudio.current !== null) {
-        spinAudio.current.pause();
-        spinAudio.current.currentTime = 0;
-      }
     }
   };
   const handleAutoSpinClick = () => {
@@ -460,6 +559,7 @@ const Safari = () => {
           bet: (line * betValueArray[betValue - 1]).toFixed(2),
         })
       );
+      setBalance((prev)=>parseFloat((prev-(line * betValueArray[betValue - 1])).toFixed(2)))
       setIsSpinning(true);
       setWinning(0.0);
       setAllSuccessIDs(() => [
@@ -487,6 +587,7 @@ const Safari = () => {
               bet: (line * betValueArray[betValue - 1]).toFixed(2),
             })
           );
+          setBalance((prev)=>parseFloat((prev-(line * betValueArray[betValue - 1])).toFixed(2)))
         }
         setIsSpinning(true);
         setWinning(0.0);
@@ -514,7 +615,13 @@ const Safari = () => {
     if (socket) {
       socket.emit('gamble', JSON.stringify({ gamble: value.toFixed(2) }));
     }
-    setWinning(isWinningGamble ? gamble : 0.0);
+    if(isWinningGamble){
+      increaseBalance(gamble,setBalance)
+      increaseBalance(gamble,setWinning)
+    } else{
+      setBalance((prev)=>parseFloat((prev+gamble).toFixed(2)));
+      setWinning(0.0)
+    }
     setGamble(0.0);
     isWinningGamble = true;
   };
@@ -645,7 +752,7 @@ const Safari = () => {
                 }}
               ></div>
               <Slot
-                count={9}
+                count={10}
                 isSpinning={isSpinning}
                 setResult={setResult1}
                 onSpinEnd={handleSpinEnd}
@@ -655,7 +762,7 @@ const Safari = () => {
               />
             </div>
             <Slot
-              count={12}
+              count={13}
               isSpinning={isSpinning}
               setResult={setResult2}
               onSpinEnd={handleSpinEnd}
@@ -664,7 +771,7 @@ const Safari = () => {
               payline={payline}
             />
             <Slot
-              count={15}
+              count={16}
               isSpinning={isSpinning}
               setResult={setResult3}
               onSpinEnd={handleSpinEnd}
@@ -673,7 +780,7 @@ const Safari = () => {
               payline={payline}
             />
             <Slot
-              count={18}
+              count={19}
               isSpinning={isSpinning}
               setResult={setResult4}
               onSpinEnd={handleSpinEnd}
@@ -683,7 +790,7 @@ const Safari = () => {
             />
             <div className="flex gap-[4px]">
               <Slot
-                count={21}
+                count={22}
                 isSpinning={isSpinning}
                 setResult={isFreeSpin ? setResult6 : setResult5}
                 onSpinEnd={handleSpinEnd}
@@ -813,6 +920,9 @@ const Safari = () => {
             </div>
           </div>
           <audio ref={winAudio} src={WinAudio}></audio>
+          <audio ref={paylineAudio} src={PaylineAudio} ></audio>
+          <audio ref={helpAudio} src={HelpAudio} loop></audio>
+          <audio ref={gambleAudio} src={GambleAudio} loop></audio>
 
           <img
             src={GambleImage}
